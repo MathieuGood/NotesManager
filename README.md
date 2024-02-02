@@ -6,5 +6,5 @@
 ## Membres de l'équipe
 - Mathieu BON
 - Soundounce CHIBANI
-- Relgrand MOUNGUEMBO MABELE
 - Youssef MOUDNI
+- Relgrand MOUNGUEMBO MABELE
