@@ -29,7 +29,8 @@ CREATE TABLE users(
    user_name VARCHAR(50),
    user_email VARCHAR(50),
    user_password VARCHAR(50),
-   PRIMARY KEY(user_id)
+   PRIMARY KEY(user_id),
+   INDEX(user_email)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO users(
@@ -177,7 +178,7 @@ INSERT INTO tag(
 -- Create a view to get all notes from all users
 CREATE VIEW viewAllUserNotes AS
     SELECT binder_name, tab_name, note_name, note_content
-    FROM notes 
+    FROM notes
         INNER JOIN tabs ON notes.tab_id = tabs.tab_id
         INNER JOIN binders ON tabs.binder_id = binders.binder_id
         INNER JOIN users ON binders.user_id = users.user_id;
