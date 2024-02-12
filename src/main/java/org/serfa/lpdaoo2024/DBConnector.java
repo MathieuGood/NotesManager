@@ -76,9 +76,8 @@ public abstract class DBConnector {
 
 
     // Create new user in database provided name, email and password
-    // TO DO :
-    // Add a check to see if the user already exists
-    public static void createUser(String name, String email, String password) {
+    // Return 1 if user was created, 0 if there was an error (likely that email already exists)
+    public static int createUser(String name, String email, String password) {
 
         try {
 
@@ -100,8 +99,11 @@ public abstract class DBConnector {
 
             closeDatabaseConnection();
 
+            return rowsInserted;
+
         } catch (SQLException e) {
             System.out.println("SQL Error : " + e);
+            return 0;
         }
     }
 

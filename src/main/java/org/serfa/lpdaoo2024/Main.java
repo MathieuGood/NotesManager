@@ -11,7 +11,8 @@ public class Main {
     public static void runDatabaseOperations() {
 
         // Create new user
-        // DBConnector.createUser("Mat", "mathieu@mathieu.com", "123456");
+        System.out.println(DBConnector.createUser("Mat", "mathieu@test.com", "123456"));
+        System.out.println(DBConnector.createUser("Mat", "test@test.com", "123456"));
 
         // Update user password
         // DBConnector.updateUserPassword("mathieu@mathieu.com", "newpassword");
