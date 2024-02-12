@@ -33,6 +33,9 @@ CREATE TABLE users(
    INDEX(user_email)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+ALTER TABLE users
+    ADD CONSTRAINT UC_user_email UNIQUE (user_email);
+
 INSERT INTO users(
    user_name,
    user_email,
