@@ -61,11 +61,15 @@ public class LoginWindow extends JFrame implements ActionListener {
                 // Check if e-mail and password match
                 if (DBConnector.checkPasswordMatch(email, password)) {
                     System.out.println("E-mail and password match!");
+                    // Open main window
                 } else {
                     System.out.println("E-mail and password DO NOT match!");
+                    JOptionPane.showMessageDialog(null, "E-mail et/ou mot de passe invalides");
                 }
             } else {
                 System.out.println("Incorrect format for either e-mail or password.");
+                JOptionPane.showMessageDialog(null, "Format incorrect de l'e-mail et/ou mot de passe");
+
             }
         }
     }
