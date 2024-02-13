@@ -20,10 +20,10 @@ public class Main {
 
     }
 
-    public static void runDatabaseOperations() {
+    public static void testDatabaseOperations() {
 
         // Create new user
-//        System.out.println(DBConnector.createUser("Mat", "mathieu@test.com", "123456"));
+        // System.out.println(DBConnector.createUser("Mat", "mathieu@test.com", "123456"));
 
         // Update user password
         // DBConnector.updateUserPassword("mathieu@mathieu.com", "newpassword");
