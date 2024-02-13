@@ -1,6 +1,7 @@
 package org.serfa.lpdaoo2024;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainWindow extends JFrame {
 
@@ -13,6 +14,7 @@ public class MainWindow extends JFrame {
         this.userEmail = userEmail;
         this.setTitle("NotesManager " + userEmail);
         this.setSize(800, 600);
+        this.setMinimumSize(new Dimension(640, 480));
 
 
 
