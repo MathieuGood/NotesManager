@@ -16,7 +16,7 @@ public class Main {
         }
 
         // Open Login Window
-        LoginWindow window = new LoginWindow();
+        LoginWindow loginWindow = new LoginWindow();
 
     }
 
