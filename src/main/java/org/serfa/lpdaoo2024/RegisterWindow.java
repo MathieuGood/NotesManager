@@ -23,10 +23,10 @@ public class RegisterWindow extends JFrame implements ActionListener {
         this.setSize(250, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        final Dimension textFieldDimension = new Dimension(150, 20);
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        final Dimension textFieldDimension = new Dimension(150, 20);
 
         JLabel titleLabel = new JLabel("Création d'un compte");
 

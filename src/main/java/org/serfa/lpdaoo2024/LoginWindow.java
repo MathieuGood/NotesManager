@@ -4,53 +4,75 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-public class LoginWindow extends JFrame implements ActionListener {
+public class LoginWindow extends JFrame implements ActionListener, FocusListener {
 
-    JButton loginButton;
-    JButton registerButton;
-    JTextField emailField;
-    JTextField passwordField;
+    private JButton loginButton;
+    private JButton registerButton;
+    private JTextField emailField;
+    private JTextField passwordField;
+    private final String emailFieldPlaceholder = "Votre e-mail";
+    private final String passwordFieldPlaceholder = "Mot de passe";
 
     public LoginWindow() {
 
+        super("NotesManager");
+        this.setSize(300, 430);
 
-        super("Bienvenue dans NotesManager");
-
-        this.setSize(250, 200);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        // Create JPanel and set no specific layout manager
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(null);
 
-        JLabel titleLabel = new JLabel("Identification");
+        // Create JLabel with ImageIcon for header
+        JLabel titleLabel = new JLabel("NotesManager", SwingConstants.CENTER);
+        ImageIcon appLogo = new ImageIcon("src/main/resources/notes-manager-logo.png");
+        titleLabel.setIcon(appLogo);
+        titleLabel.setBounds(0, 0, 300, 250);
+        titleLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        titleLabel.setHorizontalTextPosition(JLabel.CENTER);
+        titleLabel.setFont(new Font("Jetbrains Mono", Font.BOLD, 35));
 
-        JLabel emailLabel = new JLabel("E-mail");
-        emailField = new JTextField();
-        emailField.setPreferredSize(new Dimension(150, 20));
+        // Create JTextField for e-mail
+        emailField = new JTextField(emailFieldPlaceholder);
+        emailField.setBounds(75, 260, 150, 20);
+        emailField.setHorizontalAlignment(JTextField.CENTER);
+        emailField.addFocusListener(this);
 
-        JLabel passwordLabel = new JLabel("Mot de passe");
-        passwordField = new JPasswordField();
-        passwordField.setPreferredSize(new Dimension(150, 20));
+        // Create JPasswordField for password
+        passwordField = new JPasswordField(passwordFieldPlaceholder);
+        passwordField.setBounds(75, 290, 150, 20);
+        passwordField.setHorizontalAlignment(JPasswordField.CENTER);
+        passwordField.addFocusListener(this);
 
-        loginButton = new JButton("Login");
+        // Create JButton for login
+        loginButton = new JButton("S'identifier");
+        loginButton.setBounds(82, 320, 136, 25);
         loginButton.addActionListener(this);
 
+        // Create JButton to go to RegisterWindow
         registerButton = new JButton("Créer un compte");
+        registerButton.setBounds(82, 360, 136, 25);
         registerButton.addActionListener(this);
 
+        // Add all components to panel
         panel.add(titleLabel);
-        panel.add(emailLabel);
         panel.add(emailField);
-        panel.add(passwordLabel);
         panel.add(passwordField);
         panel.add(loginButton);
         panel.add(registerButton);
 
-
+        // Add panel to LoginWindow frame
         this.add(panel);
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
+
+        // Set focus on titleLabel so no TextField gets focus and placeholder appears when frame loads
+        titleLabel.grabFocus();
     }
 
     @Override
@@ -68,7 +90,10 @@ public class LoginWindow extends JFrame implements ActionListener {
                 // Check if e-mail and password match
                 if (DBConnector.checkPasswordMatch(email, password)) {
                     System.out.println("E-mail and password match!");
-                    // Open main window
+                    // Open MainWindow and close LoginWindow
+                    MainWindow mainWindow = new MainWindow(email);
+                    this.dispose();
+
                 } else {
                     System.out.println("E-mail and password DO NOT match!");
                     JOptionPane.showMessageDialog(null, "E-mail et/ou mot de passe invalides");
@@ -79,9 +104,38 @@ public class LoginWindow extends JFrame implements ActionListener {
 
             }
         } else if (e.getSource() == registerButton) {
-            // Open register window
+            // Close LoginWindow and open MainWindow
             System.out.println("Open register window");
+
             RegisterWindow registerWindow = new RegisterWindow();
+            this.dispose();
         }
     }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        if (e.getSource() == emailField) {
+            if (emailField.getText().trim().equals(emailFieldPlaceholder)) {
+                emailField.setText("");
+            }
+        } else if (e.getSource() == passwordField) {
+            if (passwordField.getText().trim().equals(passwordFieldPlaceholder)) {
+                passwordField.setText("");
+            }
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (e.getSource() == emailField) {
+            if (emailField.getText().trim().isEmpty()) {
+                emailField.setText(emailFieldPlaceholder);
+            }
+        } else if (e.getSource() == passwordField) {
+            if (passwordField.getText().trim().isEmpty()) {
+                passwordField.setText(passwordFieldPlaceholder);
+            }
+        }
+    }
+
 }
