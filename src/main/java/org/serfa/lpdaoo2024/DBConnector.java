@@ -177,11 +177,13 @@ public abstract class DBConnector {
         }
     }
 
+
     // Open database connection
     private static void openDatabaseConnection() throws SQLException {
         connection = DriverManager.getConnection("jdbc:mariadb://" + dbHost + ":" + dbPort + "/" + dbName, dbUsername, dbPassword);
         System.out.println("Connection validity to " + dbName + " : " + connection.isValid(5));
     }
+
 
     // Close database connection
     private static void closeDatabaseConnection() throws SQLException {
