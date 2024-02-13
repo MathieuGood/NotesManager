@@ -9,10 +9,10 @@ import java.awt.event.FocusListener;
 
 public class LoginWindow extends JFrame implements ActionListener, FocusListener {
 
-    private JButton loginButton;
-    private JButton registerButton;
-    private JTextField emailField;
-    private JTextField passwordField;
+    JButton loginButton;
+    JButton registerButton;
+    JTextField emailField;
+    JTextField passwordField;
     private final String emailFieldPlaceholder = "Votre e-mail";
     private final String passwordFieldPlaceholder = "Mot de passe";
     private final Color defaultTextColor = UIManager.getColor("TextField.foreground");
