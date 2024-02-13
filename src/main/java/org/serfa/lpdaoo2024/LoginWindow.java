@@ -15,11 +15,12 @@ public class LoginWindow extends JFrame implements ActionListener, FocusListener
     private JTextField passwordField;
     private final String emailFieldPlaceholder = "Votre e-mail";
     private final String passwordFieldPlaceholder = "Mot de passe";
+    private final Color defaultTextColor = UIManager.getColor("TextField.foreground");
 
     public LoginWindow() {
 
         super("NotesManager");
-        this.setSize(300, 430);
+        this.setSize(300, 500);
 
         // Create JPanel and set no specific layout manager
         JPanel panel = new JPanel();
@@ -36,24 +37,26 @@ public class LoginWindow extends JFrame implements ActionListener, FocusListener
 
         // Create JTextField for e-mail
         emailField = new JTextField(emailFieldPlaceholder);
-        emailField.setBounds(75, 260, 150, 20);
+        emailField.setBounds(55, 260, 190, 28);
         emailField.setHorizontalAlignment(JTextField.CENTER);
+        emailField.setForeground(Color.GRAY);
         emailField.addFocusListener(this);
 
         // Create JPasswordField for password
         passwordField = new JPasswordField(passwordFieldPlaceholder);
-        passwordField.setBounds(75, 290, 150, 20);
+        passwordField.setBounds(55, 295, 190, 28);
         passwordField.setHorizontalAlignment(JPasswordField.CENTER);
+        passwordField.setForeground(Color.GRAY);
         passwordField.addFocusListener(this);
 
         // Create JButton for login
         loginButton = new JButton("S'identifier");
-        loginButton.setBounds(82, 320, 136, 25);
+        loginButton.setBounds(70, 335, 160, 30);
         loginButton.addActionListener(this);
 
         // Create JButton to go to RegisterWindow
         registerButton = new JButton("Créer un compte");
-        registerButton.setBounds(82, 360, 136, 25);
+        registerButton.setBounds(70, 375, 160, 30);
         registerButton.addActionListener(this);
 
         // Add all components to panel
@@ -117,10 +120,14 @@ public class LoginWindow extends JFrame implements ActionListener, FocusListener
         if (e.getSource() == emailField) {
             if (emailField.getText().trim().equals(emailFieldPlaceholder)) {
                 emailField.setText("");
+                emailField.setForeground(defaultTextColor);
             }
         } else if (e.getSource() == passwordField) {
             if (passwordField.getText().trim().equals(passwordFieldPlaceholder)) {
                 passwordField.setText("");
+                // Reset passwordField color to default
+                passwordField.setForeground(defaultTextColor);
+
             }
         }
     }
@@ -130,10 +137,12 @@ public class LoginWindow extends JFrame implements ActionListener, FocusListener
         if (e.getSource() == emailField) {
             if (emailField.getText().trim().isEmpty()) {
                 emailField.setText(emailFieldPlaceholder);
+                emailField.setForeground(Color.GRAY);
             }
         } else if (e.getSource() == passwordField) {
             if (passwordField.getText().trim().isEmpty()) {
                 passwordField.setText(passwordFieldPlaceholder);
+                passwordField.setForeground(Color.GRAY);
             }
         }
     }
