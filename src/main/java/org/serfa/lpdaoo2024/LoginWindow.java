@@ -115,36 +115,33 @@ public class LoginWindow extends JFrame implements ActionListener, FocusListener
         }
     }
 
-    @Override
-    public void focusGained(FocusEvent e) {
-        if (e.getSource() == emailField) {
-            if (emailField.getText().trim().equals(emailFieldPlaceholder)) {
-                emailField.setText("");
-                emailField.setForeground(defaultTextColor);
-            }
-        } else if (e.getSource() == passwordField) {
-            if (passwordField.getText().trim().equals(passwordFieldPlaceholder)) {
-                passwordField.setText("");
-                // Reset passwordField color to default
-                passwordField.setForeground(defaultTextColor);
-
+    // Method to use in FocusListener to update text and color of JTextField when focus is gained or lost
+    private void updateTextOnFocus(
+            FocusEvent e,
+            JTextField textField,
+            String textToCompare,
+            String textToSet,
+            Color colorToSet
+    ) {
+        if (e.getSource() == textField) {
+            if (textField.getText().trim().equals(textToCompare)) {
+                textField.setText(textToSet);
+                textField.setForeground(colorToSet);
             }
         }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        updateTextOnFocus(e, emailField, emailFieldPlaceholder, "", defaultTextColor);
+        updateTextOnFocus(e, passwordField, passwordFieldPlaceholder, "", defaultTextColor);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
-        if (e.getSource() == emailField) {
-            if (emailField.getText().trim().isEmpty()) {
-                emailField.setText(emailFieldPlaceholder);
-                emailField.setForeground(Color.GRAY);
-            }
-        } else if (e.getSource() == passwordField) {
-            if (passwordField.getText().trim().isEmpty()) {
-                passwordField.setText(passwordFieldPlaceholder);
-                passwordField.setForeground(Color.GRAY);
-            }
-        }
+        updateTextOnFocus(e, emailField, "", emailFieldPlaceholder, Color.GRAY);
+        updateTextOnFocus(e, passwordField, "", passwordFieldPlaceholder, Color.GRAY);
     }
+
 
 }

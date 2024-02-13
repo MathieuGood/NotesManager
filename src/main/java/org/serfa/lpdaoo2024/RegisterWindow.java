@@ -139,54 +139,34 @@ public class RegisterWindow extends JFrame implements ActionListener, FocusListe
         }
     }
 
-    @Override
-    public void focusGained(FocusEvent e) {
-        if (e.getSource() == nameField) {
-            if (nameField.getText().trim().equals(namePlaceholder)) {
-                nameField.setText("");
-                nameField.setForeground(defaultTextColor);
-            }
-        } else if (e.getSource() == emailField) {
-            if (emailField.getText().trim().equals(emailPlaceholder)) {
-                emailField.setText("");
-                emailField.setForeground(defaultTextColor);
-            }
-        } else if (e.getSource() == password1Field) {
-            if (password1Field.getText().trim().equals(password1Placeholder)) {
-                password1Field.setText("");
-                password1Field.setForeground(defaultTextColor);
-            }
-        } else if (e.getSource() == password2Field) {
-            if (password2Field.getText().trim().equals(password2Placeholder)) {
-                password2Field.setText("");
-                password2Field.setForeground(defaultTextColor);
+    private void updateTextOnFocus(
+            FocusEvent e,
+            JTextField textField,
+            String textToCompare,
+            String textToSet,
+            Color colorToSet
+    ) {
+        if (e.getSource() == textField) {
+            if (textField.getText().trim().equals(textToCompare)) {
+                textField.setText(textToSet);
+                textField.setForeground(colorToSet);
             }
         }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        updateTextOnFocus(e, nameField, namePlaceholder, "", defaultTextColor);
+        updateTextOnFocus(e, emailField, emailPlaceholder, "", defaultTextColor);
+        updateTextOnFocus(e, password1Field, password1Placeholder, "", defaultTextColor);
+        updateTextOnFocus(e, password2Field, password2Placeholder, "", defaultTextColor);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
-        if (e.getSource() == nameField) {
-            if (nameField.getText().trim().isEmpty()) {
-                nameField.setText(namePlaceholder);
-                nameField.setForeground(Color.GRAY);
-            }
-        } else if (e.getSource() == emailField) {
-            if (emailField.getText().trim().isEmpty()) {
-                emailField.setText(emailPlaceholder);
-                emailField.setForeground(Color.GRAY);
-            }
-        } else if (e.getSource() == password1Field) {
-            if (password1Field.getText().trim().isEmpty()) {
-                password1Field.setText(password1Placeholder);
-                password1Field.setForeground(Color.GRAY);
-            }
-        } else if (e.getSource() == password2Field) {
-            if (password2Field.getText().trim().isEmpty()) {
-                password2Field.setText(password2Placeholder);
-                password2Field.setForeground(Color.GRAY);
-            }
-        }
+        updateTextOnFocus(e, nameField, "", namePlaceholder, Color.GRAY);
+        updateTextOnFocus(e, emailField, "", emailPlaceholder, Color.GRAY);
+        updateTextOnFocus(e, password1Field, "", password1Placeholder, Color.GRAY);
+        updateTextOnFocus(e, password2Field, "", password2Placeholder, Color.GRAY);
     }
-
 }
