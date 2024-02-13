@@ -1,12 +1,9 @@
 package org.serfa.lpdaoo2024;
 
+import java.util.Objects;
 import java.util.regex.*;
 
 public abstract class FormatChecker {
-
-    public static boolean checkIfStringIsNotEmpty(String string) {
-        return string != null && !string.isEmpty();
-    }
 
     // Checks if stringToCheck matches regexPattern and return true/false
     private static boolean regexChecker(String stringToCheck, String regexPattern) {
@@ -21,7 +18,6 @@ public abstract class FormatChecker {
         return regexChecker(email, regexPattern);
     }
 
-
     // Check if password format is valid and return true/false
     // Password must have at least :
     // - 8 characters
@@ -33,6 +29,17 @@ public abstract class FormatChecker {
     public static boolean checkPasswordFormat(String password) {
         final String regexPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()-+=])[^\\s]{8,}$";
         return regexChecker(password, regexPattern);
+    }
+
+    // Check if name has at least one alpha character
+    public static boolean checkNameFormat(String name) {
+        final String regexPattern = ".*[a-zA-Z].*";
+        return regexChecker(name, regexPattern);
+    }
+
+    // Check if two strings are the same
+    public static boolean checkIfTwoStringsMatch(String string1, String string2) {
+        return string1.equals(string2);
     }
 
 }
