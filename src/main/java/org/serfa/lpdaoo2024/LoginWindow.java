@@ -8,32 +8,36 @@ import java.awt.event.ActionListener;
 public class LoginWindow extends JFrame implements ActionListener {
 
     JButton loginButton;
+    JButton registerButton;
     JTextField emailField;
     JTextField passwordField;
 
     public LoginWindow() {
 
 
-        super("Welcome to NotesManager");
+        super("Bienvenue dans NotesManager");
 
-        this.setSize(300, 200);
+        this.setSize(250, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel titleLabel = new JLabel("Login");
+        JLabel titleLabel = new JLabel("Identification");
 
         JLabel emailLabel = new JLabel("E-mail");
         emailField = new JTextField();
         emailField.setPreferredSize(new Dimension(150, 20));
 
-        JLabel passwordLabel = new JLabel("Password");
+        JLabel passwordLabel = new JLabel("Mot de passe");
         passwordField = new JPasswordField();
         passwordField.setPreferredSize(new Dimension(150, 20));
 
         loginButton = new JButton("Login");
         loginButton.addActionListener(this);
+
+        registerButton = new JButton("Créer un compte");
+        registerButton.addActionListener(this);
 
         panel.add(titleLabel);
         panel.add(emailLabel);
@@ -41,8 +45,11 @@ public class LoginWindow extends JFrame implements ActionListener {
         panel.add(passwordLabel);
         panel.add(passwordField);
         panel.add(loginButton);
+        panel.add(registerButton);
+
 
         this.add(panel);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -71,6 +78,10 @@ public class LoginWindow extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Format incorrect de l'e-mail et/ou mot de passe");
 
             }
+        } else if (e.getSource() == registerButton) {
+            // Open register window
+            System.out.println("Open register window");
+            RegisterWindow registerWindow = new RegisterWindow();
         }
     }
 }
