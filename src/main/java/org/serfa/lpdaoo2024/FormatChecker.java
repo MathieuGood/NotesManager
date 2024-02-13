@@ -4,7 +4,6 @@ import java.util.regex.*;
 
 public abstract class FormatChecker {
 
-
     public static boolean checkIfStringIsNotEmpty(String string) {
         return string != null && !string.isEmpty();
     }
