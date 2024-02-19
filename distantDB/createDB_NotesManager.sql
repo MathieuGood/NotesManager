@@ -30,11 +30,9 @@ CREATE TABLE users(
    user_email VARCHAR(50),
    user_password VARCHAR(50),
    PRIMARY KEY(user_id),
-   INDEX(user_email)
+   INDEX(user_email),
+   ADD CONSTRAINT UC_user_email UNIQUE (user_email)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE users
-    ADD CONSTRAINT UC_user_email UNIQUE (user_email);
 
 INSERT INTO users(
    user_name,
