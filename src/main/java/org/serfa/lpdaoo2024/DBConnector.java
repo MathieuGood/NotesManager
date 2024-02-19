@@ -5,6 +5,7 @@ import java.sql.*;
 public abstract class DBConnector {
 
     // Credentials for database connection
+    // TO DO : move credentials to a separate file for security
     private static Connection connection;
     final static private String dbHost = "51.91.98.35";
     final static private String dbPort = "3306";

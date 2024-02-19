@@ -16,7 +16,8 @@ public class Main {
         }
 
         // Open Login Window
-        LoginWindow loginWindow = new LoginWindow();
+//        LoginWindow loginWindow = new LoginWindow();
+        MainWindow mainWindow = new MainWindow("bon.mathieu@gmail.com");
 
     }
 
