@@ -17,25 +17,25 @@ public class Main {
 
         // Open Login Window
 //        LoginWindow loginWindow = new LoginWindow();
-        MainWindow mainWindow = new MainWindow("bon.mathieu@gmail.com");
+//        MainWindow mainWindow = new MainWindow("bon.mathieu@gmail.com");
+        RegisterWindow registerWindow = new RegisterWindow();
+
+
+        testDatabaseOperations();
 
     }
 
     public static void testDatabaseOperations() {
 
+
         // Create new user
-        // System.out.println(DBConnector.createUser("Mat", "mathieu@test.com", "123456"));
+        // User.createUser("Mat", "mat@mat.com", "123456*G");
 
-        // Update user password
-        // DBConnector.updateUserPassword("mathieu@mathieu.com", "newpassword");
+        // Check if user email and password match
+        System.out.println(User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1"));
 
-        // Update user name
-        // DBConnector.updateUserName("mathieu@mathieu.com", "NouveauMathieu");
 
-        // Check if username and password match
-        // DBConnector.checkPasswordMatch("mathieu@mathieu.com", "newpassword");
 
-        // Delete user
-        // DBConnector.deleteUser("mathieu@mathieu.com");
+
     }
 }

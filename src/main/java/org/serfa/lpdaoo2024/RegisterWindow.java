@@ -122,12 +122,14 @@ public class RegisterWindow extends JFrame implements ActionListener, FocusListe
                 System.out.println("User entry correct, sending create query to database");
 
                 // createUserResponse is 0 if user has been created, 1 if e-mail already exists in database
-                int createUserResponse = DBConnector.createUser(name, email, password1);
+                int createUserResponse = User.createUser(name, email, password1);
 
-                if (createUserResponse == 1) {
+                if (createUserResponse > 0) {
                     JOptionPane.showMessageDialog(null, "Compte utilisateur " + email + " créé.");
-                } else {
+                } else if (createUserResponse == 0) {
                     JOptionPane.showMessageDialog(null, "L'e-mail choisi est déjà associé à un compte.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erreur lors de la création du compte utilisateur.");
                 }
             } else {
                 System.out.println("User entry incorrect for registering");
