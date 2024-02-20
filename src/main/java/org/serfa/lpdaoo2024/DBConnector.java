@@ -178,6 +178,7 @@ public abstract class DBConnector {
         }
     }
 
+    //
 
     // Open database connection
     private static void openDatabaseConnection() throws SQLException {
