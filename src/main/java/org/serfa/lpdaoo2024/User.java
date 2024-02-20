@@ -3,14 +3,14 @@ package org.serfa.lpdaoo2024;
 import java.sql.*;
 import java.sql.SQLException;
 
-public class User extends DBConnector {
+public class User {
 
 //    private final int userID;
 //    private final String userName;
 //    private final String userEmail;
 
 
-//    User(int userID, String userName, String userEmail) {
+//    public User(int userID, String userName, String userEmail) {
 //        super();
 //        this.userID = userID;
 //        this.userName = userName;
@@ -35,7 +35,8 @@ public class User extends DBConnector {
     public static int createUser(String userName, String userEmail, String userPassword) {
 
         try {
-            Connection connection = openDatabaseConnection();
+            Connection connection = DatabaseManager.openDatabaseConnection();
+
             System.out.println("Inserting : " + userName + " / " + userEmail + " / " + userPassword);
 
             PreparedStatement statement = connection.prepareStatement("""
@@ -58,7 +59,7 @@ public class User extends DBConnector {
             int lastInsertedID = rs.getInt(1);
             System.out.println("Last inserted ID : " + lastInsertedID);
 
-            closeDatabaseConnection(connection);
+            DatabaseManager.closeDatabaseConnection(connection);
 
             return lastInsertedID;
 
@@ -86,7 +87,7 @@ public class User extends DBConnector {
     public static int checkPasswordMatch(String email, String password) {
 
         try {
-            Connection connection = openDatabaseConnection();
+            Connection connection = DatabaseManager.openDatabaseConnection();
 
             System.out.println("Checking if user e-mail and password match");
             PreparedStatement statement = connection.prepareStatement("""
@@ -107,7 +108,7 @@ public class User extends DBConnector {
                 System.out.println("Match found : user ID #" + userID);
             }
 
-            closeDatabaseConnection(connection);
+           DatabaseManager.closeDatabaseConnection(connection);
             return userID;
 
         } catch (SQLException e) {

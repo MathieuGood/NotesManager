@@ -18,7 +18,7 @@ public class Main {
         // Open Login Window
 //        LoginWindow loginWindow = new LoginWindow();
 //        MainWindow mainWindow = new MainWindow("bon.mathieu@gmail.com");
-        RegisterWindow registerWindow = new RegisterWindow();
+//        RegisterWindow registerWindow = new RegisterWindow();
 
 
         testDatabaseOperations();
@@ -32,9 +32,19 @@ public class Main {
         // User.createUser("Mat", "mat@mat.com", "123456*G");
 
         // Check if user email and password match
-        System.out.println(User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1"));
 
+        int userID = User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1");
+        System.out.println("User ID : " + userID);
 
+        // Create new Notebook
+        Notebook notebook = new Notebook(userID);
+        notebook.getContentTree();
+
+        Binder binder1 = new Binder(notebook, 1);
+        // binder1.editName("Nouveau nom de classeur");
+        // binder1.delete()
+        // binder1.editColor(1)
+// To  create new binder in database, use Binder class or Notebook class ?
 
 
     }

@@ -2,7 +2,7 @@ package org.serfa.lpdaoo2024;
 
 import java.sql.*;
 
-public abstract class DBConnector {
+public abstract class DatabaseManager {
 
     // Credentials for database connection
     // TO DO : move credentials to a separate file for security
