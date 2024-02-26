@@ -31,6 +31,7 @@ public abstract class DatabaseManager {
     }
 
 
+
     /**
      * This method closes the connection to the database.
      * It prints a message indicating that the connection to the database is being closed.
@@ -45,96 +46,237 @@ public abstract class DatabaseManager {
     }
 
 
-    public static int insert(String table, String[] fields, String[] values) {
-        System.out.println("Inserting into table " + table);
 
-        try {
-            Connection connection = openDatabaseConnection();
+/**
+ * This method is used to select data from a table in the database.
+ * It constructs a SQL SELECT query using the provided table name, field names, condition field and condition value.
+ * It then executes this query and returns the result set.
+ *
+ * @param table The name of the table to select from.
+ * @param fields An array of field names to select.
+ * @param conditionField The field name to use in the WHERE clause.
+ * @param conditionValue The value to use in the WHERE clause.
+ * @return A ResultSet object containing the result of the query.
+ * @throws SQLException If a database access error occurs.
+ */
+public static ResultSet select(String table, String[] fields, String conditionField, String conditionValue) {
+    // Print a message indicating the start of the selection process
+    System.out.println("Selecting from table " + table);
 
-            // Create placeholders for field names and values
-            String fieldPlaceholders = String.join(", ", fields);
-            String valuePlaceholders = String.join(", ", Collections.nCopies(fields.length, "?"));
+    try {
+        // Open a connection to the database
+        Connection connection = openDatabaseConnection();
 
-            // Construct the SQL query string
-            String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
+        // Create a comma-separated string of field names
+        String fieldPlaceholders = String.join(", ", fields);
 
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        // Construct the SQL SELECT query
+        String query = "SELECT " + fieldPlaceholders + " FROM " + table + " WHERE " + conditionField + " = ?";
 
-            // Set values for the prepared statement
-            for (int i = 0; i < values.length; i++) {
-                statement.setString(i + 1, values[i]);
-            }
+        // Prepare the SQL statement
+        PreparedStatement statement = connection.prepareStatement(query);
 
-            // Execute the statement
-            int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows inserted : " + queryResult);
+        // Set the value for the condition field in the prepared statement
+        statement.setString(1, conditionValue);
 
-            // Get last inserted ID
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            int lastInsertedID = rs.getInt(1);
+        // Execute the statement and get the result set
+        ResultSet resultSet = statement.executeQuery();
 
-            closeDatabaseConnection(connection);
+        // Close the database connection
+        closeDatabaseConnection(connection);
 
-            System.out.println("Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+        // Print a message indicating the end of the selection process
+        System.out.println("Select done");
 
-            return lastInsertedID;
+        // Return the result set
+        return resultSet;
 
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("SQL Integrity Constraint Violation : " + e);
-            return 0;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Error : " + e);
-            return -1;
-        }
+    } catch (SQLException e) {
+        // Print an error message if a SQL exception occurs
+        System.out.println("SQL Error : " + e);
+        return null;
     }
+}
 
 
-    // On the same model as insert() method, create a method to update a row in a table
-    public static int update(String table, String[] fields, String[] values, String condition) {
-        System.out.println("Updating table " + table);
 
-        try {
-            Connection connection = openDatabaseConnection();
+    /**
+ * This method is used to insert data into a table in the database.
+ * It constructs a SQL INSERT query using the provided table name, field names, and values.
+ * It then executes this query and returns the ID of the inserted row.
+ *
+ * @param table The name of the table to insert into.
+ * @param fields An array of field names to insert.
+ * @param values An array of values corresponding to the field names to insert.
+ * @return The ID of the inserted row.
+ * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
+ * @throws SQLException If a database access error occurs.
+ */
+public static int insert(String table, String[] fields, String[] values) {
+    // Print a message indicating the start of the insertion process
+    System.out.println("Inserting into table " + table);
 
-            // Create placeholders for field names and values
-            String fieldPlaceholders = String.join(" = ?, ", fields) + " = ?";
-            String valuePlaceholders = String.join(", ", values);
+    try {
+        // Open a connection to the database
+        Connection connection = openDatabaseConnection();
 
-            // Construct the SQL query string
-            String query = "UPDATE " + table + " SET " + fieldPlaceholders + " WHERE " + condition;
+        // Create placeholders for field names and values
+        String fieldPlaceholders = String.join(", ", fields);
+        String valuePlaceholders = String.join(", ", Collections.nCopies(fields.length, "?"));
 
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        // Construct the SQL INSERT query
+        String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
+        PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-            // Set values for the prepared statement
-            for (int i = 0; i < values.length; i++) {
-                statement.setString(i + 1, values[i]);
-            }
-
-            // Execute the statement
-            int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows updated : " + queryResult);
-
-            // Get last inserted ID
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            int lastInsertedID = rs.getInt(1);
-
-            closeDatabaseConnection(connection);
-
-            System.out.println("Update done with result " + queryResult + ". ID of updated row : " + lastInsertedID);
-
-            return lastInsertedID;
-
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("SQL Integrity Constraint Violation : " + e);
-            return 0;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Error : " + e);
-            return -1;
+        // Set values for the prepared statement
+        for (int i = 0; i < values.length; i++) {
+            statement.setString(i + 1, values[i]);
         }
+
+        // Execute the statement
+        int queryResult = statement.executeUpdate();
+        System.out.println("Number of rows inserted : " + queryResult);
+
+        // Get last inserted ID
+        ResultSet rs = statement.getGeneratedKeys();
+        rs.next();
+        int lastInsertedID = rs.getInt(1);
+
+        // Close the database connection
+        closeDatabaseConnection(connection);
+
+        // Print a message indicating the end of the insertion process
+        System.out.println("Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+
+        // Return the ID of the inserted row
+        return lastInsertedID;
+
+    } catch (SQLIntegrityConstraintViolationException e) {
+        // Print an error message if a SQL integrity constraint violation occurs
+        System.out.println("SQL Integrity Constraint Violation : " + e);
+        return 0;
+
+    } catch (SQLException e) {
+        // Print an error message if a SQL exception occurs
+        System.out.println("SQL Error : " + e);
+        return -1;
     }
+}
+
+
+
+/**
+ * This method is used to update a record in a table in the database.
+ * It constructs a SQL UPDATE query using the provided table name, field name, value, condition field and condition value.
+ * It then executes this query and returns the number of rows affected.
+ *
+ * @param table The name of the table to update.
+ * @param field The field name to update.
+ * @param value The new value for the field.
+ * @param conditionField The field name to use in the WHERE clause.
+ * @param conditionValue The value to use in the WHERE clause.
+ * @return The number of rows affected by the update.
+ * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
+ * @throws SQLException If a database access error occurs.
+ */
+public static int update(String table, String field, String value, String conditionField, String conditionValue) {
+    // Print a message indicating the start of the update process
+    System.out.println("Updating table " + table + " with " + field + " = " + value + " where " + conditionField + " = " + conditionValue);
+
+    try {
+        // Open a connection to the database
+        Connection connection = openDatabaseConnection();
+
+        // Construct the SQL UPDATE query
+        String query = "UPDATE " + table + " SET ? = ?" + " WHERE ? = ?";
+        PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        // Set values for the prepared statement
+        statement.setString(1, field);
+        statement.setString(2, value);
+        statement.setString(3, conditionField);
+        statement.setString(4, conditionValue);
+
+        // Execute the statement and get the number of rows affected
+        int queryResult = statement.executeUpdate();
+        System.out.println("Number of rows updated : " + queryResult);
+
+        // Close the database connection
+        closeDatabaseConnection(connection);
+
+        // Print a message indicating the end of the update process
+        System.out.println("Update done with result " + queryResult);
+
+        // Return the number of rows affected
+        return queryResult;
+
+    } catch (SQLIntegrityConstraintViolationException e) {
+        // Print an error message if a SQL integrity constraint violation occurs
+        System.out.println("SQL Integrity Constraint Violation : " + e);
+        return 0;
+
+    } catch (SQLException e) {
+        // Print an error message if a SQL exception occurs
+        System.out.println("SQL Error : " + e);
+        return -1;
+    }
+}
+
+
+
+/**
+ * This method is used to delete a record from a table in the database.
+ * It constructs a SQL DELETE query using the provided table name, condition field and condition value.
+ * It then executes this query and returns the number of rows affected.
+ *
+ * @param table The name of the table to delete from.
+ * @param conditionField The field name to use in the WHERE clause.
+ * @param conditionValue The value to use in the WHERE clause.
+ * @return The number of rows affected by the delete.
+ * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
+ * @throws SQLException If a database access error occurs.
+ */
+public static int delete(String table, String conditionField, String conditionValue) {
+    // Print a message indicating the start of the deletion process
+    System.out.println("Deleting from table " + table + " where " + conditionField + " = " + conditionValue);
+
+    try {
+        // Open a connection to the database
+        Connection connection = openDatabaseConnection();
+
+        // Construct the SQL DELETE query
+        String query = "DELETE FROM " + table + " WHERE ? = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        // Set values for the prepared statement
+        statement.setString(1, conditionField);
+        statement.setString(2, conditionValue);
+
+        // Execute the statement and get the number of rows affected
+        int queryResult = statement.executeUpdate();
+        System.out.println("Number of rows deleted : " + queryResult);
+
+        // Close the database connection
+        closeDatabaseConnection(connection);
+
+        // Print a message indicating the end of the deletion process
+        System.out.println("Delete done with result " + queryResult);
+
+        // Return the number of rows affected
+        return queryResult;
+
+    } catch (SQLIntegrityConstraintViolationException e) {
+        // Print an error message if a SQL integrity constraint violation occurs
+        System.out.println("SQL Integrity Constraint Violation : " + e);
+        return 0;
+
+    } catch (SQLException e) {
+        // Print an error message if a SQL exception occurs
+        System.out.println("SQL Error : " + e);
+        return -1;
+    }
+}
+
 
 }
