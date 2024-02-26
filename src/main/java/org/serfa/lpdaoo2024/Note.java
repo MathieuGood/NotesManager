@@ -44,7 +44,6 @@ public class Note {
      *
      * @param tab         The Tab object that this Note belongs to.
      * @param noteID      The unique identifier for this Note.
-     * @param userID      The unique identifier for the User who owns this Note.
      * @param noteName    The name of this Note.
      * @param noteContent The content of this Note.
      * @param noteColorID The unique identifier for the color of this Note.
@@ -52,7 +51,6 @@ public class Note {
     public Note(
             Tab tab,
             int noteID,
-            int userID,
             String noteName,
             String noteContent,
             int noteColorID

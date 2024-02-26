@@ -140,25 +140,25 @@ public class Notebook {
     }
 
 
-    /**
-     * Creates a new binder with the specified name and color ID, and adds it to this notebook.
-     * This method first prints the details of the operation to the console.
-     * Then, it prepares the fields and values for the database insert operation.
-     * Finally, it calls the insert method of the DatabaseManager class to perform the operation.
-     *
-     * @param binderName    The name of the new binder.
-     * @param binderColorID The color ID of the new binder.
-     * @return The result of the database insert operation.
-     */
-    public int createBinder(String binderName, int binderColorID) {
-        System.out.println("\n***");
-        System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
+/**
+ * Creates a new Binder with the specified name and color ID.
+ * It inserts the new binder into the database, and then returns the new Binder object.
+ *
+ * @param binderName The name for the new Binder.
+ * @param binderColorID The color ID for the new Binder.
+ * @return The new Binder object.
+ */
+public Binder createBinder(String binderName, int binderColorID) {
+    System.out.println("\n***");
+    System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
 
-        String[] fields = {"binder_name", "user_id", "binder_color_id"};
-        String[] values = {binderName, String.valueOf(userID), String.valueOf(binderColorID)};
+    String[] fields = {"binder_name", "user_id", "binder_color_id"};
+    String[] values = {binderName, String.valueOf(userID), String.valueOf(binderColorID)};
 
-        return DatabaseManager.insert("binders", fields, values);
-    }
+    int binderID = DatabaseManager.insert("binders", fields, values);
+
+    return new Binder(this, binderID, binderName, binderColorID );
+}
 
 
     /**

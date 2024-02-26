@@ -132,22 +132,25 @@ public class Binder {
     }
 
 
-    /**
-     * Creates a new tab with the specified name and color ID, and adds it to this binder.
-     *
-     * @param tabName    The name of the new tab.
-     * @param tabColorID The color ID of the new tab.
-     * @return The result of the database insert operation.
-     */
-    public int createTab(String tabName, int tabColorID) {
-        System.out.println("\n***");
-        System.out.println("createTab() : " + tabName + " / binderID " + binderID + " / colorID " + tabColorID);
+/**
+ * Creates a new Tab with the specified name and color ID.
+ * It inserts the new tab into the database, and then returns the new Tab object.
+ *
+ * @param tabName The name for the new Tab.
+ * @param tabColorID The color ID for the new Tab.
+ * @return The new Tab object.
+ */
+public Tab createTab(String tabName, int tabColorID) {
+    System.out.println("\n***");
+    System.out.println("createTab() : " + tabName + " / binderID " + binderID + " / colorID " + tabColorID);
 
-        String[] fields = {"tab_name", "binder_id", "tab_color_id"};
-        String[] values = {tabName, String.valueOf(binderID), String.valueOf(binderColorID)};
+    String[] fields = {"tab_name", "binder_id", "tab_color_id"};
+    String[] values = {tabName, String.valueOf(binderID), String.valueOf(tabColorID)};
 
-        return DatabaseManager.insert("tabs", fields, values);
-    }
+    int tabID = DatabaseManager.insert("tabs", fields, values);
+
+    return new Tab(this, tabID, tabName, tabColorID);
+}
 
 
     /**

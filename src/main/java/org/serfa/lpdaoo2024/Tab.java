@@ -134,23 +134,26 @@ public class Tab {
     }
 
 
-    /**
-     * Creates a new note with the specified name and color ID.
-     * It prints the details of the note to the console, and then inserts the note into the database.
-     *
-     * @param noteName    The name of the new note.
-     * @param noteColorID The unique identifier for the color of the new note.
-     * @return The result of the insert operation. Typically, the number of rows affected.
-     */
-    public int createNote(String noteName, int noteColorID) {
-        System.out.println("\n***");
-        System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
+/**
+ * Creates a new Note with the specified name, content, and color ID.
+ * It inserts the new note into the database, and then returns the new Note object.
+ *
+ * @param noteName The name for the new Note.
+ * @param noteContent The content for the new Note.
+ * @param noteColorID The color ID for the new Note.
+ * @return The new Note object.
+ */
+public Note createNote(String noteName, String noteContent, int noteColorID) {
+    System.out.println("\n***");
+    System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
 
-        String[] fields = {"note_name", "tab_id", "note_color_id"};
-        String[] values = {noteName, String.valueOf(tabID), String.valueOf(noteColorID)};
+    String[] fields = {"note_name", "tab_id", "note_color_id"};
+    String[] values = {noteName, String.valueOf(tabID), String.valueOf(noteColorID)};
 
-        return DatabaseManager.insert("tabs", fields, values);
-    }
+    int noteID = DatabaseManager.insert("tabs", fields, values);
+
+    return new Note(this, noteID, noteName, noteContent, noteColorID);
+}
 
 
     /**

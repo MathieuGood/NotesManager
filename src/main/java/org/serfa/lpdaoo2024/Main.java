@@ -40,19 +40,18 @@ public class Main {
         Notebook notebook = new Notebook(userID);
         notebook.getContentTree();
 
-        ArrayList<Binder> binders = notebook.getAllBinders();
-
-
+//        ArrayList<Binder> binders = notebook.getAllBinders();
         // notebook.createBinder("Sorties", 4);
         // notebook.createBinder("Recherche d'emploi", 3);
 
         // Instantiate first Binder of ArrayList binders as binder1
-        Binder binder1 = binders.get(2);
-
-        System.out.println(binder1.getBinderName());
-
-         binder1.editName("Promenades");
+//        Binder binder1 = binders.get(2);
+//         binder1.editName("Promenades");
         // binder1.editColor(1)
+
+        Binder binder = notebook.createBinder("Immobilier", 1);
+
+//        Tab tab =
 
 
     }
