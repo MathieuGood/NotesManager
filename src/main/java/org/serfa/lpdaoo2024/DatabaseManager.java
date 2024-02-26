@@ -1,6 +1,7 @@
 package org.serfa.lpdaoo2024;
 
 import java.sql.*;
+import java.util.Collections;
 
 public abstract class DatabaseManager {
 
@@ -41,6 +42,99 @@ public abstract class DatabaseManager {
     public static void closeDatabaseConnection(Connection connection) throws SQLException {
         System.out.println("Closing connection to " + dbName);
         connection.close();
+    }
+
+
+    public static int insert(String table, String[] fields, String[] values) {
+        System.out.println("Inserting into table " + table);
+
+        try {
+            Connection connection = openDatabaseConnection();
+
+            // Create placeholders for field names and values
+            String fieldPlaceholders = String.join(", ", fields);
+            String valuePlaceholders = String.join(", ", Collections.nCopies(fields.length, "?"));
+
+            // Construct the SQL query string
+            String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
+
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            // Set values for the prepared statement
+            for (int i = 0; i < values.length; i++) {
+                statement.setString(i + 1, values[i]);
+            }
+
+            // Execute the statement
+            int queryResult = statement.executeUpdate();
+            System.out.println("Number of rows inserted : " + queryResult);
+
+            // Get last inserted ID
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            int lastInsertedID = rs.getInt(1);
+
+            closeDatabaseConnection(connection);
+
+            System.out.println("Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+
+            return lastInsertedID;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("SQL Integrity Constraint Violation : " + e);
+            return 0;
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error : " + e);
+            return -1;
+        }
+    }
+
+
+    // On the same model as insert() method, create a method to update a row in a table
+    public static int update(String table, String[] fields, String[] values, String condition) {
+        System.out.println("Updating table " + table);
+
+        try {
+            Connection connection = openDatabaseConnection();
+
+            // Create placeholders for field names and values
+            String fieldPlaceholders = String.join(" = ?, ", fields) + " = ?";
+            String valuePlaceholders = String.join(", ", values);
+
+            // Construct the SQL query string
+            String query = "UPDATE " + table + " SET " + fieldPlaceholders + " WHERE " + condition;
+
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            // Set values for the prepared statement
+            for (int i = 0; i < values.length; i++) {
+                statement.setString(i + 1, values[i]);
+            }
+
+            // Execute the statement
+            int queryResult = statement.executeUpdate();
+            System.out.println("Number of rows updated : " + queryResult);
+
+            // Get last inserted ID
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            int lastInsertedID = rs.getInt(1);
+
+            closeDatabaseConnection(connection);
+
+            System.out.println("Update done with result " + queryResult + ". ID of updated row : " + lastInsertedID);
+
+            return lastInsertedID;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("SQL Integrity Constraint Violation : " + e);
+            return 0;
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error : " + e);
+            return -1;
+        }
     }
 
 }

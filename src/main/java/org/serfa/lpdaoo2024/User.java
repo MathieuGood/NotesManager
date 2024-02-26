@@ -119,8 +119,6 @@ public class User {
 
 
 
-
-
 // Unused methods (need refactoring to be used)
 
 //    // Get all users from database

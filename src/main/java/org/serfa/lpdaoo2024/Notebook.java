@@ -1,8 +1,9 @@
 package org.serfa.lpdaoo2024;
 
 import java.sql.*;
+import java.util.ArrayList;
 
-public class Notebook{
+public class Notebook {
 
     private final int userID;
 
@@ -10,16 +11,16 @@ public class Notebook{
         this.userID = userID;
     }
 
-
     public int getUserID() {
-        return this.userID;
+        return userID;
     }
 
     public void getContentTree() {
 
         try {
             Connection connection = DatabaseManager.openDatabaseConnection();
-            System.out.println("Getting Notebook Content Tree for userID " + userID);
+            System.out.println("\n***");
+            System.out.println("getContentTree() for userID " + userID);
 
             PreparedStatement statement = connection.prepareStatement("""
                                 SELECT
@@ -73,8 +74,111 @@ public class Notebook{
     }
 
 
+    public ArrayList<Binder> getAllBinders() {
+
+        try {
+            Connection connection = DatabaseManager.openDatabaseConnection();
+            System.out.println("\n***");
+            System.out.println("getAllBinders() for userID " + this.userID + " :");
+
+            PreparedStatement statement = connection.prepareStatement("""
+                                SELECT
+                                	binders.binder_id,
+                                    binders.binder_name,
+                                    binders.binder_color_id
+                                FROM binders
+                                WHERE user_id = ?;
+                            """,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            // Add userID to query
+            statement.setInt(1, userID);
+
+            // Execute query and store results in ResultSet
+            ResultSet resultSet = statement.executeQuery();
 
 
+            // Create ArrayList to store all Binder objects
+            ArrayList<Binder> binders = new ArrayList<>();
+
+            // Parse query results to new Binder object and store it into ArrayList
+            while (resultSet.next()) {
+                // Print out data from resultSet
+                int binderID = resultSet.getInt(1);
+                String binderName = resultSet.getString(2);
+                int binderColorID = resultSet.getInt(3);
+                System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID);
+                binders.add(new Binder(this, binderID, binderName, binderColorID));
+            }
+
+            DatabaseManager.closeDatabaseConnection(connection);
+
+            return binders;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Entry already exists
+            System.out.println("SQL Integrity Constraint Violation : " + e);
+
+        } catch (SQLException e) {
+            // Other error
+            System.out.println("SQL Error : " + e);
+
+        }
+        return null;
+    }
+
+
+    public int createBinder(String binderName, int binderColorID) {
+        System.out.println("\n***");
+        System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
+
+        String[] fields = {"binder_name", "user_id", "binder_color_id"};
+        String[] values = {binderName, String.valueOf(userID), String.valueOf(binderColorID)};
+
+        return DatabaseManager.insert("binders", fields, values);
+    }
+
+
+    public int deleteBinder(int binderID) {
+
+        try {
+            System.out.println("\n***");
+            System.out.println("deleteBinder() : " + " binderID " + binderID);
+
+            Connection connection = DatabaseManager.openDatabaseConnection();
+
+            // Delete binder and all associated children (tabs and notes) from database
+            // userID is used to prevent deletion of other user's data
+
+            PreparedStatement statement = connection.prepareStatement("""
+                        DELETE FROM binders
+                        WHERE binder_id = ?
+                        AND user_id = ?;
+                        ;
+                    """);
+
+            statement.setInt(1, binderID);
+            statement.setInt(2, userID);
+
+            // Execute the statement
+            int rowsDeleted = statement.executeUpdate();
+            System.out.println("Rows deleted : " + rowsDeleted);
+
+            DatabaseManager.closeDatabaseConnection(connection);
+            return rowsDeleted;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Cannot delete because of foreign key constraint
+            System.out.println("SQL Integrity Constraint Violation : " + e);
+            return 0;
+
+        } catch (SQLException e) {
+            // Other error
+            System.out.println("SQL Error : " + e);
+            return -1;
+        }
+
+    }
 
 
 }

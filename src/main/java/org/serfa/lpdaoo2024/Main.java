@@ -3,6 +3,7 @@ package org.serfa.lpdaoo2024;
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -32,7 +33,6 @@ public class Main {
         // User.createUser("Mat", "mat@mat.com", "123456*G");
 
         // Check if user email and password match
-
         int userID = User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1");
         System.out.println("User ID : " + userID);
 
@@ -40,7 +40,17 @@ public class Main {
         Notebook notebook = new Notebook(userID);
         notebook.getContentTree();
 
-        Binder binder1 = new Binder(notebook, 1);
+        ArrayList<Binder> binders = notebook.getAllBinders();
+
+        notebook.createBinder("Binder de test!", 4);
+
+//        notebook2.deleteBinder(6);
+
+
+
+//        notebook.createBinder("Recherche d'emploi", 3);
+
+
         // binder1.editName("Nouveau nom de classeur");
         // binder1.delete()
         // binder1.editColor(1)
