@@ -174,8 +174,6 @@ public abstract class DatabaseManager {
             // Construct the SQL UPDATE query
             String query = "UPDATE " + table + " SET " + field + " = ?" + " WHERE " + conditionField + " = ?";
 
-            System.out.println(query);
-
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             // Set values for the prepared statement
