@@ -42,19 +42,17 @@ public class Main {
 
         ArrayList<Binder> binders = notebook.getAllBinders();
 
-        notebook.createBinder("Binder de test!", 4);
 
-//        notebook2.deleteBinder(6);
+        // notebook.createBinder("Sorties", 4);
+        // notebook.createBinder("Recherche d'emploi", 3);
 
+        // Instantiate first Binder of ArrayList binders as binder1
+        Binder binder1 = binders.get(2);
 
+        System.out.println(binder1.getBinderName());
 
-//        notebook.createBinder("Recherche d'emploi", 3);
-
-
-        // binder1.editName("Nouveau nom de classeur");
-        // binder1.delete()
+         binder1.editName("Promenades");
         // binder1.editColor(1)
-// To  create new binder in database, use Binder class or Notebook class ?
 
 
     }
