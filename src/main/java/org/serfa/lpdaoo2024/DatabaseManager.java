@@ -57,7 +57,6 @@ public abstract class DatabaseManager {
  * @param conditionField The field name to use in the WHERE clause.
  * @param conditionValue The value to use in the WHERE clause.
  * @return A ResultSet object containing the result of the query.
- * @throws SQLException If a database access error occurs.
  */
 public static ResultSet select(String table, String[] fields, String conditionField, String conditionValue) {
     // Print a message indicating the start of the selection process
@@ -109,8 +108,6 @@ public static ResultSet select(String table, String[] fields, String conditionFi
  * @param fields An array of field names to insert.
  * @param values An array of values corresponding to the field names to insert.
  * @return The ID of the inserted row.
- * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
- * @throws SQLException If a database access error occurs.
  */
 public static int insert(String table, String[] fields, String[] values) {
     // Print a message indicating the start of the insertion process
@@ -176,8 +173,6 @@ public static int insert(String table, String[] fields, String[] values) {
  * @param conditionField The field name to use in the WHERE clause.
  * @param conditionValue The value to use in the WHERE clause.
  * @return The number of rows affected by the update.
- * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
- * @throws SQLException If a database access error occurs.
  */
 public static int update(String table, String field, String value, String conditionField, String conditionValue) {
     // Print a message indicating the start of the update process
@@ -233,8 +228,6 @@ public static int update(String table, String field, String value, String condit
  * @param conditionField The field name to use in the WHERE clause.
  * @param conditionValue The value to use in the WHERE clause.
  * @return The number of rows affected by the delete.
- * @throws SQLIntegrityConstraintViolationException If a SQL integrity constraint is violated.
- * @throws SQLException If a database access error occurs.
  */
 public static int delete(String table, String conditionField, String conditionValue) {
     // Print a message indicating the start of the deletion process
