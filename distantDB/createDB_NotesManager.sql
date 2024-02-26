@@ -100,7 +100,8 @@ CREATE TABLE binders(
    user_id INT UNSIGNED NOT NULL,
    binder_color_id INT UNSIGNED,
    PRIMARY KEY(binder_id),
-   FOREIGN KEY(user_id) REFERENCES users(user_id),
+   FOREIGN KEY(user_id) REFERENCES users(user_id)
+       ON DELETE CASCADE,
    FOREIGN KEY(binder_color_id) REFERENCES colors(color_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -113,7 +114,9 @@ INSERT INTO binders(
    ('My First Binder', 2, 1),
    ('My First Binder', 3, 2),
    ('My First Binder', 4, 5),
-   ('My First Binder', 5, 2);
+   ('My First Binder', 5, 2),
+   ('Voyages', 1, 1),
+   ('Recherche emploi', 1, 3);
 
 
 CREATE TABLE tabs(
@@ -122,7 +125,8 @@ CREATE TABLE tabs(
    binder_id INT UNSIGNED NOT NULL,
    tab_color_id INT UNSIGNED,
    PRIMARY KEY(tab_id),
-   FOREIGN KEY(binder_id) REFERENCES binders(binder_id),
+   FOREIGN KEY(binder_id) REFERENCES binders(binder_id)
+       ON DELETE CASCADE,
    FOREIGN KEY(tab_color_id) REFERENCES colors(color_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -137,7 +141,9 @@ INSERT INTO tabs(
    ('My First Tab', 2, 1),
    ('My First Tab', 3, 2),
    ('My First Tab', 4, 5),
-   ('My First Tab', 5, 2);
+   ('My First Tab', 5, 2),
+   ('Grèce 2024', 6, 5),
+   ('USA 2023', 6, 4);
 
 
 CREATE TABLE notes(
@@ -148,6 +154,7 @@ CREATE TABLE notes(
    tab_id INT UNSIGNED NOT NULL,
    PRIMARY KEY(note_id),
    FOREIGN KEY(tab_id) REFERENCES tabs(tab_id)
+       ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO notes(
@@ -170,7 +177,8 @@ CREATE TABLE tag(
    note_id INT UNSIGNED NOT NULL,
    label_id INT UNSIGNED NOT NULL,
    PRIMARY KEY(note_id, label_id),
-   FOREIGN KEY(note_id) REFERENCES notes(note_id),
+   FOREIGN KEY(note_id) REFERENCES notes(note_id)
+       ON DELETE CASCADE,
    FOREIGN KEY(label_id) REFERENCES labels(label_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
