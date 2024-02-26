@@ -3,14 +3,39 @@ package org.serfa.lpdaoo2024;
 import java.sql.*;
 import java.util.Collections;
 
+/**
+ * The DatabaseManager class provides methods for interacting with a database.
+ * It contains methods to open and close a database connection, as well as to perform select, insert, update, and delete operations.
+ * This class is abstract and cannot be instantiated.
+ */
 public abstract class DatabaseManager {
 
     // Credentials for database connection
     // TO DO : move credentials to a separate file for security
+
+    /**
+     * The host address of the database.
+     */
     final static private String dbHost = "51.91.98.35";
+
+    /**
+     * The port number of the database.
+     */
     final static private String dbPort = "3306";
+
+    /**
+     * The username for the database connection.
+     */
     final static private String dbUsername = "notesmanager";
+
+    /**
+     * The password for the database connection.
+     */
     final static private String dbPassword = "notesserfa2024";
+
+    /**
+     * The name of the database.
+     */
     final static private String dbName = "NotesManager";
 
 
