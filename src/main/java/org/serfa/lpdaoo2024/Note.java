@@ -8,19 +8,14 @@ public class Note {
 
 
     /**
-     * The Tab object that this Note belongs to.
-     */
-    private final Tab tab;
-
-    /**
      * The unique identifier for this Note.
      */
     private final int noteID;
 
     /**
-     * The unique identifier for the User who owns this Note.
+     * The unique identifier for the Tab that this Note belongs to.
      */
-    private final int userID;
+    private final int tabID;
 
     /**
      * The name of this Note.
@@ -39,8 +34,8 @@ public class Note {
 
 
     /**
-     * Constructs a new Note with the specified Tab, note ID, user ID, note name, note content, and note color ID.
-     * It also sets the user ID from the Tab's user ID.
+     * Constructor for the Note class.
+     * Initializes a new Note object with the specified tab, note ID, note name, note content, and note color ID.
      *
      * @param tab         The Tab object that this Note belongs to.
      * @param noteID      The unique identifier for this Note.
@@ -55,22 +50,11 @@ public class Note {
             String noteContent,
             int noteColorID
     ) {
-        this.tab = tab;
         this.noteID = noteID;
-        this.userID = tab.getUserID();
+        this.tabID = tab.getTabID();
         this.noteName = noteName;
         this.noteContent = noteContent;
         this.noteColorID = noteColorID;
-    }
-
-
-    /**
-     * Returns the Tab object that this Note belongs to.
-     *
-     * @return The Tab object that this Note belongs to.
-     */
-    public Tab getTab() {
-        return tab;
     }
 
 
@@ -85,12 +69,12 @@ public class Note {
 
 
     /**
-     * Returns the unique identifier for the User who owns this Note.
+     * Returns the unique identifier for the Tab that this Note belongs to.
      *
-     * @return The unique identifier for the User who owns this Note.
+     * @return The unique identifier for the Tab that this Note belongs to.
      */
-    public int getUserID() {
-        return userID;
+    public int getTabID() {
+        return tabID;
     }
 
 

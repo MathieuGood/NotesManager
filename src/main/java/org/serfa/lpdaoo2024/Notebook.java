@@ -5,26 +5,33 @@ import java.util.ArrayList;
 
 
 /**
- * The Notebook class represents a notebook in a note-taking application.
- * It contains methods to get the user ID of the owner of the notebook.
+ * Represents a Notebook in the application.
+ * A Notebook contains a list of Binders.
  */
 public class Notebook {
 
 
     /**
+     * List of Binders in this Notebook.
+     */
+    private ArrayList<Binder> binders = new ArrayList<>();
+    
+    /**
      * The ID of the user who owns this notebook.
      */
     private final int userID;
 
+
     /**
-     * Constructs a new Notebook with the specified user ID.
+     * Constructs a new Notebook object with the specified user ID.
+     * It initializes the user ID of this notebook and retrieves all binders associated with the user ID.
      *
      * @param userID The ID of the user who owns this notebook.
      */
     public Notebook(int userID) {
         this.userID = userID;
+        this.binders = fetchAllBinders();
     }
-
 
     /**
      * Returns the user ID of the owner of this notebook.
@@ -33,6 +40,16 @@ public class Notebook {
      */
     public int getUserID() {
         return userID;
+    }
+
+
+    /**
+     * Returns the list of Binders in this Notebook.
+     *
+     * @return The list of Binders in this Notebook.
+     */
+    public ArrayList<Binder> getBinders() {
+        return binders;
     }
 
 
@@ -101,7 +118,7 @@ public class Notebook {
      *
      * @return An ArrayList of Binder objects representing all binders associated with the user ID of this notebook, or null if an exception occurs.
      */
-    public ArrayList<Binder> getAllBinders() {
+    private ArrayList<Binder> fetchAllBinders() {
         System.out.println("\n***");
         System.out.println("getAllBinders() for userID " + this.userID + " :");
 
@@ -140,25 +157,25 @@ public class Notebook {
     }
 
 
-/**
- * Creates a new Binder with the specified name and color ID.
- * It inserts the new binder into the database, and then returns the new Binder object.
- *
- * @param binderName The name for the new Binder.
- * @param binderColorID The color ID for the new Binder.
- * @return The new Binder object.
- */
-public Binder createBinder(String binderName, int binderColorID) {
-    System.out.println("\n***");
-    System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
+    /**
+     * Creates a new Binder with the specified name and color ID.
+     * It inserts the new binder into the database, and then returns the new Binder object.
+     *
+     * @param binderName    The name for the new Binder.
+     * @param binderColorID The color ID for the new Binder.
+     * @return The new Binder object.
+     */
+    public Binder createBinder(String binderName, int binderColorID) {
+        System.out.println("\n***");
+        System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
 
-    String[] fields = {"binder_name", "user_id", "binder_color_id"};
-    String[] values = {binderName, String.valueOf(userID), String.valueOf(binderColorID)};
+        String[] fields = {"binder_name", "user_id", "binder_color_id"};
+        String[] values = {binderName, String.valueOf(userID), String.valueOf(binderColorID)};
 
-    int binderID = DatabaseManager.insert("binders", fields, values);
+        int binderID = DatabaseManager.insert("binders", fields, values);
 
-    return new Binder(this, binderID, binderName, binderColorID );
-}
+        return new Binder(this, binderID, binderName, binderColorID);
+    }
 
 
     /**

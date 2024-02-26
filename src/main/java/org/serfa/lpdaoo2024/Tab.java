@@ -1,16 +1,21 @@
 package org.serfa.lpdaoo2024;
 
+
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+
 /**
- * The Tab class represents a tab in a binder in a note-taking application.
- * It contains methods to get and set the tab's properties, and to interact with the database.
+ * Represents a Tab in the application.
+ * A Tab contains a list of Notes.
  */
 public class Tab {
 
 
     /**
-     * The Binder object that this Tab belongs to.
+     * List of Notes in this Tab.
      */
-    private final Binder binder;
+    private ArrayList<Note> notes;
 
     /**
      * The unique identifier for this Tab.
@@ -18,9 +23,9 @@ public class Tab {
     private final int tabID;
 
     /**
-     * The unique identifier for the User who owns this Tab.
+     * The unique identifier for the Binder that this Tab belongs to.
      */
-    private final int userID;
+    private final int binderID;
 
     /**
      * The name of this Tab.
@@ -33,26 +38,36 @@ public class Tab {
     private int tabColorID;
 
 
+  /**
+ * Constructor for the Tab class.
+ * Initializes a new Tab object with the specified binder, tab ID, tab name, and tab color ID.
+ * It also fetches all the notes associated with this tab from the database.
+ *
+ * @param binder The Binder object that this Tab belongs to.
+ * @param tabID The unique identifier for this Tab.
+ * @param tabName The name of this Tab.
+ * @param tabColorID The unique identifier for the color of this Tab.
+ */
+public Tab(
+        Binder binder,
+        int tabID,
+        String tabName,
+        int tabColorID
+) {
+    this.tabID = tabID;
+    this.binderID = binder.getBinderID();
+    this.tabName = tabName;
+    this.tabColorID = tabColorID;
+    this.notes = fetchAllNotes();
+}
+
     /**
-     * Constructs a new Tab with the specified Binder, tab ID, tab name, and tab color ID.
-     * It also sets the user ID from the Binder's user ID.
+     * Returns the list of Notes in this Tab.
      *
-     * @param binder     The Binder object that this Tab belongs to.
-     * @param tabID      The unique identifier for this Tab.
-     * @param tabName    The name of this Tab.
-     * @param tabColorID The unique identifier for the color of this Tab.
+     * @return The list of Notes in this Tab.
      */
-    public Tab(
-            Binder binder,
-            int tabID,
-            String tabName,
-            int tabColorID
-    ) {
-        this.binder = binder;
-        this.tabID = tabID;
-        this.userID = binder.getUserID();
-        this.tabName = tabName;
-        this.tabColorID = tabColorID;
+    public ArrayList<Note> getNotes() {
+        return notes;
     }
 
 
@@ -67,12 +82,12 @@ public class Tab {
 
 
     /**
-     * Returns the unique identifier for the User who owns this Tab.
+     * Returns the unique identifier for the Binder that this Tab belongs to.
      *
-     * @return The unique identifier for the User who owns this Tab.
+     * @return The unique identifier for the Binder that this Tab belongs to.
      */
-    public int getUserID() {
-        return userID;
+    public int getBinderID() {
+        return binderID;
     }
 
 
@@ -95,6 +110,46 @@ public class Tab {
         return tabColorID;
     }
 
+
+    private ArrayList<Note> fetchAllNotes() {
+        System.out.println("\n***");
+        System.out.println("fetchAllNotes() for binderID " + this.getBinderID());
+
+        ResultSet resultSet = DatabaseManager.select(
+                "notes",
+                new String[]{
+                        "notes.note_id",
+                        "notes.note_name",
+                        "notes.note_content",
+                        "notes.note_color_id"
+                },
+                "tab_id",
+                String.valueOf(tabID));
+
+        // Create ArrayList to store all Note objects
+        ArrayList<Note> notes = new ArrayList<>();
+
+        // Parse query results to new Note object and store it into ArrayList
+        try {
+            while (resultSet.next()) {
+                // Retrieve data from resultSet
+                int noteID = resultSet.getInt(1);
+                String noteName = resultSet.getString(2);
+                String noteContent = resultSet.getString(3);
+                int noteColorID = resultSet.getInt(4);
+
+                // Print out data from resultSet
+                System.out.println("\t> " + noteID + " / " + noteName + " / " + noteColorID);
+
+                // Create new Note object with parsed data and add it to ArrayList
+                notes.add(new Note(this, noteID, noteName, noteContent, noteColorID));
+            }
+        } catch (Exception e) {
+            System.out.println("Error : " + e);
+            return null;
+        }
+        return notes;
+    }
 
     /**
      * Edits the name of this Tab.
@@ -134,26 +189,26 @@ public class Tab {
     }
 
 
-/**
- * Creates a new Note with the specified name, content, and color ID.
- * It inserts the new note into the database, and then returns the new Note object.
- *
- * @param noteName The name for the new Note.
- * @param noteContent The content for the new Note.
- * @param noteColorID The color ID for the new Note.
- * @return The new Note object.
- */
-public Note createNote(String noteName, String noteContent, int noteColorID) {
-    System.out.println("\n***");
-    System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
+    /**
+     * Creates a new Note with the specified name, content, and color ID.
+     * It inserts the new note into the database, and then returns the new Note object.
+     *
+     * @param noteName    The name for the new Note.
+     * @param noteContent The content for the new Note.
+     * @param noteColorID The color ID for the new Note.
+     * @return The new Note object.
+     */
+    public Note createNote(String noteName, String noteContent, int noteColorID) {
+        System.out.println("\n***");
+        System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
 
-    String[] fields = {"note_name", "tab_id", "note_content", "note_color_id"};
-    String[] values = {noteName, String.valueOf(tabID), noteContent, String.valueOf(noteColorID)};
+        String[] fields = {"note_name", "tab_id", "note_content", "note_color_id"};
+        String[] values = {noteName, String.valueOf(tabID), noteContent, String.valueOf(noteColorID)};
 
-    int noteID = DatabaseManager.insert("notes", fields, values);
+        int noteID = DatabaseManager.insert("notes", fields, values);
 
-    return new Note(this, noteID, noteName, noteContent, noteColorID);
-}
+        return new Note(this, noteID, noteName, noteContent, noteColorID);
+    }
 
 
     /**

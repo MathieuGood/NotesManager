@@ -110,13 +110,8 @@ INSERT INTO binders(
    user_id,
    binder_color_id
 ) VALUES
-   ('Cours SERFA', 1, 2),
-   ('My First Binder', 2, 1),
-   ('My First Binder', 3, 2),
-   ('My First Binder', 4, 5),
-   ('My First Binder', 5, 2),
-   ('Voyages', 1, 1),
-   ('Recherche emploi', 1, 3);
+   ('Cours SERFA', 1, 2)
+    ;
 
 
 CREATE TABLE tabs(
@@ -137,13 +132,8 @@ INSERT INTO tabs(
 ) VALUES
    ('Java', 1, 2),
    ('React Native', 1, 3),
-   ('SQL', 1, 4),
-   ('My First Tab', 2, 1),
-   ('My First Tab', 3, 2),
-   ('My First Tab', 4, 5),
-   ('My First Tab', 5, 2),
-   ('Grèce 2024', 6, 5),
-   ('USA 2023', 6, 4);
+   ('SQL', 1, 4)
+    ;
 
 
 CREATE TABLE notes(
@@ -166,11 +156,8 @@ INSERT INTO notes(
    ('Syntax', NULL,  'Print a statement : System.out.println("This is a statement")', 1),
    ('Create a class', 2, 'Do not forget to add the constructor.', 1),
    ('React Native Introduction', 4,'React Native is a framework for building native apps using React.', 2),
-   ('SQL Introduction', NULL,'SQL is a standard language for storing, manipulating and retrieving data in databases.', 3),
-   ('My First Note', NULL, 'This is my first note.', 4),
-   ('My First Note', NULL, 'This is my first note.', 5),
-   ('My First Note', NULL, 'This is my first note.', 6),
-   ('My First Note', NULL, 'This is my first note.', 7);
+   ('SQL Introduction', NULL,'SQL is a standard language for storing, manipulating and retrieving data in databases.', 3)
+    ;
 
 
 CREATE TABLE tag(

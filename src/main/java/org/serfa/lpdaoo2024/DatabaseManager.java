@@ -205,8 +205,6 @@ public abstract class DatabaseManager {
             statement.setString(1, value);
             statement.setString(2, conditionValue);
 
-            System.out.println(statement);
-
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
             System.out.println("Number of rows updated : " + queryResult);
