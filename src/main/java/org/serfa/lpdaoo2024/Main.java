@@ -40,18 +40,17 @@ public class Main {
         Notebook notebook = new Notebook(userID);
         notebook.getContentTree();
 
-//        ArrayList<Binder> binders = notebook.getAllBinders();
-        // notebook.createBinder("Sorties", 4);
-        // notebook.createBinder("Recherche d'emploi", 3);
+        // ArrayList<Binder> binders = notebook.getAllBinders();
 
-        // Instantiate first Binder of ArrayList binders as binder1
-//        Binder binder1 = binders.get(2);
-//         binder1.editName("Promenades");
-        // binder1.editColor(1)
 
         Binder binder = notebook.createBinder("Immobilier", 1);
 
-//        Tab tab =
+        Tab tab = binder.createTab("Appartements", 1);
+
+        Note note = tab.createNote("Duplex Neudorf", "Grand appartement de 100 mètres carrés.", 1);
+        Note note2 = tab.createNote("Garage sous-sol", "Box pour deux motos.", 1);
+
+        System.out.println(note.getNoteContent());
 
 
     }

@@ -147,10 +147,10 @@ public Note createNote(String noteName, String noteContent, int noteColorID) {
     System.out.println("\n***");
     System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
 
-    String[] fields = {"note_name", "tab_id", "note_color_id"};
-    String[] values = {noteName, String.valueOf(tabID), String.valueOf(noteColorID)};
+    String[] fields = {"note_name", "tab_id", "note_content", "note_color_id"};
+    String[] values = {noteName, String.valueOf(tabID), noteContent, String.valueOf(noteColorID)};
 
-    int noteID = DatabaseManager.insert("tabs", fields, values);
+    int noteID = DatabaseManager.insert("notes", fields, values);
 
     return new Note(this, noteID, noteName, noteContent, noteColorID);
 }
