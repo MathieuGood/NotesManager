@@ -21,13 +21,16 @@
             <AnchorPane minWidth="200.0" prefHeight="200.0" />
          </items>
       </SplitPane>
-      <MenuButton layoutX="307.0" layoutY="10.0" mnemonicParsing="false" text="Créer un post-it">
+      <MenuButton fx:id="btnCreateLabel" layoutX="307.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveLabel" prefHeight="25.0" prefWidth="117.0" text="Ajouter un label" AnchorPane.topAnchor="10.0">
         <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
+          <MenuItem mnemonicParsing="false" onAction="#saveLabel" text="Important" />
+          <MenuItem mnemonicParsing="false" onAction="#saveLabel" text="Urgent" />
+           <MenuItem mnemonicParsing="false" onAction="#saveLabel" text="A faire" />
+           <MenuItem mnemonicParsing="false" onAction="#saveLabel" text="Idée" />
+
         </items>
       </MenuButton>
-      <Button layoutX="434.0" layoutY="10.0" mnemonicParsing="false" text="Sauvegarder" />
-      <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" text="Quitter" />
+      <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#logOut" text="Quitter" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
    </children>
 </AnchorPane>

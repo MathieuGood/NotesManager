@@ -18,11 +18,14 @@ public class MainWindow extends Application {
     private Stage stage;
     private Scene scene;
     private Parent root;
-
-
+    
     @FXML
     Label userNameLabel;
-    Button btnLogOut;
+    @FXML
+    Button btnLogOut, btnSave;
+
+    @FXML
+    MenuButton btnCreateLabel;
 
     public static void main(String[] args) {
         launch();
@@ -30,8 +33,6 @@ public class MainWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
         this.stage = primaryStage;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
@@ -41,18 +42,8 @@ public class MainWindow extends Application {
         stage.show();
     }
 
-    @FXML
-    private void initialize() {
-        btnLogOut.setOnMouseClicked(e -> {
-            try {
-                logOut(e);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-    }
 
-    public void logOut(MouseEvent event) throws IOException {
+    public void logOut(ActionEvent event) throws IOException {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("LogOut");
@@ -70,13 +61,24 @@ public class MainWindow extends Application {
                     throw new RuntimeException(ex);
                 }
             }
+    }
 
+    public void saveNote(ActionEvent e) {
+        System.out.println("btn save note");
+    }
+
+    public void saveLabel(ActionEvent e) {
+
+        if (e.getSource() instanceof MenuItem) {
+            MenuItem label = (MenuItem) e.getSource();
+            String labelContent = label.getText();
+
+            System.out.println(labelContent);
+        }
     }
 
     public void initUserName(String userName) {
 
-        userNameLabel.setText("Hello : " + userName);
+        userNameLabel.setText("user name -> " + userName);
     }
-
-
 }
