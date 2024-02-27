@@ -28,33 +28,31 @@ public class Note {
     private String noteContent;
 
     /**
-     * The unique identifier for the color of this Note.
+     * An array of unique identifiers for the Labels associated with this Note.
+     * Each element in the array is an ID that corresponds to a Label in the database.
      */
-    private int noteColorID;
+    private int[] noteLabelID;
 
 
     /**
      * Constructor for the Note class.
-     * Initializes a new Note object with the specified tab, note ID, note name, note content, and note color ID.
+     * Initializes a new Note object with the specified tab, note ID, note name and note content.
      *
      * @param tab         The Tab object that this Note belongs to.
      * @param noteID      The unique identifier for this Note.
      * @param noteName    The name of this Note.
      * @param noteContent The content of this Note.
-     * @param noteColorID The unique identifier for the color of this Note.
      */
     public Note(
             Tab tab,
             int noteID,
             String noteName,
-            String noteContent,
-            int noteColorID
+            String noteContent
     ) {
         this.noteID = noteID;
         this.tabID = tab.getTabID();
         this.noteName = noteName;
         this.noteContent = noteContent;
-        this.noteColorID = noteColorID;
     }
 
 
@@ -99,12 +97,39 @@ public class Note {
 
 
     /**
-     * Returns the unique identifier for the color of this Note.
+     * Returns the array of label IDs associated with this Note.
      *
-     * @return The unique identifier for the color of this Note.
+     * @return The array of label IDs associated with this Note.
      */
-    public int getNoteColorID() {
-        return noteColorID;
+    public int[] getNoteLabelID() {
+        return noteLabelID;
+    }
+
+    /**
+     * Sets the name of this Note.
+     *
+     * @param noteName The new name for this Note.
+     */
+    public void setNoteName(String noteName) {
+        this.noteName = noteName;
+    }
+
+    /**
+     * Sets the content of this Note.
+     *
+     * @param noteContent The new content for this Note.
+     */
+    public void setNoteContent(String noteContent) {
+        this.noteContent = noteContent;
+    }
+
+    /**
+     * Sets the array of label IDs associated with this Note.
+     *
+     * @param noteLabelID The new array of label IDs for this Note.
+     */
+    public void setNoteLabelID(int[] noteLabelID) {
+        this.noteLabelID = noteLabelID;
     }
 
 
@@ -140,25 +165,6 @@ public class Note {
                 "notes",
                 "note_content",
                 newContent,
-                "note_id",
-                String.valueOf(this.noteID)
-        );
-    }
-
-
-    /**
-     * Edits the color ID of this Note.
-     * It updates the note color ID in the database and returns the result of the update operation.
-     *
-     * @param newColorID The new color ID for this Note.
-     * @return The result of the update operation. Typically, the number of rows affected.
-     */
-    public int editColor(int newColorID) {
-        this.noteColorID = newColorID;
-        return DatabaseManager.update(
-                "notes",
-                "notes_color_id",
-                String.valueOf(newColorID),
                 "note_id",
                 String.valueOf(this.noteID)
         );

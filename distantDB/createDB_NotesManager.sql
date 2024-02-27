@@ -69,29 +69,6 @@ INSERT INTO colors(
    ('brown', '#A52A2A'),
    ('black', '#000000'),
    ('white', '#FFFFFF');
-   
-
-CREATE TABLE labels(
-   label_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-   label_name VARCHAR(50),
-   label_color_id INT UNSIGNED NOT NULL,
-   PRIMARY KEY(label_id),
-   FOREIGN KEY(label_color_id) REFERENCES colors(color_id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
-
-INSERT INTO labels(
-   label_name,
-   label_color_id
-) VALUES
-   ('Important', 1),
-   ('Urgent', 2),
-   ('Work', 3),
-   ('Personal', 4),
-   ('School', 5),
-   ('Home', 6),
-   ('Fun', 7),
-   ('Family', 8),
-   ('Friends', 9);
 
 
 CREATE TABLE binders(
@@ -142,6 +119,7 @@ CREATE TABLE notes(
    note_color_id INT UNSIGNED,
    note_content TEXT,
    tab_id INT UNSIGNED NOT NULL,
+   label_id INT UNSIGNED,
    PRIMARY KEY(note_id),
    FOREIGN KEY(tab_id) REFERENCES tabs(tab_id)
        ON DELETE CASCADE
@@ -160,22 +138,28 @@ INSERT INTO notes(
     ;
 
 
-CREATE TABLE tag(
-   note_id INT UNSIGNED NOT NULL,
-   label_id INT UNSIGNED NOT NULL,
-   PRIMARY KEY(note_id, label_id),
-   FOREIGN KEY(note_id) REFERENCES notes(note_id)
-       ON DELETE CASCADE,
-   FOREIGN KEY(label_id) REFERENCES labels(label_id)
+CREATE TABLE labels(
+   label_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   label_name VARCHAR(50),
+   label_color_id INT UNSIGNED NOT NULL,
+   PRIMARY KEY(label_id),
+   FOREIGN KEY(label_color_id) REFERENCES colors(color_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO tag(
-   note_id,
-   label_id
+INSERT INTO labels(
+    label_name,
+    label_color_id
 ) VALUES
-   (1, 1),
-   (2, 2);
-
+      ('Important', 1),
+      ('Urgent', 2),
+      ('Work', 3),
+      ('Personal', 4),
+      ('School', 5),
+      ('Home', 6),
+      ('Fun', 7),
+      ('Family', 8),
+      ('Friends', 9)
+;
 
 -- Create a view to get all notes from all users
 CREATE VIEW viewAllUserNotes AS

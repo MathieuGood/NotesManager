@@ -119,7 +119,6 @@ public class Tab {
                 "notes.note_id",
                 "notes.note_name",
                 "notes.note_content",
-                "notes.note_color_id"
         };
         String[] conditionFields = {"tab_id"};
         String[] conditionValues = {String.valueOf(tabID)};
@@ -140,13 +139,14 @@ public class Tab {
                 int noteID = resultSet.getInt(1);
                 String noteName = resultSet.getString(2);
                 String noteContent = resultSet.getString(3);
-                int noteColorID = resultSet.getInt(4);
 
                 // Print out data from resultSet
-                System.out.println("\t> " + noteID + " / " + noteName + " / " + noteColorID);
+                System.out.println("\t> " + noteID + " / " + noteName);
 
                 // Create new Note object with parsed data and add it to ArrayList
-                notes.add(new Note(this, noteID, noteName, noteContent, noteColorID));
+                notes.add(new Note(this, noteID, noteName, noteContent));
+
+                // TODO : If there is a content in labelID, add it to the Note object created
             }
         } catch (Exception e) {
             System.out.println("Error : " + e);
@@ -154,6 +154,7 @@ public class Tab {
         }
         return notes;
     }
+
 
     /**
      * Edits the name of this Tab.
@@ -194,24 +195,23 @@ public class Tab {
 
 
     /**
-     * Creates a new Note with the specified name, content, and color ID.
+     * Creates a new Note with the specified name, and content.
      * It inserts the new note into the database, and then returns the new Note object.
      *
      * @param noteName    The name for the new Note.
      * @param noteContent The content for the new Note.
-     * @param noteColorID The color ID for the new Note.
      * @return The new Note object.
      */
-    public Note createNote(String noteName, String noteContent, int noteColorID) {
+    public Note createNote(String noteName, String noteContent) {
         System.out.println("\n***");
-        System.out.println("createNote() : " + noteName + " / tabID " + tabID + " / colorID " + noteColorID);
+        System.out.println("createNote() : " + noteName + " / tabID " + tabID);
 
-        String[] fields = {"note_name", "tab_id", "note_content", "note_color_id"};
-        String[] values = {noteName, String.valueOf(tabID), noteContent, String.valueOf(noteColorID)};
+        String[] fields = {"note_name", "tab_id", "note_content"};
+        String[] values = {noteName, String.valueOf(tabID), noteContent};
 
         int noteID = DatabaseManager.insert("notes", fields, values);
 
-        return new Note(this, noteID, noteName, noteContent, noteColorID);
+        return new Note(this, noteID, noteName, noteContent);
     }
 
 

@@ -46,7 +46,7 @@ public class Main {
         binder.editName("Formation Développeur ");
 //
         Tab games = binder.createTab("Jeux", 1);
-        Note bejeweled = games.createNote("Bejeweled", "Clone de Bejeweled en React Native", 1);
+        Note bejeweled = games.createNote("Bejeweled", "Clone de Bejeweled en React Native");
         bejeweled.editContent("Mobile app for Android and iOS with React Native : Bejeweled Clone.");
 
 
