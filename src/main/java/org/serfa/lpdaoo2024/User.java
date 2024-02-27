@@ -1,222 +1,164 @@
 package org.serfa.lpdaoo2024;
 
 import java.sql.*;
-import java.sql.SQLException;
 
+
+/**
+ * The User class represents a user in the system.
+ * It contains fields for the user's ID, name, and email, and methods for getting and setting these values.
+ * It also contains methods for creating a new user and checking if a user's password matches the one stored in the database.
+ */
 public class User {
 
-//    private final int userID;
-//    private final String userName;
-//    private final String userEmail;
-
-
-//    public User(int userID, String userName, String userEmail) {
-//        super();
-//        this.userID = userID;
-//        this.userName = userName;
-//        this.userEmail = userEmail;
-//
-//    }
 
     /**
-     * This method creates a new user in the database with the provided username, email, and password.
-     * It opens a connection to the database, prepares a SQL statement to insert the new user into the users table.
-     * The method then executes the statement and retrieves the generated key for the new user.
-     * If the user is successfully created, the generated user_id is returned.
-     * If a SQLIntegrityConstraintViolationException occurs (e.g. a duplicate email), 0 is returned.
-     * If any other SQLException occurs, -1 is returned.
-     * The database connection is closed before the method returns.
+     * The unique identifier for the user.
+     */
+    private int userID;
+
+    /**
+     * The name of the user.
+     */
+    private String userName;
+
+    /**
+     * The email of the user.
+     */
+    private String userEmail;
+
+
+    /**
+     * Constructs a new User object with the given ID, name, and email.
      *
-     * @param userName     The username of the new user.
+     * @param userID    The unique identifier for the user.
+     * @param userName  The name of the user.
+     * @param userEmail The email of the user.
+     */
+    public User(int userID, String userName, String userEmail) {
+        this.userID = userID;
+        this.userName = userName;
+        this.userEmail = userEmail;
+    }
+
+    /**
+     * Returns the user's ID.
+     *
+     * @return The user's ID.
+     */
+    public int getUserID() {
+        return userID;
+    }
+
+
+    /**
+     * Returns the user's name.
+     *
+     * @return The user's name.
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+
+    /**
+     * Returns the user's email.
+     *
+     * @return The user's email.
+     */
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+
+    /**
+     * Sets the user's ID.
+     *
+     * @param userID The user's new ID.
+     */
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    /**
+     * Sets the user's name.
+     *
+     * @param userName The user's new name.
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    /**
+     * Sets the user's email.
+     *
+     * @param userEmail The user's new email.
+     */
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+
+    /**
+     * Creates a new User and inserts it into the database.
+     * <p>
+     * This method first prints a message to the console indicating that a new user is being created.
+     * It then defines the fields and values for the new user, and calls the DatabaseManager's insert method to insert the new user into the database.
+     * Finally, it creates a new User object with the returned user ID, and the provided name and email, and returns this new User.
+     *
+     * @param userName     The name of the new user.
      * @param userEmail    The email of the new user.
      * @param userPassword The password of the new user.
-     * @return The generated user_id if the user is successfully created, 0 if a SQLIntegrityConstraintViolationException occurs, -1 if any other SQLException occurs.
+     * @return The newly created User.
      */
-    public static int createUser(String userName, String userEmail, String userPassword) {
+    public static User createUser(String userName, String userEmail, String userPassword) {
+        System.out.println("Creating new user " + userName + " / " + userEmail);
 
-        try {
-            Connection connection = DatabaseManager.openDatabaseConnection();
+        String[] fields = {"user_name", "user_email", "user_password"};
+        String[] values = {userName, userEmail, userPassword};
 
-            System.out.println("Inserting : " + userName + " / " + userEmail + " / " + userPassword);
+        int userID = DatabaseManager.insert("users", fields, values);
 
-            PreparedStatement statement = connection.prepareStatement("""
-                                INSERT INTO users (user_name, user_email, user_password)
-                                VALUES (?, ?, ?);
-                            """,
-                    Statement.RETURN_GENERATED_KEYS);
-
-            statement.setString(1, userName);
-            statement.setString(2, userEmail);
-            statement.setString(3, userPassword);
-
-            // Execute the statement
-            int rowsInserted = statement.executeUpdate();
-            System.out.println("Number of rows inserted : " + rowsInserted);
-
-            // Get last inserted ID
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            int lastInsertedID = rs.getInt(1);
-            System.out.println("Last inserted ID : " + lastInsertedID);
-
-            DatabaseManager.closeDatabaseConnection(connection);
-
-            return lastInsertedID;
-
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("SQL Integrity Constraint Violation : " + e);
-            return 0;
-        } catch (SQLException e) {
-            System.out.println("SQL Error : " + e);
-            return -1;
-        }
+        return new User(userID, userName, userEmail);
     }
 
 
     /**
-     * This method checks if the provided email and password match a user in the database.
-     * It opens a connection to the database, prepares a SQL statement to select the user_id
-     * from the users table where the user_email and user_password match the provided email and password.
-     * If a match is found, the user_id is returned, otherwise 0 is returned.
-     * The database connection is closed before the method returns.
+     * Checks if the provided password matches the one stored in the database for the given email.
+     * <p>
+     * This method first prints a message to the console indicating that a password match is being checked for the given email.
+     * It then defines the fields to be retrieved and the conditions for the database selection.
+     * The DatabaseManager's select method is called to retrieve the user data from the database.
+     * If a match is found, a new User object is created with the retrieved user ID and name, and the provided email, and this new User is returned.
+     * If no match is found, or if an exception occurs during the database operation, null is returned.
      *
-     * @param email    The email of the user.
-     * @param password The password of the user.
-     * @return The user_id if a match is found, 0 otherwise.
+     * @param userEmail    The email of the user for whom the password match is being checked.
+     * @param userPassword The password to be checked.
+     * @return The User object if a match is found, null otherwise.
      */
-    public static int checkPasswordMatch(String email, String password) {
+    public static User checkPasswordMatch(String userEmail, String userPassword) {
+        System.out.println("Checking password match for " + userEmail);
+
+        String[] fields = {"user_id", "user_name"};
+        String[] conditionFields = {"user_email", "user_password"};
+        String[] conditionValues = {userEmail, userPassword};
+
+        ResultSet resultSet = DatabaseManager.select("users", fields, conditionFields, conditionValues);
 
         try {
-            Connection connection = DatabaseManager.openDatabaseConnection();
+            if (resultSet.next()) {
+                int userID = resultSet.getInt(1);
+                String userName = resultSet.getString(2);
 
-            System.out.println("Checking if user e-mail and password match");
-            PreparedStatement statement = connection.prepareStatement("""
-                    SELECT user_id
-                    FROM users
-                    WHERE user_email = ? AND user_password = ?
-                    """);
+                // Print out data from resultSet
+                System.out.println("\t> userID " + userID + " / userName " + userName + " / userEmail " + userEmail);
 
-            statement.setString(1, email);
-            statement.setString(2, password);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            // If the returned result is a user
-            resultSet.next();
-            int userID = resultSet.getInt(1);
-            if (userID > 0) {
-                System.out.println("Match found : user ID #" + userID);
+                return new User(userID, userName, userEmail);
             }
-
-           DatabaseManager.closeDatabaseConnection(connection);
-            return userID;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Error : " + e);
-            return 0;
+        } catch (Exception e) {
+            System.out.println("Error : " + e);
         }
+        return null;
     }
-
-
-
-// Unused methods (need refactoring to be used)
-
-//    // Get all users from database
-//    public void getUsers() {
-//
-//        try {
-//            openDatabaseConnection();
-//
-//            System.out.println("Getting all users");
-//            PreparedStatement statement = connection.prepareStatement("""
-//                    SELECT *
-//                    FROM users
-//                    """);
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                String name = resultSet.getString(2);
-//                String email = resultSet.getString(3);
-//                System.out.println("\t> " + name + " / " + email);
-//            }
-//
-//            closeDatabaseConnection();
-//
-//        } catch (SQLException e) {
-//            System.out.println("SQL Error : " + e);
-//        }
-//    }
-//
-//
-
-//
-//    // Updated user password based on provided user_email
-//    public static void updateUserPassword(String email, String newPassword) {
-//
-//        try {
-//            openDatabaseConnection();
-//
-//            System.out.println("Updating password for " + email);
-//
-//            PreparedStatement statement = connection.prepareStatement("""
-//                    UPDATE users
-//                    SET user_password = ?
-//                    WHERE user_email = ?
-//                    """);
-//            statement.setString(1, newPassword);
-//            statement.setString(2, email);
-//            int rowsUpdated = statement.executeUpdate();
-//            System.out.println("Row updated : " + rowsUpdated);
-//
-//            closeDatabaseConnection();
-//        } catch (SQLException e) {
-//            System.out.println("SQL Error : " + e);
-//        }
-//    }
-//
-//
-//    // Updated user name based on provided user_email
-//    public static void updateUserName(String email, String newName) {
-//
-//        try {
-//            openDatabaseConnection();
-//
-//            System.out.println("Updating username for " + email);
-//
-//            PreparedStatement statement = connection.prepareStatement("""
-//                    UPDATE users
-//                    SET user_name = ?
-//                    WHERE user_email = ?
-//                    """);
-//            statement.setString(1, newName);
-//            statement.setString(2, email);
-//            int rowsUpdated = statement.executeUpdate();
-//            System.out.println("Row updated : " + rowsUpdated);
-//
-//            closeDatabaseConnection();
-//        } catch (SQLException e) {
-//            System.out.println("SQL Error : " + e);
-//        }
-//    }
-//
-//
-//    // Delete user based on provided user_email
-//    public static void deleteUser(String email) {
-//
-//        try {
-//            openDatabaseConnection();
-//
-//            PreparedStatement statement = connection.prepareStatement("""
-//                    DELETE FROM users WHERE user_email = ?
-//                    """);
-//            System.out.println("Deleting " + email);
-//            statement.setString(1, email);
-//            statement.executeUpdate();
-//
-//            closeDatabaseConnection();
-//        } catch (SQLException e) {
-//            System.out.println("SQL Error : " + e);
-//        }
-//    }
-
 
 }

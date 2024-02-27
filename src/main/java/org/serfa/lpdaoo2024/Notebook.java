@@ -15,7 +15,7 @@ public class Notebook {
      * List of Binders in this Notebook.
      */
     private ArrayList<Binder> binders = new ArrayList<>();
-    
+
     /**
      * The ID of the user who owns this notebook.
      */
@@ -28,8 +28,8 @@ public class Notebook {
      *
      * @param userID The ID of the user who owns this notebook.
      */
-    public Notebook(int userID) {
-        this.userID = userID;
+    public Notebook(User user) {
+        this.userID = user.getUserID();
         this.binders = fetchAllBinders();
     }
 
@@ -67,23 +67,27 @@ public class Notebook {
         System.out.println("\n***");
         System.out.println("getContentTree() for userID " + userID);
 
+        String[] fields = {
+                "binders.binder_id",
+                "binders.binder_name",
+                "binders.binder_color_id",
+                "tabs.tab_id",
+                "tabs.tab_name",
+                "tabs.tab_color_id",
+                "notes.note_id",
+                "notes.note_name",
+                "notes.note_color_id"};
+        String[] conditionFields = {"user_id"};
+        String[] conditionValues = {String.valueOf(userID)};
+
         ResultSet resultSet = DatabaseManager.select(
                 "binders "
                         + "INNER JOIN tabs ON binders.binder_id = tabs.binder_id "
                         + "INNER JOIN notes ON tabs.tab_id = notes.tab_id",
-                new String[]{
-                        "binders.binder_id",
-                        "binders.binder_name",
-                        "binders.binder_color_id",
-                        "tabs.tab_id",
-                        "tabs.tab_name",
-                        "tabs.tab_color_id",
-                        "notes.note_id",
-                        "notes.note_name",
-                        "notes.note_color_id"
-                },
-                "user_id",
-                String.valueOf(userID));
+                fields,
+                conditionFields,
+                conditionValues
+        );
 
         // Print ResultSet data
         try {
@@ -129,8 +133,9 @@ public class Notebook {
                         "binders.binder_name",
                         "binders.binder_color_id"
                 },
-                "user_id",
-                String.valueOf(userID));
+                new String[]{"user_id"},
+                new String[]{String.valueOf(userID)}
+        );
 
         // Create ArrayList to store all Binder objects
         ArrayList<Binder> binders = new ArrayList<>();

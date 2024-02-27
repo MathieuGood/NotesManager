@@ -36,7 +36,6 @@ public class MainWindow extends JFrame {
         contentPane.add(topToolBar, BorderLayout.NORTH);
 
 
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }

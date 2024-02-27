@@ -1,7 +1,10 @@
 package org.serfa.lpdaoo2024;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * The DatabaseManager class provides methods for interacting with a database.
@@ -10,33 +13,63 @@ import java.util.Collections;
  */
 public abstract class DatabaseManager {
 
-    // Credentials for database connection
-    // TO DO : move credentials to a separate file for security
+
+    /**
+     * A Properties object that holds the properties loaded from the properties file.
+     * The properties file contains the database credentials such as host, port, username, password, and database name.
+     * These properties are loaded using the loadProperties() method.
+     */
+    final static private Properties properties = loadProperties();
 
     /**
      * The host address of the database.
      */
-    final static private String dbHost = "51.91.98.35";
+    static private String dbHost;
 
     /**
      * The port number of the database.
      */
-    final static private String dbPort = "3306";
+    static private String dbPort;
 
     /**
      * The username for the database connection.
      */
-    final static private String dbUsername = "notesmanager";
+    static private String dbUsername;
 
     /**
      * The password for the database connection.
      */
-    final static private String dbPassword = "notesserfa2024";
+    static private String dbPassword;
 
     /**
      * The name of the database.
      */
-    final static private String dbName = "NotesManager";
+    static private String dbName;
+
+
+    /**
+     * This method is used to load the properties from a properties file and set the database credentials.
+     * It creates a new Properties object and attempts to load the properties from a file named "database.properties" located in the project directory.
+     * If the properties file is found and can be read, the properties are loaded into the Properties object and the database credentials are set.
+     * If an IOException occurs during this process, an error message is printed to the console.
+     * The method then returns the Properties object, whether or not the properties were successfully loaded.
+     *
+     * @return A Properties object containing the properties loaded from the properties file, or an empty Properties object if the properties could not be loaded.
+     */
+    private static Properties loadProperties() {
+        Properties properties = new Properties();
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/java/org/serfa/lpdaoo2024/database.properties")) {
+            properties.load(fileInputStream);
+            dbHost = properties.getProperty("dbHost");
+            dbPort = properties.getProperty("dbPort");
+            dbUsername = properties.getProperty("dbUsername");
+            dbPassword = properties.getProperty("dbPassword");
+            dbName = properties.getProperty("dbName");
+        } catch (IOException e) {
+            System.out.println("Error : " + e);
+        }
+        return properties;
+    }
 
 
     /**
@@ -65,16 +98,16 @@ public abstract class DatabaseManager {
 
     /**
      * This method is used to select data from a table in the database.
-     * It constructs a SQL SELECT query using the provided table name, field names, condition field and condition value.
+     * It constructs a SQL SELECT query using the provided table name, field names, condition fields and condition values.
      * It then executes this query and returns the result set.
      *
-     * @param table          The name of the table to select from.
-     * @param fields         An array of field names to select.
-     * @param conditionField The field name to use in the WHERE clause.
-     * @param conditionValue The value to use in the WHERE clause.
-     * @return A ResultSet object containing the result of the query.
+     * @param table           The name of the table to select from.
+     * @param fields          An array of field names to select.
+     * @param conditionFields An array of field names to use in the WHERE clause.
+     * @param conditionValues An array of values corresponding to the condition fields to use in the WHERE clause.
+     * @return A ResultSet object containing the result of the select operation, or null if a SQL exception occurs.
      */
-    public static ResultSet select(String table, String[] fields, String conditionField, String conditionValue) {
+    public static ResultSet select(String table, String[] fields, String[] conditionFields, String[] conditionValues) {
         // Print a message indicating the start of the selection process
         System.out.println("Selecting from table " + table);
 
@@ -86,13 +119,29 @@ public abstract class DatabaseManager {
             String fieldPlaceholders = String.join(", ", fields);
 
             // Construct the SQL SELECT query
-            String query = "SELECT " + fieldPlaceholders + " FROM " + table + " WHERE " + conditionField + " = ?";
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.append("SELECT ").append(fieldPlaceholders).append(" FROM ").append(table);
+
+            // Append WHERE clause if conditions are provided
+            if (conditionFields != null && conditionFields.length > 0 && conditionValues != null && conditionValues.length > 0) {
+                queryBuilder.append(" WHERE ");
+                for (int i = 0; i < Math.min(conditionFields.length, conditionValues.length); i++) {
+                    if (i > 0) {
+                        queryBuilder.append(" AND ");
+                    }
+                    queryBuilder.append(conditionFields[i]).append(" = ?");
+                }
+            }
 
             // Prepare the SQL statement
-            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
 
-            // Set the value for the condition field in the prepared statement
-            statement.setString(1, conditionValue);
+            // Set the values for the condition fields in the prepared statement
+            if (conditionValues != null && conditionValues.length > 0) {
+                for (int i = 0; i < conditionValues.length; i++) {
+                    statement.setString(i + 1, conditionValues[i]);
+                }
+            }
 
             // Execute the statement and get the result set
             ResultSet resultSet = statement.executeQuery();

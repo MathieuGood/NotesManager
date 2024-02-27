@@ -121,16 +121,15 @@ public class RegisterWindow extends JFrame implements ActionListener, FocusListe
                 // If user entry is correct, create user in database
                 System.out.println("User entry correct, sending create query to database");
 
-                // createUserResponse is 0 if user has been created, 1 if e-mail already exists in database
-                int createUserResponse = User.createUser(name, email, password1);
+                User  user = User.createUser(name, email, password1);
 
-                if (createUserResponse > 0) {
-                    JOptionPane.showMessageDialog(null, "Compte utilisateur " + email + " créé.");
-                } else if (createUserResponse == 0) {
-                    JOptionPane.showMessageDialog(null, "L'e-mail choisi est déjà associé à un compte.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Erreur lors de la création du compte utilisateur.");
-                }
+//                if (createUserResponse > 0) {
+//                    JOptionPane.showMessageDialog(null, "Compte utilisateur " + email + " créé.");
+//                } else if (createUserResponse == 0) {
+//                    JOptionPane.showMessageDialog(null, "L'e-mail choisi est déjà associé à un compte.");
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "Erreur lors de la création du compte utilisateur.");
+//                }
             } else {
                 System.out.println("User entry incorrect for registering");
                 JOptionPane.showMessageDialog(null, "Les informations saisies sont incorrectes.\nVeuillez saisir un mot de passe de 8 caractères minimum avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial.");

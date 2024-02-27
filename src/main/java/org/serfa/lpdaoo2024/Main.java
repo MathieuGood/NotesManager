@@ -29,27 +29,25 @@ public class Main {
     public static void testDatabaseOperations() {
 
         // Create new user
-        // User.createUser("Mat", "mat@mat.com", "123456*G");
+//         User user = User.createUser("Mat", "mat@mat.com", "123456*G");
+
 
         // Check if user email and password match
-        int userID = User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1");
-        System.out.println("User ID : " + userID);
+        User user = User.checkPasswordMatch("bon.mathieu@gmail.com", "Mathieu*1");
+        System.out.println("User ID : " + user.getUserID());
 
         // Create new Notebook
-        Notebook notebook = new Notebook(userID);
-        notebook.getContentTree();
-
+        Notebook notebook = new Notebook(user);
+//        notebook.getContentTree();
+//
         ArrayList<Binder> binders = notebook.getBinders();
-
-
+//
         Binder binder = binders.get(0);
         binder.editName("Formation Développeur ");
-
+//
         Tab games = binder.createTab("Jeux", 1);
         Note bejeweled = games.createNote("Bejeweled", "Clone de Bejeweled en React Native", 1);
         bejeweled.editContent("Mobile app for Android and iOS with React Native : Bejeweled Clone.");
-
-
 
 
 //        Binder binder = notebook.createBinder("Immobilier", 1);

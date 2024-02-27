@@ -100,51 +100,56 @@ public class Binder {
     }
 
 
-/**
- * Fetches all the tabs associated with this binder from the database.
- * It queries the database for tabs that belong to the user who owns this binder.
- * The results are parsed into Tab objects and stored in an ArrayList.
- * If an error occurs during the database query or the parsing of the results, it prints the error and returns null.
- *
- * @return An ArrayList of Tab objects representing all the tabs associated with this binder, or null if an error occurs.
- */
-private ArrayList<Tab> fetchAllTabs() {
-    System.out.println("\n***");
-    System.out.println("fetchAllTabs() for userID " + this.userID + " / binder " + binderID);
+    /**
+     * Fetches all the tabs associated with this binder from the database.
+     * It queries the database for tabs that belong to the user who owns this binder.
+     * The results are parsed into Tab objects and stored in an ArrayList.
+     * If an error occurs during the database query or the parsing of the results, it prints the error and returns null.
+     *
+     * @return An ArrayList of Tab objects representing all the tabs associated with this binder, or null if an error occurs.
+     */
+    private ArrayList<Tab> fetchAllTabs() {
+        System.out.println("\n***");
+        System.out.println("fetchAllTabs() for userID " + this.userID + " / binder " + binderID);
 
-    ResultSet resultSet = DatabaseManager.select(
-            "tabs",
-            new String[]{
-                    "tabs.tab_id",
-                    "tabs.tab_name",
-                    "tabs.tab_color_id"
-            },
-            "binder_id",
-            String.valueOf(binderID));
+        String[] fields = {
+                "tabs.tab_id",
+                "tabs.tab_name",
+                "tabs.tab_color_id"
+        };
+        String[] conditionFields = {"binder_id"};
+        String[] conditionValues = {String.valueOf(binderID)};
 
-    // Create ArrayList to store all Tab objects
-    ArrayList<Tab> tabs = new ArrayList<>();
+        ResultSet resultSet = DatabaseManager.select(
+                "tabs",
+                fields,
+                conditionFields,
+                conditionValues
+        );
 
-    // Parse query results to new Tab object and store it into ArrayList
-    try {
-        while (resultSet.next()) {
-            // Retrieve data from resultSet
-            int tabID = resultSet.getInt(1);
-            String tabName = resultSet.getString(2);
-            int tabColorID = resultSet.getInt(3);
+        // Create ArrayList to store all Tab objects
+        ArrayList<Tab> tabs = new ArrayList<>();
 
-            // Print out data from resultSet
-            System.out.println("\t> " + tabID + " / " + tabName + " / " + tabColorID);
+        // Parse query results to new Tab object and store it into ArrayList
+        try {
+            while (resultSet.next()) {
+                // Retrieve data from resultSet
+                int tabID = resultSet.getInt(1);
+                String tabName = resultSet.getString(2);
+                int tabColorID = resultSet.getInt(3);
 
-            // Create new Tab object with parsed data and add it to ArrayList
-            tabs.add(new Tab(this, tabID, tabName, tabColorID));
+                // Print out data from resultSet
+                System.out.println("\t> " + tabID + " / " + tabName + " / " + tabColorID);
+
+                // Create new Tab object with parsed data and add it to ArrayList
+                tabs.add(new Tab(this, tabID, tabName, tabColorID));
+            }
+        } catch (Exception e) {
+            System.out.println("Error : " + e);
+            return null;
         }
-    } catch (Exception e) {
-        System.out.println("Error : " + e);
-        return null;
+        return tabs;
     }
-    return tabs;
-}
 
 
     /**

@@ -38,28 +38,28 @@ public class Tab {
     private int tabColorID;
 
 
-  /**
- * Constructor for the Tab class.
- * Initializes a new Tab object with the specified binder, tab ID, tab name, and tab color ID.
- * It also fetches all the notes associated with this tab from the database.
- *
- * @param binder The Binder object that this Tab belongs to.
- * @param tabID The unique identifier for this Tab.
- * @param tabName The name of this Tab.
- * @param tabColorID The unique identifier for the color of this Tab.
- */
-public Tab(
-        Binder binder,
-        int tabID,
-        String tabName,
-        int tabColorID
-) {
-    this.tabID = tabID;
-    this.binderID = binder.getBinderID();
-    this.tabName = tabName;
-    this.tabColorID = tabColorID;
-    this.notes = fetchAllNotes();
-}
+    /**
+     * Constructor for the Tab class.
+     * Initializes a new Tab object with the specified binder, tab ID, tab name, and tab color ID.
+     * It also fetches all the notes associated with this tab from the database.
+     *
+     * @param binder     The Binder object that this Tab belongs to.
+     * @param tabID      The unique identifier for this Tab.
+     * @param tabName    The name of this Tab.
+     * @param tabColorID The unique identifier for the color of this Tab.
+     */
+    public Tab(
+            Binder binder,
+            int tabID,
+            String tabName,
+            int tabColorID
+    ) {
+        this.tabID = tabID;
+        this.binderID = binder.getBinderID();
+        this.tabName = tabName;
+        this.tabColorID = tabColorID;
+        this.notes = fetchAllNotes();
+    }
 
     /**
      * Returns the list of Notes in this Tab.
@@ -115,16 +115,20 @@ public Tab(
         System.out.println("\n***");
         System.out.println("fetchAllNotes() for binderID " + this.getBinderID());
 
+        String[] fields = {
+                "notes.note_id",
+                "notes.note_name",
+                "notes.note_content",
+                "notes.note_color_id"
+        };
+        String[] conditionFields = {"tab_id"};
+        String[] conditionValues = {String.valueOf(tabID)};
+
         ResultSet resultSet = DatabaseManager.select(
                 "notes",
-                new String[]{
-                        "notes.note_id",
-                        "notes.note_name",
-                        "notes.note_content",
-                        "notes.note_color_id"
-                },
-                "tab_id",
-                String.valueOf(tabID));
+                fields,
+                conditionFields,
+                conditionValues);
 
         // Create ArrayList to store all Note objects
         ArrayList<Note> notes = new ArrayList<>();
