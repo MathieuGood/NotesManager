@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -19,8 +20,10 @@ public class RegisterWindow extends Application {
     private Parent root;
 
     @FXML
-    TextField textFieldEmail, textFieldName, textFieldPassword, textFieldConfirmPassword;
+    TextField textFieldEmail, textFieldName;
 
+    @FXML
+    PasswordField textFieldPassword, textFieldConfirmPassword;
 
     public static void main(String[] args) {
         launch();

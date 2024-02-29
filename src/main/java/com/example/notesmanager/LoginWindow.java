@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -20,6 +22,8 @@ public class LoginWindow extends Application {
 
     @FXML
     TextField inputLoginEmail;
+    @FXML
+    PasswordField inputLoginPassword;
 
     public static void main(String[] args) {
         launch();
@@ -45,20 +49,52 @@ public class LoginWindow extends Application {
     }
 
     public void login(ActionEvent e) throws IOException {
-        System.out.println("login");
+        System.out.println("Login button pressed");
+
+        // Get userEmail and userPassword from fields
         String userEmail = inputLoginEmail.getText();
-        System.out.println(userEmail);
+        String userPassword = inputLoginPassword.getText();
+        System.out.println("User : " + userEmail + "  / Password : " + userPassword);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
-        root = loader.load();
+        // Check if email and password are in the right format
+        if (FormatChecker.checkEmailFormat(userEmail) && FormatChecker.checkPasswordFormat(userPassword)) {
 
-        MainWindow mainWindow = loader.getController();
-        mainWindow.initUserName(userEmail);
+            // Instantiate user and assign it to User object if email and password match
+            User user = User.checkPasswordMatch(userEmail, userPassword);
 
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+            // If user is a User object (email and password match)
+            if (user != null) {
+                // Navigate to MainWindow
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
+                root = loader.load();
+
+                MainWindow mainWindow = loader.getController();
+                mainWindow.initUserName(userEmail);
+
+                stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                System.out.println("E-mail and password DO NOT match!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Impossible to login");
+                alert.setHeaderText("Impossible to login");
+                alert.setContentText("E-mail and password do not match");
+                alert.show();
+
+            }
+        } else {
+            System.out.println("Incorrect format for either e-mail or password.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Impossible to login");
+            alert.setHeaderText("Impossible to login");
+            alert.setContentText("Format of e-mail and/or password is incorrect.");
+            alert.show();
+
+        }
+
+
     }
 
     public void register(ActionEvent e) throws IOException {

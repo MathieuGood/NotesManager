@@ -58,7 +58,7 @@ public abstract class DatabaseManager {
      */
     private static Properties loadProperties() {
         Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/java/org/serfa/lpdaoo2024/database.properties")) {
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/java/com/example/notesmanager/database.properties")) {
             properties.load(fileInputStream);
             dbHost = properties.getProperty("dbHost");
             dbPort = properties.getProperty("dbPort");
