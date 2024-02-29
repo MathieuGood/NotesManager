@@ -1,4 +1,4 @@
-package org.serfa.lpdaoo2024;
+package com.example.notesmanager;
 
 /**
  * The Note class represents a note in a tab in a note-taking application.

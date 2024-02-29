@@ -1,4 +1,4 @@
-package org.serfa.lpdaoo2024;
+package com.example.notesmanager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

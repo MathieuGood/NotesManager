@@ -1,4 +1,4 @@
-package org.serfa.lpdaoo2024;
+package com.example.notesmanager;
 
 import java.sql.*;
 
