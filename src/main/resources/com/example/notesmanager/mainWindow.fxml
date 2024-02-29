@@ -21,7 +21,7 @@
             </AnchorPane>
             <AnchorPane minWidth="200.0" prefHeight="200.0">
                <children>
-                  <HTMLEditor id="noteArea" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="361.0" prefWidth="475.0" />
+                  <HTMLEditor fx:id="noteArea" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="361.0" prefWidth="475.0" />
                </children></AnchorPane>
          </items>
       </SplitPane>
