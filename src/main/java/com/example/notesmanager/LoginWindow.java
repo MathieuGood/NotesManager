@@ -21,7 +21,7 @@ public class LoginWindow extends Application {
     private Parent root;
 
     @FXML
-    TextField TextFieldEmail;
+    TextField TextFieldEmail, TextFieldPassword;
 
     public static void main(String[] args) {
         launch();
@@ -51,7 +51,7 @@ public class LoginWindow extends Application {
 
         // Get userEmail and userPassword from fields
         String userEmail = TextFieldEmail.getText();
-        String userPassword = "Mathieu*1";
+        String userPassword = TextFieldPassword.getText();
         System.out.println("User : " + userEmail + "  / Password : " + userPassword);
 
         // Check if email and password are in the right format
@@ -75,14 +75,17 @@ public class LoginWindow extends Application {
                 stage.show();
             } else {
                 System.out.println("E-mail and password DO NOT match!");
-            // TODO : Show alert
-                Alert alert = new Alert( Alert.AlertType.INFORMATION, "Testing the alert");
+                // TODO : Show alert
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Impossible to login");
+                alert.setHeaderText("E-mail and password do not match");
+                alert.setContentText("Do you want to save before existing");
 
             }
         } else {
             System.out.println("Incorrect format for either e-mail or password.");
             // TODO : Show alert
-            Alert alert = new Alert( Alert.AlertType.INFORMATION, "Testing the alert 2");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Testing the alert 2");
 
         }
 
