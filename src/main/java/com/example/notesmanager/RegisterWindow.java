@@ -12,14 +12,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginWindow extends Application {
+public class RegisterWindow extends Application {
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
     @FXML
-    TextField inputLoginEmail;
+    TextField textFieldEmail, textFieldName, textFieldPassword, textFieldConfirmPassword;
+
 
     public static void main(String[] args) {
         launch();
@@ -31,7 +32,7 @@ public class LoginWindow extends Application {
         this.stage = primaryStage;
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(LoginWindow.class.getResource("loginWindow.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(LoginWindow.class.getResource("registerWindow.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             primaryStage.setResizable(false);
@@ -41,28 +42,16 @@ public class LoginWindow extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public void login(ActionEvent e) throws IOException {
-        System.out.println("login");
-        String userEmail = inputLoginEmail.getText();
-        System.out.println(userEmail);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
-        root = loader.load();
-
-        MainWindow mainWindow = loader.getController();
-        mainWindow.initUserName(userEmail);
-
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    public void createAccount(ActionEvent e)  {
+        System.out.println("btn create account");
     }
 
-    public void register(ActionEvent e) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
+    public void backToLogin(ActionEvent e) throws IOException {
+        System.out.println("back to login");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("loginWindow.fxml"));
         root = loader.load();
 
         stage = (Stage)((Node)e.getSource()).getScene().getWindow();
@@ -70,4 +59,6 @@ public class LoginWindow extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }
