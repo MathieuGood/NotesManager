@@ -9,11 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 
-public class MainWindow extends Application {
+public class MainWindow  {
 
     private Stage stage;
     private Scene scene;
@@ -26,22 +28,32 @@ public class MainWindow extends Application {
 
     @FXML
     MenuButton btnCreateLabel;
+    @FXML
+    HTMLEditor noteArea;
 
-    public static void main(String[] args) {
-        launch();
+    @FXML
+    public void initialize(){
+        //search if note exist for current userId
+        ResultSet resultSet = DatabaseManager.select("notes", new String[]{"note_id", "note_content"}, new String[]{"note_id"}, new String[]{"5"});
+        try {
+            if (resultSet.next()) {
+                int note_id = resultSet.getInt(1);
+                String note_content = resultSet.getString(2);
+
+                System.out.println("\t> noteID " + note_id + " / content " + note_content);
+                //create note
+                //Note note = new Note(note_id)
+                noteArea.setHtmlText(note_content);
+                //return new User(userID, userName, userEmail);
+            }
+            else{
+                System.out.println("Id is not in DB");
+                newNote();
+            }
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex);
+        }
     }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        this.stage = primaryStage;
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
-        scene = new Scene(fxmlLoader.load(), 300, 500);
-        stage.setTitle("main window");
-        stage.setScene(scene);
-        stage.show();
-    }
-
 
     public void logOut(ActionEvent event) throws IOException {
 
@@ -64,6 +76,15 @@ public class MainWindow extends Application {
     }
 
     public void saveNote(ActionEvent e) {
+        String content = noteArea.getHtmlText();
+        System.out.println(content);
+        int idNote = 5; 
+        try {
+            int resultID = DatabaseManager.update("notes", "note_content",content, "note_id", String.valueOf(idNote));
+            System.out.println("Save. ID : "+ resultID);
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex);
+        }
         System.out.println("btn save note");
     }
 
@@ -80,5 +101,13 @@ public class MainWindow extends Application {
     public void initUserName(String userName) {
 
         userNameLabel.setText("user name -> " + userName);
+    }
+    public void newNote(){
+        try {
+            int resultID = DatabaseManager.insert("notes", new String[]{"note_name", "note_color_id", "note_content", "tab_id"}, new String[]{"testSou", "2", "", "1"});
+            System.out.println("Insertion réussie. ID de l'élément inséré ID : "+ resultID);
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex);
+        }
     }
 }
