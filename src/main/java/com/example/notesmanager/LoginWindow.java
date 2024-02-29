@@ -75,7 +75,6 @@ public class LoginWindow extends Application {
                 stage.show();
             } else {
                 System.out.println("E-mail and password DO NOT match!");
-                // TODO : Show alert
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Impossible to login");
                 alert.setHeaderText("Impossible to login");
@@ -85,7 +84,6 @@ public class LoginWindow extends Application {
             }
         } else {
             System.out.println("Incorrect format for either e-mail or password.");
-            // TODO : Show alert
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Impossible to login");
             alert.setHeaderText("Impossible to login");
