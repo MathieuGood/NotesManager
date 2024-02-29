@@ -121,7 +121,7 @@ public class RegisterWindow extends JFrame implements ActionListener, FocusListe
                 // If user entry is correct, create user in database
                 System.out.println("User entry correct, sending create query to database");
 
-                User  user = User.createUser(name, email, password1);
+                User user = User.createUser(name, email, password1);
 
 //                if (createUserResponse > 0) {
 //                    JOptionPane.showMessageDialog(null, "Compte utilisateur " + email + " créé.");
