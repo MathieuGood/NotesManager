@@ -202,7 +202,6 @@ FROM notes
 
 
 -- Create a view to get all the directory tree for one user displaying the binders, tabs and notes with their respective color code
-
 CREATE VIEW viewDirectoryTree AS
 SELECT binder_name, binder_color_id, tab_name, tab_color_id, note_name, note_color_id
 FROM binders
@@ -217,7 +216,7 @@ CREATE VIEW viewNotesForTab AS
 SELECT notes.note_id, note_name, note_content, note_color_id, label_name, color_hex
 FROM notes
          LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
+         LEFT JOIN labels ON tag.label_id = labels.label_id 
          LEFT JOIN colors ON notes.note_color_id = colors.color_id
 WHERE tab_id = 1;
 
