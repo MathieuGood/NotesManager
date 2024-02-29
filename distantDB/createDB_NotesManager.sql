@@ -119,7 +119,7 @@ CREATE TABLE notes
     note_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
     note_name     VARCHAR(50),
     note_color_id INT UNSIGNED,
-    note_content  TEXT,
+    note_content  LONGTEXT,
     tab_id        INT UNSIGNED NOT NULL,
     PRIMARY KEY (note_id),
     FOREIGN KEY (tab_id) REFERENCES tabs (tab_id)
@@ -209,7 +209,7 @@ FROM binders
          LEFT JOIN tabs ON binders.binder_id = tabs.binder_id
          LEFT JOIN notes ON tabs.tab_id = notes.tab_id
          INNER JOIN colors ON binders.binder_color_id = colors.color_id 
-         AND tabs.tab_color_id = colors.color_id
+         AND tabs.tab_color_id = colors.color_id;
          
 
 -- Create a view to display all the notes (note_id, note_name, note_content, note_color_id, labels) for a specific tab_id
