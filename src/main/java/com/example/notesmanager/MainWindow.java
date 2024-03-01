@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class MainWindow  {
 
@@ -31,28 +32,20 @@ public class MainWindow  {
     @FXML
     HTMLEditor noteArea;
 
+    User user;
+    Notebook notebook;
+    ArrayList<Binder> binders;
+    Note note;
     @FXML
     public void initialize(){
-        //search if note exist for current userId
-        ResultSet resultSet = DatabaseManager.select("notes", new String[]{"note_id", "note_content"}, new String[]{"note_id"}, new String[]{"5"});
-        try {
-            if (resultSet.next()) {
-                int note_id = resultSet.getInt(1);
-                String note_content = resultSet.getString(2);
+        //retrieve User's content
+        user = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
+        notebook = new Notebook(user);
+        binders = notebook.getBinders();
 
-                System.out.println("\t> noteID " + note_id + " / content " + note_content);
-                //create note
-                //Note note = new Note(note_id)
-                noteArea.setHtmlText(note_content);
-                //return new User(userID, userName, userEmail);
-            }
-            else{
-                System.out.println("Id is not in DB");
-                newNote();
-            }
-        } catch (Exception ex) {
-            System.out.println("Error : " + ex);
-        }
+        note = binders.get(0).getTabs().get(0).getNotes().get(0);
+        String note_content = note.getNoteContent();
+        noteArea.setHtmlText(note_content);
     }
 
     public void logOut(ActionEvent event) throws IOException {
@@ -78,10 +71,9 @@ public class MainWindow  {
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
         System.out.println(content);
-        int idNote = 5; 
         try {
-            int resultID = DatabaseManager.update("notes", "note_content",content, "note_id", String.valueOf(idNote));
-            System.out.println("Save. ID : "+ resultID);
+            note.editContent(content);
+            System.out.println("Saved");
         } catch (Exception ex) {
             System.out.println("Error : " + ex);
         }
@@ -93,7 +85,6 @@ public class MainWindow  {
         if (e.getSource() instanceof MenuItem) {
             MenuItem label = (MenuItem) e.getSource();
             String labelContent = label.getText();
-
             System.out.println(labelContent);
         }
     }
@@ -101,13 +92,5 @@ public class MainWindow  {
     public void initUserName(String userName) {
 
         userNameLabel.setText("user name -> " + userName);
-    }
-    public void newNote(){
-        try {
-            int resultID = DatabaseManager.insert("notes", new String[]{"note_name", "note_color_id", "note_content", "tab_id"}, new String[]{"testSou", "2", "", "1"});
-            System.out.println("Insertion réussie. ID de l'élément inséré ID : "+ resultID);
-        } catch (Exception ex) {
-            System.out.println("Error : " + ex);
-        }
     }
 }
