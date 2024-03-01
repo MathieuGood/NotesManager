@@ -3,9 +3,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.treeviewnotes.NoteManagerApp">
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.treeviewnotes.NoteManagerController">
     <top>
-        <HBox>
+        <HBox spacing="10">
             <MenuBar>
                 <Menu text="Actions">
                     <items>
@@ -17,9 +18,16 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <Button text="Add Binder" onAction="#createNewBinder"/>
-                <Button text="Add Divider" onAction="#createNewDivider"/>
-                <Button text="Add Note" onAction="#createNewNote"/>
+                <ComboBox fx:id="labelFilter" prefWidth="20.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="All"/>
+                            <String fx:value="Pro"/>
+                            <String fx:value="Urgent"/>
+                            <String fx:value="Draft"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
             </ToolBar>
         </HBox>
     </top>
@@ -29,16 +37,5 @@
     <right>
         <TextArea fx:id="noteArea" prefWidth="200.0" prefHeight="200.0"/>
     </right>
-    <bottom>
-        <ComboBox fx:id="labelFilter" prefWidth="200.0">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="All"/>
-                    <String fx:value="Pro"/>
-                    <String fx:value="Urgent"/>
-                    <String fx:value="Draft"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
-    </bottom>
+
 </BorderPane>
