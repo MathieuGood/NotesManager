@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e4c3f98-fc05-49ea-9937-e57ada2638dc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NoteArea.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/RegisterWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/RegisterWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,9 +30,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -50,13 +51,14 @@
   "keyToString": {
     "Application.LoginWindow.executor": "Run",
     "Application.Main.executor": "Run",
+    "Application.MainWindow.executor": "Run",
     "Application.RegisterWindow.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "dev",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/youmo/OneDrive/Bureau/UHA/projet java - notesManager/NotesManager",
+    "last_opened_file_path": "C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -70,10 +72,15 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DevInfo\NotesManager\src\main\java\com\example\notesmanager" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-4caba194b151-9b16c6e2" />
+        <option value="jdk-21.0.1-openjdk-21.0.1-4caba194b151-23eed401" />
       </set>
     </attachedChunks>
   </component>
@@ -87,6 +94,8 @@
       <updated>1709202936412</updated>
       <workItem from="1709202937431" duration="592000" />
       <workItem from="1709204212804" duration="6890000" />
+      <workItem from="1709297800893" duration="28000" />
+      <workItem from="1709297856287" duration="2639000" />
     </task>
     <servers />
   </component>

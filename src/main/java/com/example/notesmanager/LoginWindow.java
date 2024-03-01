@@ -70,6 +70,7 @@ public class LoginWindow extends Application {
 
                 MainWindow mainWindow = loader.getController();
                 mainWindow.initUserName(userEmail);
+                //mainWindow.initUser(user);
 
                 stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 scene = new Scene(root);

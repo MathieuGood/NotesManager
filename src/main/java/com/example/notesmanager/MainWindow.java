@@ -8,9 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainWindow extends Application {
 
@@ -25,7 +27,29 @@ public class MainWindow extends Application {
 
     @FXML
     MenuButton btnCreateLabel;
+    @FXML
+    HTMLEditor noteArea;
 
+    User user;
+    Notebook notebook;
+    ArrayList<Binder> binders;
+    Note note;
+    NoteArea area;
+
+    @FXML
+    public void initialize(){
+        //retrieve User's content
+       User userLog = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
+        initUser(userLog);
+
+        notebook = new Notebook(user);
+        binders = notebook.getBinders();
+        //note clicked
+        note = binders.get(0).getTabs().get(0).getNotes().get(0);
+
+        area = new NoteArea(note, noteArea);
+
+    }
     public static void main(String[] args) {
         launch();
     }
@@ -63,6 +87,8 @@ public class MainWindow extends Application {
     }
 
     public void saveNote(ActionEvent e) {
+        String content = noteArea.getHtmlText();
+        area.setContent(content);
         System.out.println("btn save note");
     }
 
@@ -79,5 +105,9 @@ public class MainWindow extends Application {
     public void initUserName(String userName) {
 
         userNameLabel.setText("user name -> " + userName);
+    }
+    public void initUser(User userLog){
+        System.out.println("initUser");
+        user = userLog;
     }
 }
