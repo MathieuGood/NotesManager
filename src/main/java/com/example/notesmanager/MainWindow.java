@@ -36,16 +36,18 @@ public class MainWindow  {
     Notebook notebook;
     ArrayList<Binder> binders;
     Note note;
+    NoteArea area;
     @FXML
     public void initialize(){
         //retrieve User's content
         user = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
         notebook = new Notebook(user);
         binders = notebook.getBinders();
-
+        //note clicked
         note = binders.get(0).getTabs().get(0).getNotes().get(0);
-        String note_content = note.getNoteContent();
-        noteArea.setHtmlText(note_content);
+
+        area = new NoteArea(note, noteArea);
+
     }
 
     public void logOut(ActionEvent event) throws IOException {
@@ -70,13 +72,7 @@ public class MainWindow  {
 
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
-        System.out.println(content);
-        try {
-            note.editContent(content);
-            System.out.println("Saved");
-        } catch (Exception ex) {
-            System.out.println("Error : " + ex);
-        }
+        area.setContent(content);
         System.out.println("btn save note");
     }
 
