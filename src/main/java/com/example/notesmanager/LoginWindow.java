@@ -21,9 +21,9 @@ public class LoginWindow extends Application {
     private Parent root;
 
     @FXML
-    TextField inputLoginEmail;
+    private TextField inputLoginEmail;
     @FXML
-    PasswordField inputLoginPassword;
+    private PasswordField inputLoginPassword;
 
     public static void main(String[] args) {
         launch();

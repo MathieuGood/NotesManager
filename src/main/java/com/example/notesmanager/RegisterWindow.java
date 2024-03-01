@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -20,10 +22,10 @@ public class RegisterWindow extends Application {
     private Parent root;
 
     @FXML
-    TextField textFieldEmail, textFieldName;
+    private TextField inputRegisterName, inputRegisterEmail;
 
     @FXML
-    PasswordField textFieldPassword, textFieldConfirmPassword;
+    private PasswordField inputRegisterPassword, inputRegisterConfirmPassword;
 
     public static void main(String[] args) {
         launch();
@@ -47,17 +49,93 @@ public class RegisterWindow extends Application {
         }
     }
 
-    public void createAccount(ActionEvent e)  {
-        System.out.println("btn create account");
+    public void createAccount(ActionEvent e) throws IOException {
+        System.out.println("Create account button clicked");
+
+        String userEmail = inputRegisterEmail.getText();
+        String userName = inputRegisterName.getText();
+        String userPassword = inputRegisterPassword.getText();
+        String userConfirmPassword = inputRegisterConfirmPassword.getText();
+
+        System.out.println(userEmail);
+        System.out.println(userName);
+        System.out.println(userPassword);
+        System.out.println(userConfirmPassword);
+
+        // If format of all fields is correct and both of the entered passwords match
+        if (FormatChecker.checkEmailFormat(userEmail)
+                && FormatChecker.checkNameFormat(userName)
+                && FormatChecker.checkPasswordFormat(userPassword)
+                && userPassword.equals(userConfirmPassword)) {
+            // Create user account in database and return the corresponding User object
+            int userID = User.createUser(userName, userEmail, userPassword);
+
+            // If userID equals -1, e-mail already exists in database
+            if (userID <= 0) {
+                String alertContent;
+                // If userID is 0, database returned an IntegrityConstraintViolation
+                if (userID == 0) {
+                    alertContent = "An account has already been registered to " + userEmail + ". Login with this address or specify a different e-mail to create new account.";
+                } else {
+                    alertContent = "Error occurred during account creation, please try again.";
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Account creation");
+                alert.setHeaderText("Impossible to create account");
+                alert.setContentText(alertContent);
+                alert.show();
+
+            } else {
+                // If userID > 0, user has been successfully created
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Account creation");
+                alert.setHeaderText("Account creation");
+                alert.setContentText("Account " + userEmail + " successfully created");
+
+                // Wait for the user to click on the OK button to navigate to MainWindow
+                if (alert.showAndWait().get() == ButtonType.OK) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
+                    root = loader.load();
+
+                    MainWindow mainWindow = loader.getController();
+                    mainWindow.initUserName(userEmail);
+
+                    stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+
+                    // Create new User object
+                    User user = new User(userID, userName, userEmail);
+                    // TODO : Figure out how and where to return the User object
+                }
+
+            }
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Account creation");
+            alert.setHeaderText("Impossible to create account");
+            alert.setContentText("""
+                    Please verify that :
+                     - Your e-mail is correct
+                     - Your name contains at least one letter
+                     - Your password has at least 6 characters including 1 uppercase letter, 1 lowercase letter, 1 special character and 1 digit
+                    """);
+            alert.show();
+        }
+
+
     }
 
     public void backToLogin(ActionEvent e) throws IOException {
-        System.out.println("back to login");
+        System.out.println("Back to login");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("loginWindow.fxml"));
         root = loader.load();
 
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

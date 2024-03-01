@@ -111,15 +111,14 @@ public class User {
      * @param userPassword The password of the new user.
      * @return The newly created User.
      */
-    public static User createUser(String userName, String userEmail, String userPassword) {
+    public static int createUser(String userName, String userEmail, String userPassword) {
         System.out.println("Creating new user " + userName + " / " + userEmail);
 
         String[] fields = {"user_name", "user_email", "user_password"};
         String[] values = {userName, userEmail, userPassword};
-
         int userID = DatabaseManager.insert("users", fields, values);
-
-        return new User(userID, userName, userEmail);
+        System.out.println("userID is : " + userID);
+        return userID;
     }
 
 
