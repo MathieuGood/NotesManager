@@ -110,7 +110,17 @@ INSERT INTO tabs(tab_name,
                  tab_color_id)
 VALUES ('Java', 1, 2),
        ('React Native', 1, 3),
-       ('SQL', 1, 4)
+       ('SQL', 1, 4),
+       ('HTML', 1, 5),
+       ('CSS', 1, 6),
+       ('JavaScript', 1, 7),
+       ('PHP', 1, 8),
+       ('Python', 1, 9),
+       ('C++', 1, 10),
+       ('C#', 1, 1),
+       ('Ruby', 1, 2),
+       ('Swift', 1, 3),
+       ('Kotlin', 1, 4)
 ;
 
 
@@ -127,16 +137,32 @@ CREATE TABLE notes
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO notes(note_name,
-                  note_color_id,
-                  note_content,
-                  tab_id)
-VALUES ('Syntax', NULL, 'Print a statement : System.out.println("This is a statement")', 1),
-       ('Create a class', 2, 'Do not forget to add the constructor.', 1),
-       ('React Native Introduction', 4, 'React Native is a framework for building native apps using React.', 2),
-       ('SQL Introduction', NULL,
-        'SQL is a standard language for storing, manipulating and retrieving data in databases.', 3)
-;
+INSERT INTO notes(note_name, note_color_id, note_content, tab_id)
+VALUES
+    -- Notes for Java tab
+    ('Java Basics', 7, 'Learn about variables, data types, and operators in Java.', 1),
+    ('Java OOP Concepts', 7, 'Understand concepts like classes, objects, inheritance, and polymorphism.', 1),
+    ('Java Collections', 7, 'Explore Java collections framework including ArrayList, HashMap, and LinkedList.', 1),
+    ('Exception Handling', 7, 'Study how to handle exceptions in Java using try-catch blocks.', 1),
+    ('File Handling', 7, 'Learn to read from and write to files in Java using FileReader and FileWriter.', 1),
+    ('Multithreading', 7, 'Understand the basics of multithreading and synchronization in Java.', 1),
+
+    -- Notes for React Native tab
+    ('React Native Setup', 4, 'Follow the React Native documentation to set up your development environment.', 2),
+    ('React Native Components', 4, 'Understand basic components like View, Text, and Image in React Native.', 2),
+    ('React Navigation', 4, 'Learn how to implement navigation in React Native using React Navigation library.', 2),
+    ('State Management', 4, 'Explore state management options in React Native including useState and useContext.', 2),
+    ('Redux Integration', 4, 'Integrate Redux into your React Native app for centralized state management.', 2),
+    ('Styling in React Native', 4, 'Learn different methods to style components in React Native using StyleSheet.', 2),
+
+    -- Notes for SQL tab
+    ('SQL Queries', 5, 'Practice writing SQL SELECT queries to retrieve data from a database.', 3),
+    ('SQL Joins', 5, 'Understand different types of SQL joins like INNER JOIN, LEFT JOIN, and RIGHT JOIN.', 3),
+    ('SQL DDL Commands', 5, 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
+    ('SQL DML Commands', 5, 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
+    ('Database Normalization', 5, 'Understand the normalization process to organize data in a relational database.', 3),
+    ('Transactions in SQL', 5, 'Study transactions and their importance in maintaining data integrity in SQL.', 3);
+
 
 
 CREATE TABLE labels
@@ -208,9 +234,9 @@ SELECT binder_name, binder_color_id, tab_name, tab_color_id, note_name, note_col
 FROM binders
          LEFT JOIN tabs ON binders.binder_id = tabs.binder_id
          LEFT JOIN notes ON tabs.tab_id = notes.tab_id
-         INNER JOIN colors ON binders.binder_color_id = colors.color_id 
-         AND tabs.tab_color_id = colors.color_id;
-         
+         INNER JOIN colors ON binders.binder_color_id = colors.color_id
+    AND tabs.tab_color_id = colors.color_id;
+
 
 -- Create a view to display all the notes (note_id, note_name, note_content, note_color_id, labels) for a specific tab_id
 CREATE VIEW viewNotesForTab AS
@@ -229,7 +255,6 @@ FROM notes
          LEFT JOIN labels ON tag.label_id = labels.label_id
 WHERE tab_id = 1
 GROUP BY notes.note_id;
-
 
 
 COMMIT;

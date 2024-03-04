@@ -12,30 +12,19 @@ import java.util.ArrayList;
 public class Binder {
 
 
-    /**
-     * List of Tabs in this Binder.
-     */
+    // An ArrayList that holds all the Tab objects associated with this Binder.
     private ArrayList<Tab> tabs = new ArrayList<>();
 
-
-    /**
-     * The unique identifier for this Binder.
-     */
+    // The unique identifier for this Binder.
     private final int binderID;
 
-    /**
-     * The unique identifier for the User who owns this Binder.
-     */
+    // The unique identifier for the User that owns this Binder.
     private final int userID;
 
-    /**
-     * The name of this Binder.
-     */
+    // The name of this Binder.
     private String binderName;
 
-    /**
-     * The unique identifier for the color of this Binder.
-     */
+    // The unique identifier for the color of this Binder.
     private int binderColorID;
 
 

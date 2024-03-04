@@ -12,31 +12,20 @@ import java.util.ArrayList;
 public class Tab {
 
 
-    /**
-     * List of Notes in this Tab.
-     */
+    // An ArrayList that holds all the Note objects associated with this Tab.
     private ArrayList<Note> notes;
 
-    /**
-     * The unique identifier for this Tab.
-     */
+    // The unique identifier for this Tab.
     private final int tabID;
 
-    /**
-     * The unique identifier for the Binder that this Tab belongs to.
-     */
+    // The unique identifier for the Binder that this Tab belongs to.
     private final int binderID;
 
-    /**
-     * The name of this Tab.
-     */
+    // The name of this Tab.
     private String tabName;
 
-    /**
-     * The unique identifier for the color of this Tab.
-     */
+    // The unique identifier for the color of this Tab.
     private int tabColorID;
-
 
     /**
      * Constructor for the Tab class.

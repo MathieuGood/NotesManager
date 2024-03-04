@@ -7,30 +7,19 @@ package com.example.notesmanager;
 public class Note {
 
 
-    /**
-     * The unique identifier for this Note.
-     */
+    // The unique identifier for this Note.
     private final int noteID;
 
-    /**
-     * The unique identifier for the Tab that this Note belongs to.
-     */
+    // The unique identifier for the Tab that this Note belongs to.
     private final int tabID;
 
-    /**
-     * The name of this Note.
-     */
+    // The name of this Note.
     private String noteName;
 
-    /**
-     * The content of this Note.
-     */
+    // The content of this Note.
     private String noteContent;
 
-    /**
-     * An array of unique identifiers for the Labels associated with this Note.
-     * Each element in the array is an ID that corresponds to a Label in the database.
-     */
+    // The array of label IDs associated with this Note.
     private int[] noteLabelID;
 
 

@@ -11,22 +11,20 @@ import java.util.ArrayList;
 public class Notebook {
 
 
-    /**
-     * List of Binders in this Notebook.
-     */
+    // An ArrayList that holds all the Binder objects associated with this Notebook.
     private ArrayList<Binder> binders = new ArrayList<>();
 
-    /**
-     * The ID of the user who owns this notebook.
-     */
+    // The unique identifier for the User that owns this Notebook.
     private final int userID;
 
 
     /**
-     * Constructs a new Notebook object with the specified user ID.
-     * It initializes the user ID of this notebook and retrieves all binders associated with the user ID.
+     * Constructs a Notebook object for the given user.
+     * <p>
+     * This constructor initializes the userID with the ID of the given user.
+     * It also initializes the binders list by calling the fetchAllBinders method, which retrieves all binders associated with the user from the database.
      *
-     * @param userID The ID of the user who owns this notebook.
+     * @param user The User object representing the owner of this notebook.
      */
     public Notebook(User user) {
         this.userID = user.getUserID();
