@@ -210,4 +210,8 @@ public class Binder {
 
         return DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
     }
+
+    public String getColorHex() {
+        return DatabaseManager.getColorHexById(this.binderColorID);
+    }
 }

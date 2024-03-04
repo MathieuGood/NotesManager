@@ -21,8 +21,8 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="inputLoginEmail" alignment="CENTER" layoutX="68.0" layoutY="238.0" promptText="Votre email" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="238.0" />
-       <PasswordField fx:id="inputLoginPassword" alignment="CENTER" layoutX="59.0" layoutY="275.0" prefHeight="25.0" prefWidth="167.0" promptText="Votre mot de passe" />
+      <TextField fx:id="inputLoginEmail" alignment="CENTER" layoutX="68.0" layoutY="238.0" promptText="Votre email" text="bon.mathieu@gmail.com" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="238.0" />
+       <PasswordField fx:id="inputLoginPassword" alignment="CENTER" layoutX="59.0" layoutY="275.0" prefHeight="25.0" prefWidth="167.0" promptText="Votre mot de passe" text="Mathieu*1" />
       <Button fx:id="buttonLogin" contentDisplay="CENTER" layoutX="90.0" layoutY="346.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="30.0" text="S'identifier" textAlignment="CENTER" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="346.0" />
       <Button fx:id="buttonRegister" layoutX="59.0" layoutY="381.0" mnemonicParsing="false" onAction="#register" text="Créer un compte" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="58.0" />
    </children>

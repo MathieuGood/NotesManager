@@ -218,4 +218,8 @@ public class Tab {
         return DatabaseManager.delete("notes", "noteID", String.valueOf(noteID));
     }
 
+    public String getColorHex() {
+        return DatabaseManager.getColorHexById(this.tabColorID);
+    }
+
 }

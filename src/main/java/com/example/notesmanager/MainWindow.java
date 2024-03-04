@@ -58,6 +58,11 @@ public class MainWindow extends Application {
     @FXML
     HTMLEditor noteArea;
 
+    // The TreeView UI element for displaying the binder structure in the application.
+    // It is annotated with @FXML so its value can be injected from the FXML file.
+    @FXML
+    private TreeView<String> binderTree;
+
     // The static User object for this application.
     private static User user;
 
@@ -100,6 +105,10 @@ public class MainWindow extends Application {
 
         // Initialize the NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
+
+
+        NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
+        notebookTreeView.createTreeView();
     }
 
 
