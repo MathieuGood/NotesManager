@@ -63,17 +63,14 @@ public class LoginWindow extends Application {
             // Instantiate user and assign it to User object if email and password match
             User user = User.checkPasswordMatch(userEmail, userPassword);
 
-
             // If user is a User object (email and password match)
             if (user != null) {
+                // Static user
+                MainWindow.setUser(user);
+
                 // Navigate to MainWindow
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
                 root = loader.load();
-
-                MainWindow mainWindow = loader.getController();
-                mainWindow.setUser(user);
-//                mainWindow.initUserName(userEmail);
-                //mainWindow.initUser(user);
 
                 stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 scene = new Scene(root);
@@ -97,7 +94,6 @@ public class LoginWindow extends Application {
             alert.show();
 
         }
-
 
     }
 

@@ -62,6 +62,11 @@ public class RegisterWindow extends Application {
         System.out.println(userPassword);
         System.out.println(userConfirmPassword);
 
+        System.out.println(FormatChecker.checkEmailFormat(userEmail));
+        System.out.println(FormatChecker.checkNameFormat(userName));
+        System.out.println(FormatChecker.checkPasswordFormat(userPassword));
+        System.out.println(userPassword.equals(userConfirmPassword));
+
         // If format of all fields is correct and both of the entered passwords match
         if (FormatChecker.checkEmailFormat(userEmail)
                 && FormatChecker.checkNameFormat(userName)
@@ -95,20 +100,15 @@ public class RegisterWindow extends Application {
 
                 // Wait for the user to click on the OK button to navigate to MainWindow
                 if (alert.showAndWait().get() == ButtonType.OK) {
+                    MainWindow.setUser(new User(userID, userName, userEmail));
+
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
                     root = loader.load();
-
-                    MainWindow mainWindow = loader.getController();
-                    mainWindow.initUserName(userEmail);
 
                     stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                     scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
-
-                    // Create new User object
-                    User user = new User(userID, userName, userEmail);
-                    // TODO : Figure out how and where to return the User object
                 }
 
             }
@@ -121,7 +121,7 @@ public class RegisterWindow extends Application {
                     Please verify that :
                      - Your e-mail is correct
                      - Your name contains at least one letter
-                     - Your password has at least 6 characters including 1 uppercase letter, 1 lowercase letter, 1 special character and 1 digit
+                     - Your password has at least 8 characters including 1 uppercase letter, 1 lowercase letter, 1 special character and 1 digit
                     """);
             alert.show();
         }
