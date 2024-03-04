@@ -30,32 +30,41 @@ public class MainWindow extends Application {
     @FXML
     HTMLEditor noteArea;
 
-    User user;
+    private User user;
     Notebook notebook;
     ArrayList<Binder> binders;
     Note note;
     NoteArea area;
 
+//    MainWindow() {
+//        System.out.println("constructor function");
+//    }
+
     @FXML
     public void initialize(){
+        System.out.println("initialize function");
         //retrieve User's content
-       User userLog = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
-        initUser(userLog);
+//        User userLog = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
+//        initUser(userLog);
+        System.out.println(user.toString());
 
-        notebook = new Notebook(user);
-        binders = notebook.getBinders();
-        //note clicked
-        note = binders.get(0).getTabs().get(0).getNotes().get(0);
-
-        area = new NoteArea(note, noteArea);
+//        notebook = new Notebook(user);
+//        binders = notebook.getBinders();
+//        //note clicked
+//        note = binders.get(0).getTabs().get(0).getNotes().get(0);
+//
+//        area = new NoteArea(note, noteArea);
 
     }
     public static void main(String[] args) {
+        System.out.println("main Main window function");
+
         launch();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        System.out.println("start function");
         this.stage = primaryStage;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
@@ -106,8 +115,9 @@ public class MainWindow extends Application {
 
         userNameLabel.setText("user name -> " + userName);
     }
-    public void initUser(User userLog){
+    public void setUser(User user){
         System.out.println("initUser");
-        user = userLog;
+        this.user = user;
+        System.out.println(user.toString());
     }
 }

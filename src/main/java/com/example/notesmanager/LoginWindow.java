@@ -26,6 +26,7 @@ public class LoginWindow extends Application {
     private PasswordField inputLoginPassword;
 
     public static void main(String[] args) {
+        System.out.println("main login window function");
         launch();
     }
 
@@ -62,6 +63,7 @@ public class LoginWindow extends Application {
             // Instantiate user and assign it to User object if email and password match
             User user = User.checkPasswordMatch(userEmail, userPassword);
 
+
             // If user is a User object (email and password match)
             if (user != null) {
                 // Navigate to MainWindow
@@ -69,7 +71,8 @@ public class LoginWindow extends Application {
                 root = loader.load();
 
                 MainWindow mainWindow = loader.getController();
-                mainWindow.initUserName(userEmail);
+                mainWindow.setUser(user);
+//                mainWindow.initUserName(userEmail);
                 //mainWindow.initUser(user);
 
                 stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
