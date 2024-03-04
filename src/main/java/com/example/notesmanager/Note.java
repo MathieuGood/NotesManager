@@ -4,7 +4,7 @@ package com.example.notesmanager;
  * The Note class represents a note in a tab in a note-taking application.
  * It contains methods to get and set the note's properties, and to interact with the database.
  */
-public class Note {
+public class Note  {
 
 
     /**
@@ -169,6 +169,14 @@ public class Note {
                 String.valueOf(this.noteID)
         );
     }
+
+    /*
+    @Override
+    public String getDisplayName() {
+        return this.getNoteName(); // Ou tout autre nom que vous souhaitez afficher pour la Note.
+    }
+
+     */
 
 
 }

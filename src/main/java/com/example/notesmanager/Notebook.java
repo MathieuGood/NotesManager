@@ -155,7 +155,8 @@ public class Notebook {
                 binders.add(new Binder(this, binderID, binderName, binderColorID));
             }
         } catch (Exception e) {
-            System.out.println("Error : " + e);
+            System.out.println("Error while fetching binders: " + e.getMessage());
+           // System.out.println("Error : " + e);
             return null;
         }
         return binders;

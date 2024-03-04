@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class MainWindow extends Application {
 
+    // public TreeView binderTree;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -30,6 +31,13 @@ public class MainWindow extends Application {
     @FXML
     HTMLEditor noteArea;
 
+
+
+    @FXML
+    private TreeView<String> binderTree;
+
+
+
     User user;
     Notebook notebook;
     ArrayList<Binder> binders;
@@ -39,7 +47,7 @@ public class MainWindow extends Application {
     @FXML
     public void initialize(){
         //retrieve User's content
-       User userLog = new User(2, "Soundouce", "soundouce.chibani@gmail.com");
+       User userLog = new User(1, "Soundouce", "soundouce.chibani@gmail.com");
         initUser(userLog);
 
         notebook = new Notebook(user);
@@ -48,6 +56,11 @@ public class MainWindow extends Application {
         note = binders.get(0).getTabs().get(0).getNotes().get(0);
 
         area = new NoteArea(note, noteArea);
+
+        NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
+        notebookTreeView.createTreeView();
+
+
 
     }
     public static void main(String[] args) {
@@ -63,6 +76,7 @@ public class MainWindow extends Application {
         stage.setTitle("main window");
         stage.setScene(scene);
         stage.show();
+
     }
 
 
@@ -106,8 +120,13 @@ public class MainWindow extends Application {
 
         userNameLabel.setText("user name -> " + userName);
     }
+
     public void initUser(User userLog){
+        // System.out.println("initUser avec userID: " + userLog.getUserID());
         System.out.println("initUser");
         user = userLog;
     }
+
+
+
 }

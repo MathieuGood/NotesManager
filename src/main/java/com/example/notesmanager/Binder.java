@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Represents a Binder in the application.
  * A Binder contains a list of Tabs.
  */
-public class Binder {
+public class Binder  {
 
 
     /**
@@ -37,6 +37,7 @@ public class Binder {
      * The unique identifier for the color of this Binder.
      */
     private int binderColorID;
+    private int tabColorID;
 
 
     /**
@@ -220,5 +221,39 @@ public class Binder {
         System.out.println("deleteTab() : " + " tabID " + tabID);
 
         return DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
+    }
+
+    /**
+     * Constructs a root Binder object for the TreeView.
+     * This special constructor sets up a "root" Binder that doesn't correspond to an actual binder in the database.
+     */
+    public Binder() {
+        this.binderID = -1;  // Utilisez -1 ou une autre valeur non valide pour indiquer un objet racine.
+        this.userID = -1;    // Utilisez -1 ou une autre valeur non valide pour indiquer un objet racine.
+        this.binderName = "Classeurs";  // Nom par défaut pour l'élément racine.
+        this.binderColorID = -1;  // Utilisez -1 ou une autre valeur non valide pour indiquer un objet racine.
+        // Aucun appel à fetchAllTabs car il n'y a pas de tabs pour l'élément racine.
+    }
+
+    /**
+     * Returns whether this Binder is the root of the TreeView.
+     *
+     * @return true if this Binder is the root, false otherwise.
+     */
+    public boolean isRoot() {
+        return binderID == -1;  // Ou utilisez une autre logique si vous avez une meilleure façon de déterminer si c'est la racine.
+    }
+
+    /*
+    @Override
+    public String getDisplayName() {
+        return this.getBinderName(); // Ou tout autre nom que vous souhaitez afficher pour le Binder.
+    }
+
+     */
+
+    // Nouvelle méthode pour obtenir le code hexadécimal de la couleur du tab
+    public String getColorHex() {
+        return DatabaseManager.getColorHexById(this.binderColorID);
     }
 }

@@ -16,7 +16,7 @@
          <items>
             <AnchorPane minWidth="100.0" prefHeight="361.0" prefWidth="294.0">
                <children>
-                  <TreeView layoutY="21.0" prefHeight="200.0" prefWidth="117.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TreeView fx:id="binderTree" layoutY="21.0" prefHeight="200.0" prefWidth="117.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <AnchorPane minWidth="200.0" prefHeight="200.0">

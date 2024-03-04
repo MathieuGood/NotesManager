@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Represents a Tab in the application.
  * A Tab contains a list of Notes.
  */
-public class Tab {
+public class Tab  {
 
 
     /**
@@ -227,6 +227,19 @@ public class Tab {
         System.out.println("deleteNote() : " + " noteID " + noteID);
 
         return DatabaseManager.delete("notes", "noteID", String.valueOf(noteID));
+    }
+
+    /*
+    @Override
+    public String getDisplayName() {
+        return this.getTabName(); // Ou tout autre nom que vous souhaitez afficher pour le Tab.
+    }
+
+     */
+
+    // Nouvelle méthode pour obtenir le code hexadécimal de la couleur du tab
+    public String getColorHex() {
+        return DatabaseManager.getColorHexById(this.tabColorID);
     }
 
 }

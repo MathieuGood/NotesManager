@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e4c3f98-fc05-49ea-9937-e57ada2638dc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NoteArea.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NotebookTreeView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Note.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Tab.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Tab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/loginWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/loginWindow.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +28,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -58,7 +64,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "dev",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager",
+    "last_opened_file_path": "/Users/relgrandgiressemounguembomabele/NotesManager/src/main/java/com/example/notesmanager",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -73,14 +79,18 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.notesmanager" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/example/notesmanager" />
       <recent name="C:\Users\DevInfo\NotesManager\src\main\java\com\example\notesmanager" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-4caba194b151-23eed401" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-f644763e9732-a81d5c7c" />
       </set>
     </attachedChunks>
   </component>
@@ -96,6 +106,7 @@
       <workItem from="1709204212804" duration="6890000" />
       <workItem from="1709297800893" duration="28000" />
       <workItem from="1709297856287" duration="2639000" />
+      <workItem from="1709392393938" duration="21558000" />
     </task>
     <servers />
   </component>

@@ -133,6 +133,9 @@ public abstract class DatabaseManager {
                 }
             }
 
+            /********** Imprimez la requête SQL pour le débogage *******/
+            System.out.println("Executing SQL query: " + queryBuilder.toString());
+
             // Prepare the SQL statement
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
 
@@ -331,6 +334,29 @@ public abstract class DatabaseManager {
             return -1;
         }
     }
+
+
+    public static String getColorHexById(int colorId) {
+        String colorHex = "#000000"; // Valeur par défaut pour le noir
+        try {
+            Connection conn = openDatabaseConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT color_hex FROM colors WHERE color_id = ?");
+            stmt.setInt(1, colorId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                colorHex = rs.getString("color_hex");
+            }
+
+            rs.close();
+            stmt.close();
+            closeDatabaseConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colorHex;
+    }
+
 
 
 }
