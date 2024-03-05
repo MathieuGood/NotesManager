@@ -5,11 +5,12 @@ import java.util.Map;
 
 public class CustomLabel {
 
-    private static Map<Integer, String> labelNames;
+    private final Map<Integer, String> labelNames = new java.util.HashMap<>();
 
 
     CustomLabel() {
         setLabelsContent();
+        System.out.println("Constructing CustomLabel");
     }
 
 
@@ -42,9 +43,12 @@ public class CustomLabel {
     }
 
     // With the labelID, return the labelName
-    static public String getLabelName(int labelID) {
+    public String getLabelName(int labelID) {
         return labelNames.get(labelID);
     }
 
+    public Map<Integer, String> getAllLabels() {
+        return labelNames;
+    }
 
 }

@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -111,10 +112,20 @@ public class MainWindow extends Application {
 
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
-        note = binders.get(0).getTabs().get(0).getNotes().get(0);
+        note = binders.get(0).getTabs().get(0).getNotes().get(1);
 
         // Initialize the NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
+
+        CustomLabel customLabel = new CustomLabel();
+        Map<Integer, String> labelResult = customLabel.getAllLabels();
+
+        // Loop over labelResult and print every line
+        for (Map.Entry<Integer, String> entry : labelResult.entrySet()) {
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
+
+
 
 
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
