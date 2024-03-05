@@ -6,23 +6,25 @@ import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 
 public class NotebookTreeView {
 
-    private  TreeView<String> binderTree;
-    private  Notebook notebook;
+    private TreeView<String> binderTree;
+    private Notebook notebook;
+    TreeItem<String> rootItem = new TreeItem<>("Main node");
 
-    public  NotebookTreeView(TreeView<String> binderTree, Notebook notebook) {
+    public NotebookTreeView(TreeView<String> binderTree, Notebook notebook) {
         this.binderTree = binderTree;
         this.notebook = notebook;
     }
 
 
     public void createTreeView() {
+        System.out.println(">>>>>>>> Creating tree view");
 
-        TreeItem<String> rootItem = new TreeItem<>("Classeurs");
         binderTree.setRoot(rootItem);
         binderTree.setShowRoot(false);
 
@@ -54,8 +56,7 @@ public class NotebookTreeView {
     }
 
     private Node getColorCircle(String colorHex) {
-        Circle circle = new Circle(5, Color.web(colorHex));
-        return circle;
+        return new Circle(5, Color.web(colorHex));
     }
 
 }

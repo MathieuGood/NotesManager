@@ -13,7 +13,7 @@ public class Tab {
 
 
     // An ArrayList that holds all the Note objects associated with this Tab.
-    private ArrayList<Note> notes;
+    private ArrayList<Note> notes = new ArrayList<>();
 
     // The unique identifier for this Tab.
     private final int tabID;
@@ -47,7 +47,6 @@ public class Tab {
         this.binderID = binder.getBinderID();
         this.tabName = tabName;
         this.tabColorID = tabColorID;
-        this.notes = fetchAllNotes();
     }
 
     /**
@@ -144,6 +143,10 @@ public class Tab {
         return notes;
     }
 
+
+public void addNoteToList(Note note) {
+        notes.add(note);
+    }
 
     /**
      * Edits the name of this Tab.

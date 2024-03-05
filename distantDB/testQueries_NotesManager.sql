@@ -1,15 +1,16 @@
--- Get all notes from user 1
-SELECT binder_name, tab_name, note_name, note_content
-    FROM notes 
-        INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-        INNER JOIN binders ON tabs.binder_id = binders.binder_id
-        INNER JOIN users ON binders.user_id = users.user_id
-        	WHERE users.user_id = 1;
+SELECT binders.binder_id,
+       binders.binder_name,
+       binders.binder_color_id,
+       tabs.tab_id,
+       tabs.tab_name,
+       tabs.tab_color_id,
+       notes.note_id,
+       notes.note_name,
+       notes.note_color_id
+FROM binders
+         LEFT JOIN users ON binders.user_id = users.user_id
+         LEFT JOIN tabs ON tabs.binder_id = binders.binder_id
+         LEFT JOIN notes ON notes.tab_id = tabs.tab_id
+WHERE users.user_id = 1
+;
 
--- Create a view to get all notes from all users
-CREATE VIEW viewAllUserNotes AS
-    SELECT binder_name, tab_name, note_name, note_content
-    FROM notes 
-        INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-        INNER JOIN binders ON tabs.binder_id = binders.binder_id
-        INNER JOIN users ON binders.user_id = users.user_id;

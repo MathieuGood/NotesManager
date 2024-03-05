@@ -28,8 +28,9 @@ public class Notebook {
      */
     public Notebook(User user) {
         this.userID = user.getUserID();
-        this.binders = fetchAllBinders();
+        setNotebookContent();
     }
+
 
     /**
      * Returns the user ID of the owner of this notebook.
@@ -52,15 +53,24 @@ public class Notebook {
 
 
     /**
-     * Prints the content tree of this notebook to the console.
-     * This method first prints the details of the operation to the console.
-     * Then, it performs a select operation on the "binders", "tabs", and "notes" tables in the database, retrieving all binders, tabs, and notes associated with the user ID.
-     * The results of the select operation are stored in a ResultSet.
-     * The method then iterates over the ResultSet, retrieving the binder ID, binder name, binder color ID, tab ID, tab name, tab color ID, note ID, note name, and note color ID for each row.
-     * For each row, it prints the details to the console.
-     * If an exception occurs during this process, it prints the error to the console.
+     * Adds a Binder object to the binders list.
+     *
+     * @param binder The Binder object to be added to the list.
      */
-    public void getContentTree() {
+    public void addBinderToList(Binder binder) {
+        binders.add(binder);
+    }
+
+
+    /**
+     * Fetches all content related to the Notebook from the database.
+     * This includes information about binders, tabs, and notes associated with the user.
+     * The method performs a select operation on the database with multiple left joins to retrieve the required data.
+     * The result of the select operation is returned as a ResultSet.
+     *
+     * @return A ResultSet containing all content related to the Notebook.
+     */
+    public ResultSet fetchAllNotebookContent() {
 
         System.out.println("\n***");
         System.out.println("getContentTree() for userID " + userID);
@@ -75,33 +85,89 @@ public class Notebook {
                 "notes.note_id",
                 "notes.note_name",
                 "notes.note_color_id"};
-        String[] conditionFields = {"user_id"};
+        String[] conditionFields = {"users.user_id"};
         String[] conditionValues = {String.valueOf(userID)};
 
-        ResultSet resultSet = DatabaseManager.select(
+        return DatabaseManager.select(
                 "binders "
-                        + "INNER JOIN tabs ON binders.binder_id = tabs.binder_id "
-                        + "INNER JOIN notes ON tabs.tab_id = notes.tab_id",
+                        + "LEFT JOIN users ON binders.user_id = users.user_id "
+                        + "LEFT JOIN tabs ON tabs.binder_id = binders.binder_id "
+                        + "LEFT JOIN notes ON notes.tab_id = tabs.tab_id ",
                 fields,
                 conditionFields,
                 conditionValues
         );
+    }
 
-        // Print ResultSet data
+
+    /**
+     * Sets the content of the Notebook by fetching all related content from the database.
+     * The method fetches all content related to the Notebook and iterates over the ResultSet.
+     * For each row in the ResultSet, it checks if the binder ID, tab ID, and note ID correspond to new entities.
+     * If they do, it creates new Binder, Tab, and Note objects and adds them to the appropriate lists.
+     * If an exception occurs during this process, it prints the error to the console.
+     */
+    public void setNotebookContent() {
+
+        // Fetch all content related to the Notebook from the database
+        ResultSet notebookContent = fetchAllNotebookContent();
+
+        // Initialize current binder and tab IDs
+        int currentBinderID = 0;
+        int currentTabID = 0;
+
         try {
-            while (resultSet.next()) {
-                int binderID = resultSet.getInt(1);
-                String binderName = resultSet.getString(2);
-                int binderColorID = resultSet.getInt(3);
-                int tabID = resultSet.getInt(4);
-                String tabName = resultSet.getString(5);
-                int tabColorID = resultSet.getInt(6);
-                int noteID = resultSet.getInt(7);
-                String noteName = resultSet.getString(8);
-                int noteColorID = resultSet.getInt(9);
+            // Move the cursor to the first row of the ResultSet
+            notebookContent.first();
+
+            // Iterate over each row in the ResultSet
+            while (notebookContent.next()) {
+                // Print the current binder ID
+                System.out.println("Current binderID is " + currentBinderID);
+
+                // Retrieve data from the current row of the ResultSet
+                int binderID = notebookContent.getInt(1);
+                String binderName = notebookContent.getString(2);
+                int binderColorID = notebookContent.getInt(3);
+                int tabID = notebookContent.getInt(4);
+                String tabName = notebookContent.getString(5);
+                int tabColorID = notebookContent.getInt(6);
+                int noteID = notebookContent.getInt(7);
+                String noteName = notebookContent.getString(8);
+                int noteColorID = notebookContent.getInt(9);
+
+                // Print the retrieved data
                 System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
+
+                // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
+                if (binderID != currentBinderID) {
+                    System.out.println(">>> BinderID " + binderID + " is different from currentBinderID " + currentBinderID);
+                    System.out.println(">>> Adding binder " + binderName);
+                    addBinderToList(new Binder(this, binderID, binderName, binderColorID));
+                    currentBinderID = binderID;
+                }
+
+                // If the tab ID corresponds to a new tab and is not null, create a new Tab object and add it to the tabs list of the last binder
+                if (tabID != currentTabID && tabID != 0) {
+                    System.out.println(">>> TabID " + tabID + " is different from currentTabID " + currentTabID);
+                    System.out.println(">>> Adding tab " + tabName);
+                    binders.getLast().addTabToList(new Tab(binders.getLast(), tabID, tabName, tabColorID));
+                    currentTabID = tabID;
+                }
+
+                // If the note ID is not null, create a new Note object and add it to the notes list of the last tab of the last binder
+                if (noteID != 0) {
+                    System.out.println(">>> Adding note " + noteName);
+                    binders.getLast().getTabs().getLast().addNoteToList(new Note(
+                            binders.getLast().getTabs().getLast(),
+                            noteID,
+                            noteName
+                    ));
+                }
+
             }
         } catch (Exception e) {
+            // Print any exceptions that occur
             System.out.println("Error : " + e);
         }
     }
