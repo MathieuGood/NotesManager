@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 /**
  * The MainWindow class extends the Application class from the JavaFX library.
  * <p>
@@ -39,53 +40,83 @@ import java.util.Optional;
 public class MainWindow extends Application {
 
 
-    // public MenuButton btnCreateAction;
-    // The primary stage for this application, onto which the application scene can be set.
+    /**
+     * public MenuButton btnCreateAction;
+     * The primary stage for this application, onto which the application scene can be set.
+     */
     private Stage stage;
 
-    // The scene for this application. The scene is the container for the visible content in the JavaFX scene graph.
+    /**
+     * The scene for this application. The scene is the container for the visible content in the JavaFX scene graph.
+     */
     private Scene scene;
 
-    // The root node of the scene graph. It is an intermediate container for complex scene graph.
+    /**
+     * The root node of the scene graph. It is an intermediate container for complex scene graph.
+     */
     private Parent root;
 
-    // The label displaying the user's name. It is annotated with @FXML so its value can be injected from the FXML file.
+    /**
+     * The label displaying the user's name. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
     @FXML
     Label userNameLabel;
 
-    // The logout and save buttons. They are annotated with @FXML so their values can be injected from the FXML file.
+    /**
+     * The logout and save buttons. They are annotated with @FXML so their values can be injected from the FXML file.
+     */
     @FXML
     Button btnLogOut, btnSave;
 
-    // The button for creating a new label. It is annotated with @FXML so its value can be injected from the FXML file.
+    /**
+     * The button for creating a new label. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
     @FXML
     MenuButton btnCreateLabel;
 
-    // The HTML editor for the note area. It is annotated with @FXML so its value can be injected from the FXML file.
+    /**
+     * The HTML editor for the note area. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
     @FXML
     HTMLEditor noteArea;
 
-    // The TreeView UI element for displaying the binder structure in the application.
-    // It is annotated with @FXML so its value can be injected from the FXML file.
+    /**
+     * The TreeView UI element for displaying the binder structure in the application.
+     * It is annotated with @FXML so its value can be injected from the FXML file.
+     */
     @FXML
     private TreeView<String> binderTree;
 
+    /**
+     * Button for creating actions. This button is used to trigger the creation of new items in the application.
+     * It is annotated with @FXML so its value can be injected from the FXML file.
+     */
     @FXML
     MenuButton btnCreateAction;
 
-    // The static User object for this application.
+    /**
+     * The current user of the application. This is a static field, meaning it is shared across all instances of the MainWindow class.
+     */
     private static User user;
 
-    // The Notebook object for this application.
+    /**
+     * The notebook associated with the current user. This notebook contains all the binders and notes for the user.
+     */
     Notebook notebook;
 
-    // The ArrayList of Binder objects for this application.
+    /**
+     * A list of binders in the notebook. Each binder can contain multiple tabs, and each tab can contain multiple notes.
+     */
     ArrayList<Binder> binders;
 
-    // The Note object for this application.
+    /**
+     * The current note being displayed or edited in the application.
+     */
     Note note;
 
-    // The NoteArea object for this application.
+    /**
+     * The area where the content of the current note is displayed and edited.
+     */
     NoteArea area;
 
 
@@ -126,15 +157,8 @@ public class MainWindow extends Application {
         }
 
 
-
-
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
-
-
-
-       // NotebookTreeView notebookBinder = new NotebookTreeView(binderTree, notebook);
-
 
     }
 
@@ -272,6 +296,7 @@ public class MainWindow extends Application {
         Circle circle = new Circle(5, Color.web(colorHex));
         return circle;
     }
+
     @FXML
     private void createNewDivider() {
         TreeItem<String> selectedBinder = binderTree.getSelectionModel().getSelectedItem();
