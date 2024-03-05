@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notesmanager.MainWindow">
+<?import javafx.scene.control.SeparatorMenuItem?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notesmanager.MainWindow" stylesheets="@stylesheet.css">
    <children>
       <Label fx:id="userNameLabel" layoutX="14.0" layoutY="14.0" text="Bonjour :" />
       <SplitPane dividerPositions="0.2" layoutX="-1.0" layoutY="39.0" prefHeight="363.0" prefWidth="600.0">
@@ -38,12 +39,24 @@
       <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />
       <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#logOut" text="Quitter" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
 
-       <MenuButton fx:id="btnCreateAction" layoutX="183.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Creation" AnchorPane.topAnchor="10.0">
+       <MenuButton fx:id="btnCreateAction" layoutX="183.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.topAnchor="10.0">
            <items>
 
-               <MenuItem onAction="#createNewBinder" text="Create Binder" />
-               <MenuItem onAction="#createNewDivider" text="Create Divider" />
-               <MenuItem onAction="#createNewNote" text="Create Note" />
+               <MenuItem onAction="#addBinderMenu" text="Add Binder" />
+               <MenuItem onAction="#editBinderMenu" text="Edit Binder" />
+               <MenuItem onAction="#deleteBinderMenu" text="Delete Binder" />
+
+               <SeparatorMenuItem />
+
+               <MenuItem onAction="#addTabMenu" text="Add Tab" />
+               <MenuItem onAction="#editTabMenu" text="Edit Tab" />
+               <MenuItem onAction="#deleteTabMenu" text="Delete Tab" />
+
+               <SeparatorMenuItem />
+
+               <MenuItem onAction="#addNoteMenu" text="Add Note" />
+               <MenuItem onAction="#editNoteMenu" text="Edit Note" />
+               <MenuItem onAction="#deleteNoteMenu" text="Delete Note" />
 
            </items>
        </MenuButton>

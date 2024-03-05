@@ -270,11 +270,11 @@ public class Notebook {
      */
     public Binder getBinderByName(String binderName) {
         for (Binder binder : this.binders) {
-            if (binder.getBinderName().equals(binderName)) {
+            if (binder.getBinderName().equalsIgnoreCase(binderName)) {
                 return binder;
             }
         }
-        return null; // ou lancez une exception si approprié
+        return null;
     }
 
     /**
@@ -286,7 +286,7 @@ public class Notebook {
     public Tab getTabByDividerName(String tabName) {
         for (Binder binder : binders) {
             for (Tab tab : binder.getTabs()) {
-                if (tab.getTabName().equals(tabName)) {
+                if (tab.getTabName().equalsIgnoreCase(tabName)) {
                     return tab;
                 }
             }

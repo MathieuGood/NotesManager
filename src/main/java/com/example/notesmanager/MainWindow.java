@@ -217,8 +217,10 @@ public class MainWindow extends Application {
 
     }
 
+    /************* Binders ******************/
+
     @FXML
-    private void createNewBinder() {
+    private void addBinderMenu(ActionEvent actionEvent) {
 
         TextInputDialog dialog = new TextInputDialog("Nom du Classeur");
         dialog.setTitle("Création d'un Nouveau Classeur");
@@ -257,17 +259,37 @@ public class MainWindow extends Application {
         }
     }
 
-    private Node getColorCircle(String colorHex) {
-        Circle circle = new Circle(5, Color.web(colorHex));
-        return circle;
-    }
+
     @FXML
-    private void createNewDivider() {
+    private void editBinderMenu() {
+
+    }
+
+    @FXML
+    private void deleteBinderMenu() {
+
+    }
+
+
+
+
+    /************* Tabs *******************/
+    @FXML
+    private void addTabMenu() {
+        System.out.println("Selected item: " + binderTree.getSelectionModel().getSelectedItem());
+
         TreeItem<String> selectedBinder = binderTree.getSelectionModel().getSelectedItem();
 
         if (selectedBinder != null) {
+
+            System.out.println("Classeur sélectionné : " + selectedBinder.getValue());
+
             Binder binder = notebook.getBinderByName(selectedBinder.getValue());
+
             if (binder != null) {
+
+                System.out.println("Binder trouvé avec succès.");
+
                 TextInputDialog dialog = new TextInputDialog("Nouveau Intercalaire");
                 dialog.setTitle("Création d'un Nouvel Intercalaire");
                 dialog.setHeaderText("Entrez le nom du nouvel intercalaire :");
@@ -305,16 +327,37 @@ public class MainWindow extends Application {
                     }
                 }
             } else {
+                System.out.println("Erreur : Binder correspondant au nom sélectionné introuvable.");
                 showAlert("Veuillez sélectionner un classeur pour ajouter un intercalaire.");
             }
         } else {
+            System.out.println("Erreur : Aucun classeur sélectionné.");
             showAlert("Aucun classeur sélectionné.");
         }
     }
 
 
+
     @FXML
-    private void createNewNote() {
+    private void editTabMenu(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void deleteTabMenu(ActionEvent event) {
+
+    }
+
+
+
+    /************  Notes  *******************/
+
+
+    @FXML
+    private void addNoteMenu() {
+
+        System.out.println("Selected item: " + binderTree.getSelectionModel().getSelectedItem());
+
         TreeItem<String> selectedDivider = binderTree.getSelectionModel().getSelectedItem();
 
 
@@ -348,6 +391,19 @@ public class MainWindow extends Application {
         }
     }
 
+    @FXML
+    private void editNoteMenu(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void deleteNoteMenu(ActionEvent event) {
+
+    }
+
+
+
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -355,6 +411,12 @@ public class MainWindow extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    private Node getColorCircle(String colorHex) {
+        Circle circle = new Circle(5, Color.web(colorHex));
+        return circle;
     }
 
 }
