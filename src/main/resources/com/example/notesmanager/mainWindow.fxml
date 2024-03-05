@@ -27,7 +27,7 @@
          </items>
       </SplitPane>
        
-      <MenuButton fx:id="btnFilterLabel" layoutX="307.0" layoutY="10.0" mnemonicParsing="false" onAction="#setFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
+      <MenuButton fx:id="btnFilterLabel" layoutX="307.0" layoutY="10.0" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
         <items>
 
         </items>

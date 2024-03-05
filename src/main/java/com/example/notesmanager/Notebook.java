@@ -28,7 +28,7 @@ public class Notebook {
      */
     public Notebook(User user) {
         this.userID = user.getUserID();
-        setNotebookContent();
+        setNotebookContent(null);
     }
 
 
@@ -112,7 +112,7 @@ public class Notebook {
      * If they do, it creates new Binder, Tab, and Note objects and adds them to the appropriate lists.
      * If an exception occurs during this process, it prints the error to the console.
      */
-    public void setNotebookContent() {
+    public void setNotebookContent(String labelNameFilter) {
 
         // Fetch all content related to the Notebook from the database
         ResultSet notebookContent = fetchAllNotebookContent();
@@ -140,12 +140,20 @@ public class Notebook {
                 // Print the retrieved data
                 //  System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
 
-                // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
-                if (binderID != currentBinderID) {
-                    System.out.println("Binder : " + binderName + " / ID #" + binderID);
-                    addBinderToList(new Binder(this, binderID, binderName, binderColorID));
-                    currentBinderID = binderID;
-                }
+                // If a labelNameFilter is provided, do not skip the current row if the note's labels do not match the filter
+                if (labelNameFilter != null) {
+                    if (!labelNameFilter.equals(noteLabel1) || !labelNameFilter.equals(noteLabel2)) {
+                        continue;
+
+                    }
+                } else
+
+                    // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
+                    if (binderID != currentBinderID) {
+                        System.out.println("Binder : " + binderName + " / ID #" + binderID);
+                        addBinderToList(new Binder(this, binderID, binderName, binderColorID));
+                        currentBinderID = binderID;
+                    }
 
                 // If the tab ID corresponds to a new tab and is not null, create a new Tab object and add it to the tabs list of the last binder
                 if (tabID != currentTabID && tabID != 0) {

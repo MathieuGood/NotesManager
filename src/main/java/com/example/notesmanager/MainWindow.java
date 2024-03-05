@@ -32,7 +32,7 @@ import java.util.Optional;
  * @see Stage
  * @see Scene
  * @see Parent
- * @see CustomLabel
+ * @see NoteLabel
  * @see Button
  * @see MenuButton
  * @see HTMLEditor
@@ -121,53 +121,36 @@ public class MainWindow extends Application {
 
 
     /**
-     * This method is called when the MainWindow is initialized.
-     * It sets up the user interface and initializes the notebook, binders, and note.
-     * It also sets up the NoteArea with the first note from the first tab of the first binder.
+     * The initialize method is called after all the FXML fields have been injected.
+     * It sets the text of the userNameLabel to greet the user, initializes the notebook with the current user, and gets the binders from the notebook.
+     * It also initializes the note area with the current note and the HTMLEditor from the user interface, and sets the content of the note area to the content of the current note.
      */
     @FXML
     public void initialize() {
-        // Print debug information to the console
-        System.out.println("initialize function");
-        System.out.println(user.toString());
-
         // Set the text of the userNameLabel to greet the user
         userNameLabel.setText("Bonjour " + user.getUserName());
 
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
 
-
-        // Get the binders from the notebook
+        // Get binders from the notebook
         binders = notebook.getBinders();
 
+        //
+        // FOR DEVELOPMENT PURPOSES ONLY
+        //
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
         note = binders.get(0).getTabs().get(0).getNotes().get(1);
 
-        // Initialize the NoteArea with the note and the HTMLEditor from the user interface
+        // Initialize NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
 
-        // Get all labels from database and store them in a map
-        CustomLabel customLabel = new CustomLabel();
-        Map<Integer, String> labelResult = customLabel.getAllLabels();
+        // Set the content of the note area to the content of the current note
+        setNoteLabelDropdownContent();
 
-        // Loop over labelResult and print every line
-        for (Map.Entry<Integer, String> entry : labelResult.entrySet()) {
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-        }
-
-        // Add content of labelResult (including keys that will be the ID of each entry ) into btnFilterLabel
-        for (Map.Entry<Integer, String> entry : labelResult.entrySet()) {
-            MenuItem menuItem = new MenuItem(entry.getValue());
-            menuItem.setOnAction(this::setFilter);
-            btnFilterLabel.getItems().add(menuItem);
-        }
-
-
-        NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
-        notebookTreeView.createTreeView();
-
+        // Generate the tree view for the notebook
+        generateTreeView();
     }
 
 
@@ -224,13 +207,16 @@ public class MainWindow extends Application {
      *
      * @param e the action event
      */
-    public void setFilter(ActionEvent e) {
-
-        if (e.getSource() instanceof MenuItem) {
-            MenuItem selectedLabel = (MenuItem) e.getSource();
+    public void setLabelFilter(ActionEvent e) {
+        // Check if the source of the event is a MenuItem
+        if (e.getSource() instanceof MenuItem selectedLabel) {
+            // Retrieve name of the label
             String labelName = selectedLabel.getText();
-
             System.out.println(labelName);
+
+            // Filter notes by label name and rerender the tree view
+            notebook.setNotebookContent(labelName);
+            generateTreeView();
         }
     }
 
@@ -245,6 +231,66 @@ public class MainWindow extends Application {
         System.out.println("initUser");
         user = pUser;
         System.out.println(user.toString());
+    }
+
+
+    /**
+     * This method is used to set the content of the note label dropdown menu.
+     * It fetches all labels from the database and adds them as menu items to the dropdown menu.
+     * Each menu item is set to trigger the setFilter method when selected.
+     */
+    public void setNoteLabelDropdownContent() {
+        // Fetch all labels from the database
+        Map<Integer, String> labelsResult = fetchAllLabels();
+
+        // Loop over the fetched labels
+        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
+
+            // Create a new menu item for each label
+            MenuItem label = new MenuItem(entry.getValue());
+
+            // Set the action of the menu item to trigger the setFilter method
+            label.setOnAction(this::setLabelFilter);
+
+            // Add the menu item to the dropdown menu
+            btnFilterLabel.getItems().add(label);
+        }
+    }
+
+    /**
+     * This method is used to fetch all labels from the database.
+     * It creates a new instance of the NoteLabel class and calls its getAllLabels method to retrieve all labels.
+     * The labels are stored in a map where the key is the label's ID and the value is the label's name.
+     * The method then iterates over the map and prints each label's ID and name to the console.
+     * Finally, it returns the map of labels.
+     *
+     * @return a map where the key is the label's ID and the value is the label's name
+     */
+    public Map<Integer, String> fetchAllLabels() {
+        NoteLabel noteLabels = new NoteLabel();
+
+        // Call the getAllLabels method of the NoteLabel instance to fetch all labels from the database
+        // The labels are stored in a map where the key is the label's ID and the value is the label's name
+        Map<Integer, String> labelsResult = noteLabels.getAllLabels();
+
+        // Iterate over the map of labels
+        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
+            // Print each label's ID and name to the console
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
+
+        // Return the map of labels
+        return labelsResult;
+    }
+
+    /**
+     * This method is used to generate the tree view for the notebook.
+     * It creates an instance of the NotebookTreeView class, passing the binderTree and notebook as parameters.
+     * Then, it calls the createTreeView method on the NotebookTreeView instance to generate the tree view.
+     */
+    public void generateTreeView() {
+        NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
+        notebookTreeView.createTreeView();
     }
 
 
@@ -314,8 +360,6 @@ public class MainWindow extends Application {
     }
 
 
-
-
     /************* Tabs *******************/
     @FXML
     private void addTabMenu() {
@@ -380,7 +424,6 @@ public class MainWindow extends Application {
     }
 
 
-
     @FXML
     private void editTabMenu(ActionEvent event) {
 
@@ -390,7 +433,6 @@ public class MainWindow extends Application {
     private void deleteTabMenu(ActionEvent event) {
 
     }
-
 
 
     /************  Notes  *******************/
@@ -443,9 +485,6 @@ public class MainWindow extends Application {
     private void deleteNoteMenu(ActionEvent event) {
 
     }
-
-
-
 
 
     private void showAlert(String message) {

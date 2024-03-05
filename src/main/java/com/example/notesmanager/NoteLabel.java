@@ -7,7 +7,7 @@ import java.util.Map;
  * CustomLabel class is used to manage labels in the application.
  * It fetches all labels from the database and stores them in a HashMap for easy access.
  */
-public class CustomLabel {
+public class NoteLabel {
 
     /**
      * A HashMap to store label IDs and their corresponding names.
@@ -18,7 +18,7 @@ public class CustomLabel {
      * Constructor for the CustomLabel class.
      * It sets the content of the labels by fetching them from the database.
      */
-    CustomLabel() {
+    NoteLabel() {
         setLabelsContent();
         System.out.println("Constructing CustomLabel");
     }
