@@ -3,7 +3,9 @@ package com.example.notesmanager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -341,6 +343,47 @@ public abstract class DatabaseManager {
             e.printStackTrace();
         }
         return colorHex;
+    }
+
+    public static List<String> getColorNames() {
+        List<String> colorNames = new ArrayList<>();
+        try {
+            Connection conn = openDatabaseConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT color_name FROM colors");
+
+            while (rs.next()) {
+                colorNames.add(rs.getString("color_name"));
+            }
+
+            rs.close();
+            stmt.close();
+            closeDatabaseConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colorNames;
+    }
+
+    public static int getColorIdByName(String colorName) {
+        int colorId = -1;
+        try {
+            Connection conn = openDatabaseConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT color_id FROM colors WHERE color_name = ?");
+            stmt.setString(1, colorName);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                colorId = rs.getInt("color_id");
+            }
+
+            rs.close();
+            stmt.close();
+            closeDatabaseConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colorId;
     }
 
 

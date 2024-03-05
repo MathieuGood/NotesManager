@@ -262,4 +262,36 @@ public class Notebook {
         return DatabaseManager.delete("binders", "binderID", String.valueOf(binderID));
     }
 
+    /**
+     * Recherche un Binder par son nom.
+     *
+     * @param binderName Le nom du Binder à rechercher.
+     * @return Le Binder correspondant au nom donné, ou null si non trouvé.
+     */
+    public Binder getBinderByName(String binderName) {
+        for (Binder binder : this.binders) {
+            if (binder.getBinderName().equals(binderName)) {
+                return binder;
+            }
+        }
+        return null; // ou lancez une exception si approprié
+    }
+
+    /**
+     * Recherche un Tab (intervalaire) par son nom dans tous les classeurs.
+     *
+     * @param tabName Le nom du Tab (intervalaire) à rechercher.
+     * @return Le premier Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
+     */
+    public Tab getTabByDividerName(String tabName) {
+        for (Binder binder : binders) {
+            for (Tab tab : binder.getTabs()) {
+                if (tab.getTabName().equals(tabName)) {
+                    return tab;
+                }
+            }
+        }
+        return null;
+    }
+
 }

@@ -190,6 +190,13 @@ public class Binder {
      * @return The new Tab object.
      */
     public Tab createTab(String tabName, int tabColorID) {
+
+        // Vérif si l'ID de couleur n'est pas négatif avant de faire l'insertion
+        if (tabColorID < 0) {
+            System.err.println("Erreur : L'ID de la couleur est hors de portée.");
+            return null;
+        }
+
         System.out.println("\n***");
         System.out.println("createTab() : " + tabName + " / binderID " + binderID + " / colorID " + tabColorID);
 
@@ -217,5 +224,21 @@ public class Binder {
 
     public String getColorHex() {
         return DatabaseManager.getColorHexById(this.binderColorID);
+    }
+
+
+    /**
+     * Recherche un Tab (intervalaire) par son nom.
+     *
+     * @param tabName Le nom du Tab (intervalaire) à rechercher.
+     * @return Le Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
+     */
+    public Tab findTabByName(String tabName) {
+        for (Tab tab : this.tabs) {
+            if (tab.getTabName().equals(tabName)) {
+                return tab;
+            }
+        }
+        return null;
     }
 }

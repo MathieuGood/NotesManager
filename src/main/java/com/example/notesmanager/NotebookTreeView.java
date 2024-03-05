@@ -1,6 +1,9 @@
 package com.example.notesmanager;
 
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
@@ -8,6 +11,7 @@ import javafx.scene.shape.Circle;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 public class NotebookTreeView {
@@ -58,5 +62,6 @@ public class NotebookTreeView {
     private Node getColorCircle(String colorHex) {
         return new Circle(5, Color.web(colorHex));
     }
+
 
 }
