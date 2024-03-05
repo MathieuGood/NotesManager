@@ -23,27 +23,23 @@ public class Note {
     // The content of this Note.
     private String noteContent;
 
-    // The array of label IDs associated with this Note.
-    private int[] noteLabelID;
+    private String noteLabel1;
+    private String noteLabel2;
 
 
-    /**
-     * This constructor creates a new Note object with a given Tab, noteID, and noteName.
-     * The noteID and noteName are directly assigned, while the tabID is retrieved from the given Tab object.
-     * The noteContent is not set in this constructor, so it will be null until set.
-     *
-     * @param tab      The Tab object that this Note belongs to.
-     * @param noteID   The unique identifier for this Note.
-     * @param noteName The name of this Note.
-     */
+
     public Note(
             Tab tab,
             int noteID,
-            String noteName
+            String noteName,
+            String noteLabel1,
+            String noteLabel2
     ) {
         this.noteID = noteID;
         this.tabID = tab.getTabID();
         this.noteName = noteName;
+        this.noteLabel1 = noteLabel1;
+        this.noteLabel2 = noteLabel2;
     }
 
 
@@ -60,12 +56,16 @@ public class Note {
             Tab tab,
             int noteID,
             String noteName,
-            String noteContent
+            String noteContent,
+            String noteLabel1,
+            String noteLabel2
     ) {
         this.noteID = noteID;
         this.tabID = tab.getTabID();
         this.noteName = noteName;
         this.noteContent = noteContent;
+        this.noteLabel1 = noteLabel1;
+        this.noteLabel2 = noteLabel2;
     }
 
 
@@ -99,15 +99,13 @@ public class Note {
     }
 
 
-    /**
-     * Returns the array of label IDs associated with this Note.
-     *
-     * @return The array of label IDs associated with this Note.
-     */
-    public int[] getNoteLabelID() {
-        return noteLabelID;
+    public String getNoteLabel1() {
+        return noteLabel1;
     }
 
+    public String getNoteLabel2() {
+        return noteLabel2;
+    }
 
     /**
      * Returns the content of this Note.
@@ -134,15 +132,6 @@ public class Note {
      */
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
-    }
-
-    /**
-     * Sets the array of label IDs associated with this Note.
-     *
-     * @param noteLabelID The new array of label IDs for this Note.
-     */
-    public void setNoteLabelID(int[] noteLabelID) {
-        this.noteLabelID = noteLabelID;
     }
 
 

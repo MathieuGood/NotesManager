@@ -14,3 +14,6 @@ FROM binders
 WHERE users.user_id = 1
 ;
 
+
+SELECT * FROM viewAllUserNotes;
+

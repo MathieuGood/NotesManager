@@ -84,7 +84,10 @@ public class Notebook {
                 "tabs.tab_color_id",
                 "notes.note_id",
                 "notes.note_name",
-                "notes.note_color_id"};
+                "notes.note_color_id",
+                "label1.label_name",
+                "label2.label_name"
+        };
         String[] conditionFields = {"users.user_id"};
         String[] conditionValues = {String.valueOf(userID)};
 
@@ -92,7 +95,9 @@ public class Notebook {
                 "binders "
                         + "LEFT JOIN users ON binders.user_id = users.user_id "
                         + "LEFT JOIN tabs ON tabs.binder_id = binders.binder_id "
-                        + "LEFT JOIN notes ON notes.tab_id = tabs.tab_id ",
+                        + "LEFT JOIN notes ON notes.tab_id = tabs.tab_id "
+                        + "LEFT JOIN labels AS label1 ON notes.note_label1_id = label1.label_id "
+                        + "LEFT JOIN labels AS label2 ON notes.note_label2_id = label2.label_id ",
                 fields,
                 conditionFields,
                 conditionValues
@@ -117,9 +122,6 @@ public class Notebook {
         int currentTabID = 0;
 
         try {
-            // Move the cursor to the first row of the ResultSet
-            notebookContent.first();
-
             // Iterate over each row in the ResultSet
             while (notebookContent.next()) {
                 // Print the current binder ID
@@ -135,6 +137,8 @@ public class Notebook {
                 int noteID = notebookContent.getInt(7);
                 String noteName = notebookContent.getString(8);
                 int noteColorID = notebookContent.getInt(9);
+                String noteLabel1 = notebookContent.getString(10);
+                String noteLabel2 = notebookContent.getString(11);
 
                 // Print the retrieved data
                 System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
@@ -161,7 +165,9 @@ public class Notebook {
                     binders.getLast().getTabs().getLast().addNoteToList(new Note(
                             binders.getLast().getTabs().getLast(),
                             noteID,
-                            noteName
+                            noteName,
+                            noteLabel1,
+                            noteLabel2
                     ));
                 }
 

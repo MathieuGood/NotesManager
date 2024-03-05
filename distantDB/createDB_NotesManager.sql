@@ -126,11 +126,13 @@ VALUES ('Java', 1, 2),
 
 CREATE TABLE notes
 (
-    note_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    note_name     VARCHAR(50),
-    note_color_id INT UNSIGNED,
-    note_content  LONGTEXT,
-    tab_id        INT UNSIGNED NOT NULL,
+    note_id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    note_name      VARCHAR(50),
+    note_color_id  INT UNSIGNED,
+    note_content   LONGTEXT,
+    tab_id         INT UNSIGNED NOT NULL,
+    note_label1_id INT DEFAULT NULL,
+    note_label2_id INT DEFAULT NULL,
     PRIMARY KEY (note_id),
     FOREIGN KEY (tab_id) REFERENCES tabs (tab_id)
         ON DELETE CASCADE
@@ -161,8 +163,13 @@ VALUES
     ('SQL DDL Commands', 5, 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
     ('SQL DML Commands', 5, 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
     ('Database Normalization', 5, 'Understand the normalization process to organize data in a relational database.', 3),
-    ('Transactions in SQL', 5, 'Study transactions and their importance in maintaining data integrity in SQL.', 3);
+    ('Transactions in SQL', 5, 'Study transactions and their importance in maintaining data integrity in SQL.', 3)
+;
 
+UPDATE notes
+SET note_label1_id = 2,
+    note_label2_id=4
+WHERE note_id = 1;
 
 
 CREATE TABLE labels
@@ -189,72 +196,25 @@ VALUES ('Important', 1),
 ;
 
 
-CREATE TABLE tag
-(
-    note_id  INT UNSIGNED NOT NULL,
-    label_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (note_id, label_id),
-    FOREIGN KEY (note_id) REFERENCES notes (note_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (label_id) REFERENCES labels (label_id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
-INSERT INTO tag(note_id,
-                label_id)
-VALUES (1, 1),
-       (2, 2);
-
-
 -- Create a view to get all notes from all users
 CREATE VIEW viewAllUserNotes AS
-SELECT binder_name, tab_name, note_name, note_content
-FROM notes
-         INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-         INNER JOIN binders ON tabs.binder_id = binders.binder_id
-         INNER JOIN users ON binders.user_id = users.user_id;
-
-
--- Create a view to get all notes from all user with their labels
-CREATE VIEW viewAllUserNotesWithLabels AS
-SELECT binder_name, tab_name, note_name, note_content, label_name, color_hex
-FROM notes
-         INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-         INNER JOIN binders ON tabs.binder_id = binders.binder_id
-         INNER JOIN users ON binders.user_id = users.user_id
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-         LEFT JOIN colors ON labels.label_color_id = colors.color_id;
-
-
--- Create a view to get all the directory tree for one user displaying the binders, tabs and notes with their respective color code
-
-CREATE VIEW viewDirectoryTree AS
-SELECT binder_name, binder_color_id, tab_name, tab_color_id, note_name, note_color_id
+SELECT binders.binder_id,
+       binders.binder_name,
+       binders.binder_color_id,
+       tabs.tab_id,
+       tabs.tab_name,
+       tabs.tab_color_id,
+       notes.note_id,
+       notes.note_name,
+       notes.note_color_id,
+       notes.note_label1_id,
+       notes.note_label2_id
 FROM binders
-         LEFT JOIN tabs ON binders.binder_id = tabs.binder_id
-         LEFT JOIN notes ON tabs.tab_id = notes.tab_id
-         INNER JOIN colors ON binders.binder_color_id = colors.color_id
-    AND tabs.tab_color_id = colors.color_id;
+         LEFT JOIN users ON binders.user_id = users.user_id
+         LEFT JOIN tabs ON tabs.binder_id = binders.binder_id
+         LEFT JOIN notes ON notes.tab_id = tabs.tab_id
+;
 
-
--- Create a view to display all the notes (note_id, note_name, note_content, note_color_id, labels) for a specific tab_id
-CREATE VIEW viewNotesForTab AS
-SELECT notes.note_id, note_name, note_content, note_color_id, label_name, color_hex
-FROM notes
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-         LEFT JOIN colors ON notes.note_color_id = colors.color_id
-WHERE tab_id = 1;
-
--- On the same base as viewNotesForTab, display just one entry per note_id with all the labels concatenated (separator: ', ')
-CREATE VIEW viewNotesForTabConcatenated AS
-SELECT notes.note_id, note_name, note_content, note_color_id, GROUP_CONCAT(label_name SEPARATOR ', ') AS labels
-FROM notes
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-WHERE tab_id = 1
-GROUP BY notes.note_id;
 
 
 COMMIT;

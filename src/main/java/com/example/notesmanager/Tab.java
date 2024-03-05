@@ -99,49 +99,49 @@ public class Tab {
     }
 
 
-    private ArrayList<Note> fetchAllNotes() {
-        System.out.println("\n***");
-        System.out.println("fetchAllNotes() for binderID " + this.getBinderID());
-
-        String[] fields = {
-                "notes.note_id",
-                "notes.note_name",
-                "notes.note_content",
-        };
-        String[] conditionFields = {"tab_id"};
-        String[] conditionValues = {String.valueOf(tabID)};
-
-        ResultSet resultSet = DatabaseManager.select(
-                "notes",
-                fields,
-                conditionFields,
-                conditionValues);
-
-        // Create ArrayList to store all Note objects
-        ArrayList<Note> notes = new ArrayList<>();
-
-        // Parse query results to new Note object and store it into ArrayList
-        try {
-            while (resultSet.next()) {
-                // Retrieve data from resultSet
-                int noteID = resultSet.getInt(1);
-                String noteName = resultSet.getString(2);
-                String noteContent = resultSet.getString(3);
-
-                // Print out data from resultSet
-                System.out.println("\t> " + noteID + " / " + noteName);
-
-                // Create new Note object with parsed data and add it to ArrayList
-                notes.add(new Note(this, noteID, noteName, noteContent));
-
-                // TODO : If there is a content in labelID, add it to the Note object created
-            }
-        } catch (Exception e) {
-            System.out.println("Error : " + e);
-            return null;
-        }
-        return notes;
-    }
+//    private ArrayList<Note> fetchAllNotes() {
+//        System.out.println("\n***");
+//        System.out.println("fetchAllNotes() for binderID " + this.getBinderID());
+//
+//        String[] fields = {
+//                "notes.note_id",
+//                "notes.note_name",
+//                "notes.note_content",
+//        };
+//        String[] conditionFields = {"tab_id"};
+//        String[] conditionValues = {String.valueOf(tabID)};
+//
+//        ResultSet resultSet = DatabaseManager.select(
+//                "notes",
+//                fields,
+//                conditionFields,
+//                conditionValues);
+//
+//        // Create ArrayList to store all Note objects
+//        ArrayList<Note> notes = new ArrayList<>();
+//
+//        // Parse query results to new Note object and store it into ArrayList
+//        try {
+//            while (resultSet.next()) {
+//                // Retrieve data from resultSet
+//                int noteID = resultSet.getInt(1);
+//                String noteName = resultSet.getString(2);
+//                String noteContent = resultSet.getString(3);
+//
+//                // Print out data from resultSet
+//                System.out.println("\t> " + noteID + " / " + noteName);
+//
+//                // Create new Note object with parsed data and add it to ArrayList
+//                notes.add(new Note(this, noteID, noteName, noteContent));
+//
+//                // TODO : If there is a content in labelID, add it to the Note object created
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error : " + e);
+//            return null;
+//        }
+//        return notes;
+//    }
 
 
 public void addNoteToList(Note note) {
@@ -186,14 +186,6 @@ public void addNoteToList(Note note) {
     }
 
 
-    /**
-     * Creates a new Note with the specified name, and content.
-     * It inserts the new note into the database, and then returns the new Note object.
-     *
-     * @param noteName    The name for the new Note.
-     * @param noteContent The content for the new Note.
-     * @return The new Note object.
-     */
     public Note createNote(String noteName, String noteContent) {
         System.out.println("\n***");
         System.out.println("createNote() : " + noteName + " / tabID " + tabID);
@@ -203,7 +195,7 @@ public void addNoteToList(Note note) {
 
         int noteID = DatabaseManager.insert("notes", fields, values);
 
-        return new Note(this, noteID, noteName, noteContent);
+        return new Note(this, noteID, noteName, noteContent, null, null);
     }
 
 

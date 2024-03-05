@@ -25,7 +25,7 @@ public class NoteArea {
         this.noteArea = noteArea;
         String noteContent = getContent();
         if (!noteContent.isEmpty()) {
-            noteArea.setHtmlText(noteContent);
+            noteArea.setHtmlText(noteContent + "<br>" + note.getNoteLabel1() + "<br>" + note.getNoteLabel2());
         }
     }
 

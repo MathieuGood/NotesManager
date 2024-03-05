@@ -30,7 +30,7 @@ import java.util.Optional;
  * @see Stage
  * @see Scene
  * @see Parent
- * @see Label
+ * @see CustomLabel
  * @see Button
  * @see MenuButton
  * @see HTMLEditor
