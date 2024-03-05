@@ -21,29 +21,19 @@ public abstract class DatabaseManager {
      */
     final static private Properties properties = loadProperties();
 
-    /**
-     * The host address of the database.
-     */
+    // The host of the database.
     static private String dbHost;
 
-    /**
-     * The port number of the database.
-     */
+    // The port number of the database.
     static private String dbPort;
 
-    /**
-     * The username for the database connection.
-     */
+    // The username used to connect to the database.
     static private String dbUsername;
 
-    /**
-     * The password for the database connection.
-     */
+    // The password used to connect to the database.
     static private String dbPassword;
 
-    /**
-     * The name of the database.
-     */
+    // The name of the database.
     static private String dbName;
 
 

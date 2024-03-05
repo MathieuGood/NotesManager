@@ -1,5 +1,9 @@
 package com.example.notesmanager;
 
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * The Note class represents a note in a tab in a note-taking application.
  * It contains methods to get and set the note's properties, and to interact with the database.
@@ -24,8 +28,28 @@ public class Note {
 
 
     /**
-     * Constructor for the Note class.
-     * Initializes a new Note object with the specified tab, note ID, note name and note content.
+     * This constructor creates a new Note object with a given Tab, noteID, and noteName.
+     * The noteID and noteName are directly assigned, while the tabID is retrieved from the given Tab object.
+     * The noteContent is not set in this constructor, so it will be null until set.
+     *
+     * @param tab      The Tab object that this Note belongs to.
+     * @param noteID   The unique identifier for this Note.
+     * @param noteName The name of this Note.
+     */
+    public Note(
+            Tab tab,
+            int noteID,
+            String noteName
+    ) {
+        this.noteID = noteID;
+        this.tabID = tab.getTabID();
+        this.noteName = noteName;
+    }
+
+
+    /**
+     * This constructor creates a new Note object with a given Tab, noteID, noteName, and noteContent.
+     * The noteID, noteName, and noteContent are directly assigned, while the tabID is retrieved from the given Tab object.
      *
      * @param tab         The Tab object that this Note belongs to.
      * @param noteID      The unique identifier for this Note.
@@ -76,22 +100,22 @@ public class Note {
 
 
     /**
-     * Returns the content of this Note.
-     *
-     * @return The content of this Note.
-     */
-    public String getNoteContent() {
-        return noteContent;
-    }
-
-
-    /**
      * Returns the array of label IDs associated with this Note.
      *
      * @return The array of label IDs associated with this Note.
      */
     public int[] getNoteLabelID() {
         return noteLabelID;
+    }
+
+
+    /**
+     * Returns the content of this Note.
+     *
+     * @return The content of this Note.
+     */
+    public String getNoteContent() {
+        return noteContent;
     }
 
     /**
@@ -119,6 +143,30 @@ public class Note {
      */
     public void setNoteLabelID(int[] noteLabelID) {
         this.noteLabelID = noteLabelID;
+    }
+
+
+    /**
+     * Fetches the content of this Note from the database.
+     * If the noteContent is null, it queries the database for the note content using the note's ID.
+     * The result is then assigned to the noteContent.
+     */
+    public void fetchNoteContent() {
+        if (noteContent == null) {
+            ResultSet resultSet = DatabaseManager.select(
+                    "notes",
+                    new String[]{"note_content"},
+                    new String[]{"note_id"},
+                    new String[]{String.valueOf(this.noteID)}
+            );
+
+            try {
+                resultSet.first();
+                noteContent = resultSet.getString(1);
+            } catch (SQLException e) {
+                System.out.println("Error : " + e);
+            }
+        }
     }
 
 

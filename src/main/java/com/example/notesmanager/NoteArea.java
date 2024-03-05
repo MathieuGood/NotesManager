@@ -23,8 +23,9 @@ public class NoteArea {
     public NoteArea(Note note, HTMLEditor noteArea) {
         this.note = note;
         this.noteArea = noteArea;
-        if (!getContent().isEmpty()) {
-            noteArea.setHtmlText(getContent());
+        String noteContent = getContent();
+        if (!noteContent.isEmpty()) {
+            noteArea.setHtmlText(noteContent);
         }
     }
 
@@ -34,6 +35,9 @@ public class NoteArea {
      * @return the content of the note
      */
     public String getContent() {
+        this.note.fetchNoteContent();
+        System.out.println("NOTE CONTENT :");
+        System.out.println(this.note.getNoteContent());
         return this.note.getNoteContent();
     }
 

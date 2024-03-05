@@ -96,19 +96,22 @@ public class MainWindow extends Application {
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
 
+
         // Get the binders from the notebook
-//        binders = notebook.getBinders();
+        binders = notebook.getBinders();
 
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
-//        note = binders.get(0).getTabs().get(0).getNotes().get(0);
+        note = binders.get(0).getTabs().get(0).getNotes().get(0);
 
         // Initialize the NoteArea with the note and the HTMLEditor from the user interface
-//        area = new NoteArea(note, noteArea);
+        area = new NoteArea(note, noteArea);
 
 
         NotebookTreeView notebookTreeView = new NotebookTreeView(notebookTree, notebook);
         notebookTreeView.createTreeView();
+
+
     }
 
 

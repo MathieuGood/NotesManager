@@ -45,7 +45,6 @@ public class Binder {
         this.userID = notebook.getUserID();
         this.binderName = binderName;
         this.binderColorID = binderColorID;
-        this.tabs = fetchAllTabs();
     }
 
 
@@ -86,6 +85,11 @@ public class Binder {
      */
     public ArrayList<Tab> getTabs() {
         return tabs;
+    }
+
+
+    public void addTabToList(Tab tab) {
+        tabs.add(tab);
     }
 
 
