@@ -83,6 +83,9 @@ public class LoginWindow extends Application {
             // Create a new scene with the loaded FXML
             Scene scene = new Scene(fxmlLoader.load());
 
+            scene.getStylesheets().add(getClass().getResource("/com/example/notesmanager/stylesheet.css").toExternalForm());
+
+
             // Set the primary stage properties
             primaryStage.setResizable(false);
             stage.setTitle("NotesManager");
