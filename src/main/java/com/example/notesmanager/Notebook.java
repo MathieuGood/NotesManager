@@ -124,9 +124,6 @@ public class Notebook {
         try {
             // Iterate over each row in the ResultSet
             while (notebookContent.next()) {
-                // Print the current binder ID
-                System.out.println("Current binderID is " + currentBinderID);
-
                 // Retrieve data from the current row of the ResultSet
                 int binderID = notebookContent.getInt(1);
                 String binderName = notebookContent.getString(2);
@@ -141,27 +138,25 @@ public class Notebook {
                 String noteLabel2 = notebookContent.getString(11);
 
                 // Print the retrieved data
-                System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
+                //  System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
 
                 // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
                 if (binderID != currentBinderID) {
-                    System.out.println(">>> BinderID " + binderID + " is different from currentBinderID " + currentBinderID);
-                    System.out.println(">>> Adding binder " + binderName);
+                    System.out.println("Binder : " + binderName + " / ID #" + binderID);
                     addBinderToList(new Binder(this, binderID, binderName, binderColorID));
                     currentBinderID = binderID;
                 }
 
                 // If the tab ID corresponds to a new tab and is not null, create a new Tab object and add it to the tabs list of the last binder
                 if (tabID != currentTabID && tabID != 0) {
-                    System.out.println(">>> TabID " + tabID + " is different from currentTabID " + currentTabID);
-                    System.out.println(">>> Adding tab " + tabName);
+                    System.out.println("  > Tab : " + tabName);
                     binders.getLast().addTabToList(new Tab(binders.getLast(), tabID, tabName, tabColorID));
                     currentTabID = tabID;
                 }
 
                 // If the note ID is not null, create a new Note object and add it to the notes list of the last tab of the last binder
                 if (noteID != 0) {
-                    System.out.println(">>> Adding note " + noteName);
+                    System.out.println("\t>> Note : " + noteName);
                     binders.getLast().getTabs().getLast().addNoteToList(new Note(
                             binders.getLast().getTabs().getLast(),
                             noteID,

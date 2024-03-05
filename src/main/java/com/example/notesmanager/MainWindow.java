@@ -72,7 +72,7 @@ public class MainWindow extends Application {
      * The button for creating a new label. It is annotated with @FXML so its value can be injected from the FXML file.
      */
     @FXML
-    MenuButton btnCreateLabel;
+    MenuButton btnFilterLabel;
 
     /**
      * The HTML editor for the note area. It is annotated with @FXML so its value can be injected from the FXML file.
@@ -148,6 +148,7 @@ public class MainWindow extends Application {
         // Initialize the NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
 
+        // Get all labels from database and store them in a map
         CustomLabel customLabel = new CustomLabel();
         Map<Integer, String> labelResult = customLabel.getAllLabels();
 
@@ -155,6 +156,16 @@ public class MainWindow extends Application {
         for (Map.Entry<Integer, String> entry : labelResult.entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
+
+        // Add content of labelResult (including keys that will be the ID of each entry ) into btnFilterLabel
+        for (Map.Entry<Integer, String> entry : labelResult.entrySet()) {
+            MenuItem menuItem = new MenuItem(entry.getValue());
+            menuItem.setOnAction(this::setFilter);
+            btnFilterLabel.getItems().add(menuItem);
+        }
+
+
+
 
 
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
@@ -216,13 +227,13 @@ public class MainWindow extends Application {
      *
      * @param e the action event
      */
-    public void saveLabel(ActionEvent e) {
+    public void setFilter(ActionEvent e) {
 
         if (e.getSource() instanceof MenuItem) {
-            MenuItem label = (MenuItem) e.getSource();
-            String labelContent = label.getText();
+            MenuItem selectedLabel = (MenuItem) e.getSource();
+            String labelName = selectedLabel.getText();
 
-            System.out.println(labelContent);
+            System.out.println(labelName);
         }
     }
 
