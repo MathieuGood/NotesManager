@@ -4,7 +4,7 @@ import java.sql.*;
 
 
 /**
- * The User class represents a user in the system.
+ * Represents a user in the system.
  * It contains fields for the user's ID, name, and email, and methods for getting and setting these values.
  * It also contains methods for creating a new user and checking if a user's password matches the one stored in the database.
  */

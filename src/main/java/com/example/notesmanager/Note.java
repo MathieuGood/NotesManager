@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * The Note class represents a note in a tab in a note-taking application.
+ * Represents a note in a tab in a note-taking application.
  * It contains methods to get and set the note's properties, and to interact with the database.
  */
 public class Note {
