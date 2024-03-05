@@ -84,6 +84,7 @@ public class Notebook {
                 "tabs.tab_color_id",
                 "notes.note_id",
                 "notes.note_name",
+                "notes.note_color_id",
                 "label1.label_name",
                 "label2.label_name"
         };
@@ -132,8 +133,9 @@ public class Notebook {
                 int tabColorID = notebookContent.getInt(6);
                 int noteID = notebookContent.getInt(7);
                 String noteName = notebookContent.getString(8);
-                String noteLabel1 = notebookContent.getString(9);
-                String noteLabel2 = notebookContent.getString(10);
+                int noteColorID = notebookContent.getInt(9);
+                String noteLabel1 = notebookContent.getString(10);
+                String noteLabel2 = notebookContent.getString(11);
 
                 // Print the retrieved data
                 //  System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
