@@ -10,6 +10,7 @@ module com.example.notesmanager {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.notesmanager to javafx.fxml;
     exports com.example.notesmanager;
