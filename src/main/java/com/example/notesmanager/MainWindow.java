@@ -8,11 +8,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * The MainWindow class extends the Application class from the JavaFX library.
@@ -22,17 +26,19 @@ import java.util.ArrayList;
  * The UI elements are annotated with @FXML, which allows them to be injected with values from the FXML markup.
  * The class also contains a static User object, a Notebook object, an ArrayList of Binders, a Note object, and a NoteArea object.
  *
- * @see javafx.application.Application
- * @see javafx.stage.Stage
- * @see javafx.scene.Scene
- * @see javafx.scene.Parent
- * @see javafx.scene.control.Label
- * @see javafx.scene.control.Button
- * @see javafx.scene.control.MenuButton
- * @see javafx.scene.web.HTMLEditor
+ * @see Application
+ * @see Stage
+ * @see Scene
+ * @see Parent
+ * @see Label
+ * @see Button
+ * @see MenuButton
+ * @see HTMLEditor
  */
 public class MainWindow extends Application {
 
+
+    // public MenuButton btnCreateAction;
     // The primary stage for this application, onto which the application scene can be set.
     private Stage stage;
 
@@ -61,7 +67,10 @@ public class MainWindow extends Application {
     // The TreeView UI element for displaying the binder structure in the application.
     // It is annotated with @FXML so its value can be injected from the FXML file.
     @FXML
-    private TreeView<String> notebookTree;
+    private TreeView<String> binderTree;
+
+    @FXML
+    MenuButton btnCreateAction;
 
     // The static User object for this application.
     private static User user;
@@ -107,8 +116,11 @@ public class MainWindow extends Application {
 //        area = new NoteArea(note, noteArea);
 
 
-        NotebookTreeView notebookTreeView = new NotebookTreeView(notebookTree, notebook);
+        NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
+
+       // NotebookTreeView notebookBinder = new NotebookTreeView(binderTree, notebook);
+
     }
 
 
@@ -200,4 +212,145 @@ public class MainWindow extends Application {
     public void start(Stage stage) throws Exception {
 
     }
+
+    @FXML
+    private void createNewBinder() {
+
+        TextInputDialog dialog = new TextInputDialog("Nom du Classeur");
+        dialog.setTitle("Création d'un Nouveau Classeur");
+        dialog.setHeaderText("Entrez le nom du nouveau classeur :");
+        dialog.setContentText("Nom :");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+
+            String binderName = result.get();
+
+            List<String> colorNames = DatabaseManager.getColorNames();
+            ChoiceDialog<String> dialogColor = new ChoiceDialog<>(colorNames.get(0), colorNames);
+            dialogColor.setTitle("Choix de la couleur");
+            dialogColor.setHeaderText("Choissez une couleur pour le nouveau classeur :");
+            dialogColor.setContentText("Couleur :");
+
+            Optional<String> colorResult = dialogColor.showAndWait();
+            if (colorResult.isPresent()) {
+                int binderColorId = DatabaseManager.getColorIdByName(colorResult.get());
+
+                Binder newBinder = notebook.createBinder(binderName, binderColorId);
+
+                //  code hexadécimal de la couleur du nouveau classeur
+                String colorHex = DatabaseManager.getColorHexById(binderColorId);
+
+                Node circle = getColorCircle(colorHex);
+
+
+                TreeItem<String> newBinderItem = new TreeItem<>(binderName);
+                newBinderItem.setGraphic(circle);
+
+                // Ajout du nouveau classeur à la racine de l'arbre
+                binderTree.getRoot().getChildren().add(newBinderItem);
+            }
+        }
+    }
+
+    private Node getColorCircle(String colorHex) {
+        Circle circle = new Circle(5, Color.web(colorHex));
+        return circle;
+    }
+    @FXML
+    private void createNewDivider() {
+        TreeItem<String> selectedBinder = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedBinder != null) {
+            Binder binder = notebook.getBinderByName(selectedBinder.getValue());
+            if (binder != null) {
+                TextInputDialog dialog = new TextInputDialog("Nouveau Intercalaire");
+                dialog.setTitle("Création d'un Nouvel Intercalaire");
+                dialog.setHeaderText("Entrez le nom du nouvel intercalaire :");
+                dialog.setContentText("Nom :");
+
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()) {
+                    String tabName = result.get();
+
+                    List<String> colorNames = DatabaseManager.getColorNames();
+                    ChoiceDialog<String> choiceDialog = new ChoiceDialog<>(colorNames.get(0), colorNames);
+                    choiceDialog.setTitle("Choix de la couleur");
+                    choiceDialog.setHeaderText("Choisissez une couleur pour le nouvel intercalaire :");
+                    choiceDialog.setContentText("Couleur :");
+
+                    Optional<String> colorResult = choiceDialog.showAndWait();
+                    if (colorResult.isPresent()) {
+                        int tabColorID = DatabaseManager.getColorIdByName(colorResult.get());
+
+                        if (tabColorID >= 0) {
+                            Tab newtab = binder.createTab(tabName, tabColorID);
+
+                            //  code hexadécimal de la couleur du nouveau classeur
+                            String colorHex = DatabaseManager.getColorHexById(tabColorID);
+
+                            Node circle = getColorCircle(colorHex);
+
+                            TreeItem<String> newTabItem = new TreeItem<>(tabName);
+                            newTabItem.setGraphic(circle);
+
+                            selectedBinder.getChildren().add(newTabItem);
+                        } else {
+                            showAlert("La couleur sélectionnée est invalide.");
+                        }
+                    }
+                }
+            } else {
+                showAlert("Veuillez sélectionner un classeur pour ajouter un intercalaire.");
+            }
+        } else {
+            showAlert("Aucun classeur sélectionné.");
+        }
+    }
+
+
+    @FXML
+    private void createNewNote() {
+        TreeItem<String> selectedDivider = binderTree.getSelectionModel().getSelectedItem();
+
+
+        if (selectedDivider != null && selectedDivider.getParent() != null && selectedDivider.getParent().getParent() == binderTree.getRoot()) {
+
+            Tab selectedTab = notebook.getTabByDividerName(selectedDivider.getValue());
+
+            if (selectedTab != null) {
+                TextInputDialog dialog = new TextInputDialog("Nom de la Note");
+                dialog.setTitle("Création d'une Nouvelle Note");
+                dialog.setHeaderText("Entrez le nom de la nouvelle note :");
+                dialog.setContentText("Nom :");
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(name -> {
+
+                    Note newNote = selectedTab.createNote(name, "");
+
+                    // Mettez à jour l'interface utilisateur
+                    TreeItem<String> newNoteItem = new TreeItem<>(name);
+                    selectedDivider.getChildren().add(newNoteItem);
+
+
+                    noteArea.setHtmlText(newNote.getNoteContent());
+                });
+            } else {
+                showAlert("Intercalaire non trouvé.");
+            }
+        } else {
+            showAlert("Veuillez sélectionner un intercalaire pour ajouter une note.");
+        }
+    }
+
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Action Requise");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

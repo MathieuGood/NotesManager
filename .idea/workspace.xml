@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="0e4c3f98-fc05-49ea-9937-e57ada2638dc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NotebookTreeView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NotebookTreeView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,31 +49,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.LoginWindow.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.MainWindow.executor": "Run",
-    "Application.RegisterWindow.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Rebasing dev",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.LoginWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MainWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RegisterWindow.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;implementation-tree&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mariadb"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mariadb&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DevInfo\NotesManager\src\main\java\com\example\notesmanager" />
@@ -76,7 +82,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-4caba194b151-23eed401" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-f644763e9732-a81d5c7c" />
       </set>
     </attachedChunks>
   </component>
@@ -92,6 +98,7 @@
       <workItem from="1709204212804" duration="6890000" />
       <workItem from="1709297800893" duration="28000" />
       <workItem from="1709297856287" duration="2639000" />
+      <workItem from="1709559861572" duration="12229000" />
     </task>
     <servers />
   </component>
