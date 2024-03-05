@@ -244,7 +244,10 @@ public class Notebook {
 
         int binderID = DatabaseManager.insert("binders", fields, values);
 
-        return new Binder(this, binderID, binderName, binderColorID);
+        Binder binder = new Binder(this, binderID, binderName, binderColorID);
+        binders.add(binder);
+
+        return binder;
     }
 
 

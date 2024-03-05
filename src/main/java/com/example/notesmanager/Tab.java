@@ -195,7 +195,10 @@ public void addNoteToList(Note note) {
 
         int noteID = DatabaseManager.insert("notes", fields, values);
 
-        return new Note(this, noteID, noteName, noteContent, null, null);
+        Note note = new Note(this, noteID, noteName, noteContent, null, null);
+        notes.add(note);
+
+        return note;
     }
 
 

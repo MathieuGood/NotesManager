@@ -165,9 +165,6 @@ public class MainWindow extends Application {
         }
 
 
-
-
-
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
 

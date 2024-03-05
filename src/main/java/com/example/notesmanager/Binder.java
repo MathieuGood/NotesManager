@@ -205,7 +205,10 @@ public class Binder {
 
         int tabID = DatabaseManager.insert("tabs", fields, values);
 
-        return new Tab(this, tabID, tabName, tabColorID);
+        Tab tab = new Tab(this, tabID, tabName, tabColorID);
+        tabs.add(tab);
+
+        return tab;
     }
 
 
