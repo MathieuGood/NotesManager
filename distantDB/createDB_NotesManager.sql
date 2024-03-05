@@ -139,33 +139,34 @@ CREATE TABLE notes
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO notes(note_name, note_color_id, note_content, tab_id)
+INSERT INTO notes(note_name, note_content, tab_id)
 VALUES
     -- Notes for Java tab
-    ('Java Basics', 7, 'Learn about variables, data types, and operators in Java.', 1),
-    ('Java OOP Concepts', 7, 'Understand concepts like classes, objects, inheritance, and polymorphism.', 1),
-    ('Java Collections', 7, 'Explore Java collections framework including ArrayList, HashMap, and LinkedList.', 1),
-    ('Exception Handling', 7, 'Study how to handle exceptions in Java using try-catch blocks.', 1),
-    ('File Handling', 7, 'Learn to read from and write to files in Java using FileReader and FileWriter.', 1),
-    ('Multithreading', 7, 'Understand the basics of multithreading and synchronization in Java.', 1),
+    ('Java Basics', 'Learn about variables, data types, and operators in Java.', 1),
+    ('Java OOP Concepts', 'Understand concepts like classes, objects, inheritance, and polymorphism.', 1),
+    ('Java Collections', 'Explore Java collections framework including ArrayList, HashMap, and LinkedList.', 1),
+    ('Exception Handling', 'Study how to handle exceptions in Java using try-catch blocks.', 1),
+    ('File Handling', 'Learn to read from and write to files in Java using FileReader and FileWriter.', 1),
+    ('Multithreading', 'Understand the basics of multithreading and synchronization in Java.', 1),
 
     -- Notes for React Native tab
-    ('React Native Setup', 4, 'Follow the React Native documentation to set up your development environment.', 2),
-    ('React Native Components', 4, 'Understand basic components like View, Text, and Image in React Native.', 2),
-    ('React Navigation', 4, 'Learn how to implement navigation in React Native using React Navigation library.', 2),
-    ('State Management', 4, 'Explore state management options in React Native including useState and useContext.', 2),
-    ('Redux Integration', 4, 'Integrate Redux into your React Native app for centralized state management.', 2),
-    ('Styling in React Native', 4, 'Learn different methods to style components in React Native using StyleSheet.', 2),
+    ('React Native Setup', 'Follow the React Native documentation to set up your development environment.', 2),
+    ('React Native Components', 'Understand basic components like View, Text, and Image in React Native.', 2),
+    ('React Navigation', 'Learn how to implement navigation in React Native using React Navigation library.', 2),
+    ('State Management', 'Explore state management options in React Native including useState and useContext.', 2),
+    ('Redux Integration', 'Integrate Redux into your React Native app for centralized state management.', 2),
+    ('Styling in React Native', 'Learn different methods to style components in React Native using StyleSheet.', 2),
 
     -- Notes for SQL tab
-    ('SQL Queries', 5, 'Practice writing SQL SELECT queries to retrieve data from a database.', 3),
-    ('SQL Joins', 5, 'Understand different types of SQL joins like INNER JOIN, LEFT JOIN, and RIGHT JOIN.', 3),
-    ('SQL DDL Commands', 5, 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
-    ('SQL DML Commands', 5, 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
-    ('Database Normalization', 5, 'Understand the normalization process to organize data in a relational database.', 3),
-    ('Transactions in SQL', 5, 'Study transactions and their importance in maintaining data integrity in SQL.', 3)
+    ('SQL Queries', 'Practice writing SQL SELECT queries to retrieve data from a database.', 3),
+    ('SQL Joins', 'Understand different types of SQL joins like INNER JOIN, LEFT JOIN, and RIGHT JOIN.', 3),
+    ('SQL DDL Commands', 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
+    ('SQL DML Commands', 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
+    ('Database Normalization', 'Understand the normalization process to organize data in a relational database.', 3),
+    ('Transactions in SQL', 'Study transactions and their importance in maintaining data integrity in SQL.', 3)
 ;
 
+-- Add labels to notes
 UPDATE notes
 SET note_label1_id = 2,
     note_label2_id=4
@@ -206,7 +207,6 @@ SELECT binders.binder_id,
        tabs.tab_color_id,
        notes.note_id,
        notes.note_name,
-       notes.note_color_id,
        notes.note_label1_id,
        notes.note_label2_id
 FROM binders
