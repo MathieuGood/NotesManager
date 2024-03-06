@@ -28,7 +28,7 @@ public class Notebook {
      */
     public Notebook(User user) {
         this.userID = user.getUserID();
-        setNotebookContent(null);
+        setNotebookContent();
     }
 
 
@@ -84,7 +84,6 @@ public class Notebook {
                 "tabs.tab_color_id",
                 "notes.note_id",
                 "notes.note_name",
-                "notes.note_color_id",
                 "label1.label_name",
                 "label2.label_name"
         };
@@ -107,12 +106,23 @@ public class Notebook {
 
     /**
      * Sets the content of the Notebook by fetching all related content from the database.
+     * This method is a shorthand for calling setNotebookContent with a null argument,
+     * which means it fetches all content without any label filter.
+     */
+    public void setNotebookContent() {
+        setNotebookContent(null);
+    }
+
+    /**
+     * Sets the content of the Notebook by fetching all related content from the database.
      * The method fetches all content related to the Notebook and iterates over the ResultSet.
      * For each row in the ResultSet, it checks if the binder ID, tab ID, and note ID correspond to new entities.
      * If they do, it creates new Binder, Tab, and Note objects and adds them to the appropriate lists.
      * If an exception occurs during this process, it prints the error to the console.
      */
     public void setNotebookContent(String labelNameFilter) {
+        // Clear the binders list
+        binders = new ArrayList<>();
 
         // Fetch all content related to the Notebook from the database
         ResultSet notebookContent = fetchAllNotebookContent();
@@ -133,27 +143,28 @@ public class Notebook {
                 int tabColorID = notebookContent.getInt(6);
                 int noteID = notebookContent.getInt(7);
                 String noteName = notebookContent.getString(8);
-                int noteColorID = notebookContent.getInt(9);
-                String noteLabel1 = notebookContent.getString(10);
-                String noteLabel2 = notebookContent.getString(11);
+                String noteLabel1 = notebookContent.getString(9);
+                String noteLabel2 = notebookContent.getString(10);
 
                 // Print the retrieved data
                 //  System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
 
                 // If a labelNameFilter is provided, do not skip the current row if the note's labels do not match the filter
                 if (labelNameFilter != null) {
-                    if (!labelNameFilter.equals(noteLabel1) || !labelNameFilter.equals(noteLabel2)) {
+                    // If either label1 or label2 does not match the filter, skip the current row
+                    if (!labelNameFilter.equals(noteLabel1) && !labelNameFilter.equals(noteLabel2)) {
                         continue;
-
                     }
-                } else
+                }
 
-                    // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
-                    if (binderID != currentBinderID) {
-                        System.out.println("Binder : " + binderName + " / ID #" + binderID);
-                        addBinderToList(new Binder(this, binderID, binderName, binderColorID));
-                        currentBinderID = binderID;
-                    }
+                System.out.println("Adding to notebook : " + noteName + " / " + noteLabel1 + " / " + noteLabel2);
+
+                // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
+                if (binderID != currentBinderID) {
+                    System.out.println("Binder : " + binderName + " / ID #" + binderID);
+                    addBinderToList(new Binder(this, binderID, binderName, binderColorID));
+                    currentBinderID = binderID;
+                }
 
                 // If the tab ID corresponds to a new tab and is not null, create a new Tab object and add it to the tabs list of the last binder
                 if (tabID != currentTabID && tabID != 0) {

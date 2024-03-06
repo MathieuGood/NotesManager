@@ -131,7 +131,6 @@ public class MainWindow extends Application {
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
 
-
         //
         // FOR DEVELOPMENT PURPOSES ONLY
         //
@@ -216,6 +215,9 @@ public class MainWindow extends Application {
             // Filter notes by label name and rerender the tree view
             notebook.setNotebookContent(labelName);
             generateTreeView();
+
+            // TODO :  Unfold the tree view
+            binderTree.getRoot().setExpanded(true);
         }
     }
 
