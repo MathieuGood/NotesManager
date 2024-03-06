@@ -59,6 +59,18 @@ public class NoteLabel {
         }
     }
 
+
+    // Method that returns the label id given a label name
+    public int getLabelID(String labelName) {
+        for (Map.Entry<Integer, String> entry : labelNames.entrySet()) {
+            if (entry.getValue().equals(labelName)) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
+
     /**
      * Returns the label name for a given label ID.
      * @param labelID The ID of the label.

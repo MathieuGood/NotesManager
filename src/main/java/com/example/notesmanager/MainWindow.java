@@ -2,6 +2,7 @@ package com.example.notesmanager;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -71,6 +72,9 @@ public class MainWindow extends Application {
     @FXML
     MenuButton btnFilterLabel;
 
+    @FXML
+    MenuButton btnChooseLabel;
+
     /**
      * The HTML editor for the note area. It is annotated with @FXML so its value can be injected from the FXML file.
      */
@@ -126,7 +130,7 @@ public class MainWindow extends Application {
     public void initialize() {
 
         // Set the text of the userNameLabel to greet the user
-        userNameLabel.setText("Bonjour " + user.getUserName());
+        userNameLabel.setText(user.getUserName());
 
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
@@ -143,8 +147,12 @@ public class MainWindow extends Application {
         // Initialize NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
 
-        // Set the content of the note area to the content of the current note
-        setLabelFilterDropdownContent();
+        // Set the content of note filter dropdown menu
+        setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter);
+
+        // Set the content of note label selector dropdown menu
+        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel);
+
 
         // Generate the tree view for the notebook
         generateTreeView();
@@ -218,7 +226,7 @@ public class MainWindow extends Application {
             // If the label name is "All labels", set the notebook content to all notes
             if (labelName.equals("All labels")) {
                 // Reset the style of all MenuItems
-                    btnFilterLabel.setText("All labels");
+                btnFilterLabel.setText("All labels");
 
                 notebook.setNotebookContent();
                 generateTreeView();
@@ -244,6 +252,44 @@ public class MainWindow extends Application {
     }
 
 
+    public void setNoteLabel(ActionEvent e) {
+        // Check if the source of the event is a MenuItem
+        if (e.getSource() instanceof MenuItem selectedLabel) {
+            // Retrieve name of the label
+            String labelName = selectedLabel.getText();
+            System.out.println(labelName);
+
+            // Clear the style of all MenuItems
+            for (MenuItem label : btnFilterLabel.getItems()) {
+                label.setStyle("");
+            }
+
+            // Apply visual effect (bold) to the selected labels that match noteLabel1 or noteLabel2
+            if (labelName.equals(note.getNoteLabel1()) || labelName.equals(note.getNoteLabel2())) {
+                selectedLabel.setStyle("-fx-font-weight: bold");
+            }
+
+            // Add the selected label to the note
+            note.addNoteLabel(labelName);
+
+            // Change the text of the selected label to surround it with brackets
+            btnFilterLabel.setText(labelName);
+
+            // Render the tree view for the notebook
+            generateTreeView();
+
+            // Unfold all the binders and tabs in the tree view
+            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
+                binder.setExpanded(true);
+                for (TreeItem<String> tab : binder.getChildren()) {
+                    tab.setExpanded(true);
+                }
+            }
+        }
+
+    }
+
+
     /**
      * This method is used to set the user for the MainWindow.
      * It prints a debug message to the console, sets the static user field to the provided user, and then prints the user's toString representation to the console.
@@ -262,7 +308,7 @@ public class MainWindow extends Application {
      * It fetches all labels from the database and adds them as menu items to the dropdown menu.
      * Each menu item is set to trigger the setFilter method when selected.
      */
-    public void setLabelFilterDropdownContent() {
+    public void setLabelFilterDropdownContent(MenuButton menuButton, EventHandler<ActionEvent> callback) {
         // Fetch all labels from the database
         Map<Integer, String> labelsResult = fetchAllLabels();
 
@@ -272,13 +318,14 @@ public class MainWindow extends Application {
             // Create a new menu item for each label
             MenuItem label = new MenuItem(entry.getValue());
 
-            // Set the action of the menu item to trigger the setFilter method
-            label.setOnAction(this::setLabelFilter);
+            // Set the action of the menu item to trigger the callback
+            label.setOnAction(callback);
 
             // Add the menu item to the dropdown menu
-            btnFilterLabel.getItems().add(label);
+            menuButton.getItems().add(label);
         }
     }
+
 
     /**
      * This method is used to fetch all labels from the database.

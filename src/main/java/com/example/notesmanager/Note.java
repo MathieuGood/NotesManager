@@ -40,6 +40,8 @@ public class Note {
      */
     private String noteLabel2;
 
+    private NoteLabel notebookLabel;
+
     /**
      * Constructor for the Note class.
      * It sets the noteID, tabID, noteName, noteLabel1, and noteLabel2.
@@ -228,5 +230,35 @@ public class Note {
         return result;
     }
 
+
+    public void addNoteLabel(String labelName) {
+        String field;
+        notebookLabel = new NoteLabel();
+        int labelID = notebookLabel.getLabelID(labelName);
+
+        if (noteLabel1 != null && noteLabel2 != null &&!noteLabel1.equals("null") && !noteLabel2.equals("null")) {
+            System.out.println("Can't apply label " + labelName + " Note already has two labels");
+            return;
+        } else {
+
+            if (noteLabel1 == null || noteLabel1.equals("null")) {
+                noteLabel1 = labelName;
+                field = "note_label1_id";
+            } else {
+                noteLabel2 = labelName;
+                field = "note_label2_id";
+            }
+
+            int result = DatabaseManager.update(
+                    "notes",
+                    field,
+                    String.valueOf(labelID),
+                    "note_id",
+                    String.valueOf(this.noteID)
+            );
+
+        }
+
+    }
 
 }
