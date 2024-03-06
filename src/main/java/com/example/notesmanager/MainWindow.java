@@ -148,16 +148,8 @@ public class MainWindow extends Application {
         // Set the content of the note area to the content of the current note
         setNoteLabelDropdownContent();
 
-
-
-
-
-
-
-
         // Generate the tree view for the notebook
         generateTreeView();
-
 
     }
 

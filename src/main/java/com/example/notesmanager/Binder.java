@@ -226,8 +226,20 @@ public class Binder {
         System.out.println("\n***");
         System.out.println("deleteTab() : " + " tabID " + tabID);
 
-        return DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
+        int result = DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
+
+        // If query is successful, remove the Binder object from the ArrayList
+        if (result > 0) {
+            for (Tab tab : tabs) {
+                if (tab.getTabID() == tabID) {
+                    tabs.remove(tab);
+                    break;
+                }
+            }
+        }
+        return result;
     }
+
 
     public String getColorHex() {
         return NotebookColor.getHexColorByID(this.binderColorID);

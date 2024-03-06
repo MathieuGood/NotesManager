@@ -270,7 +270,19 @@ public class Notebook {
         System.out.println("\n***");
         System.out.println("deleteBinder() : " + " binderID " + binderID);
 
-        return DatabaseManager.delete("binders", "binderID", String.valueOf(binderID));
+        int result = DatabaseManager.delete("binders", "binderID", String.valueOf(binderID));
+
+        // If query is successful, remove the Binder object from the ArrayList
+        if (result > 0) {
+
+            for (Binder binder : binders) {
+                if (binder.getBinderID() == binderID) {
+                    binders.remove(binder);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     /**

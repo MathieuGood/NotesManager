@@ -144,7 +144,7 @@ public class Tab {
 //    }
 
 
-public void addNoteToList(Note note) {
+    public void addNoteToList(Note note) {
         notes.add(note);
     }
 
@@ -213,7 +213,18 @@ public void addNoteToList(Note note) {
         System.out.println("\n***");
         System.out.println("deleteNote() : " + " noteID " + noteID);
 
-        return DatabaseManager.delete("notes", "noteID", String.valueOf(noteID));
+        int result = DatabaseManager.delete("notes", "noteID", String.valueOf(noteID));
+
+        // If the delete operation was successful, remove the note from the ArrayList
+        if (result > 0) {
+            for (Note note : notes) {
+                if (note.getNoteID() == noteID) {
+                    notes.remove(note);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     public String getColorHex() {
