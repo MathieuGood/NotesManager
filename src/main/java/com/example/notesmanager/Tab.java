@@ -156,14 +156,19 @@ public class Tab {
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editName(String newName) {
-        this.tabName = newName;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "tabs",
                 "tab_name",
                 newName,
                 "tab_id",
                 String.valueOf(this.tabID)
         );
+
+        if (result > 0) {
+            this.tabName = newName;
+        }
+
+        return result;
     }
 
 
@@ -175,14 +180,19 @@ public class Tab {
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editColor(int newColorID) {
-        this.tabColorID = newColorID;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "tabs",
                 "tab_color_id",
                 String.valueOf(newColorID),
                 "tab_id",
                 String.valueOf(this.tabID)
         );
+
+        if (result > 0) {
+            this.tabColorID = newColorID;
+        }
+
+        return result;
     }
 
 

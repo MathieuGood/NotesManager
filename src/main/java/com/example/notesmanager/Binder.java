@@ -156,14 +156,18 @@ public class Binder {
      * @return The result of the database update operation.
      */
     public int editName(String newName) {
-        this.binderName = newName;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "binders",
                 "binder_name",
                 newName,
                 "binder_id",
-                String.valueOf(this.binderID)
-        );
+                String.valueOf(this.binderID));
+
+        if (result > 0) {
+            this.binderName = newName;
+        }
+
+        return result;
     }
 
 
@@ -174,14 +178,19 @@ public class Binder {
      * @return The result of the database update operation.
      */
     public int editColor(int newColorID) {
-        this.binderColorID = newColorID;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "binders",
                 "binder_color_id",
                 String.valueOf(newColorID),
                 "binder_id",
                 String.valueOf(this.binderID)
         );
+
+        if (result > 0) {
+            this.binderColorID = newColorID;
+        }
+
+        return result;
     }
 
 

@@ -127,6 +127,7 @@ public abstract class DatabaseManager {
 
             // Prepare the SQL statement
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Set the values for the condition fields in the prepared statement
             if (conditionValues != null && conditionValues.length > 0) {
@@ -163,7 +164,6 @@ public abstract class DatabaseManager {
      */
     public static int insert(String table, String[] fields, String[] values) {
         // Print a message indicating the start of the insertion process
-        System.out.println("Inserting into table " + table);
 
         try {
             // Open a connection to the database
@@ -176,6 +176,7 @@ public abstract class DatabaseManager {
             // Construct the SQL INSERT query
             String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Set values for the prepared statement
             for (int i = 0; i < values.length; i++) {
@@ -184,7 +185,7 @@ public abstract class DatabaseManager {
 
             // Execute the statement
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows inserted : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Get last inserted ID
             ResultSet rs = statement.getGeneratedKeys();
@@ -195,7 +196,7 @@ public abstract class DatabaseManager {
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the insertion process
-            System.out.println("Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+            System.out.println("   > Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
 
             // Return the ID of the inserted row
             return lastInsertedID;
@@ -244,13 +245,13 @@ public abstract class DatabaseManager {
 
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows updated : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Close the database connection
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the update process
-            System.out.println("Update done with result " + queryResult);
+            System.out.println("   > Update done with result " + queryResult);
 
             // Return the number of rows affected
             return queryResult;
@@ -297,13 +298,13 @@ public abstract class DatabaseManager {
 
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows deleted : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Close the database connection
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the deletion process
-            System.out.println("Delete done with result " + queryResult);
+            System.out.println("   > Delete done with result " + queryResult);
 
             // Return the number of rows affected
             return queryResult;

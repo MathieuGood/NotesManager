@@ -132,12 +132,11 @@ public class MainWindow extends Application {
         notebook = new Notebook(user);
 
 
-        // Get binders from the notebook
-        binders = notebook.getBinders();
-
         //
         // FOR DEVELOPMENT PURPOSES ONLY
         //
+        // Get binders from the notebook
+        binders = notebook.getBinders();
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
         note = binders.get(0).getTabs().get(0).getNotes().get(1);

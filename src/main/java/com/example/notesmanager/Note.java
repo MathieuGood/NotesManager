@@ -10,59 +10,59 @@ import java.sql.SQLException;
  */
 public class Note {
 
-/**
- * The unique identifier for this Note.
- */
-private final int noteID;
+    /**
+     * The unique identifier for this Note.
+     */
+    private final int noteID;
 
-/**
- * The unique identifier for the Tab that this Note belongs to.
- */
-private final int tabID;
+    /**
+     * The unique identifier for the Tab that this Note belongs to.
+     */
+    private final int tabID;
 
-/**
- * The name of this Note.
- */
-private String noteName;
+    /**
+     * The name of this Note.
+     */
+    private String noteName;
 
-/**
- * The content of this Note.
- */
-private String noteContent;
+    /**
+     * The content of this Note.
+     */
+    private String noteContent;
 
-/**
- * The first label of this Note.
- */
-private String noteLabel1;
+    /**
+     * The first label of this Note.
+     */
+    private String noteLabel1;
 
-/**
- * The second label of this Note.
- */
-private String noteLabel2;
+    /**
+     * The second label of this Note.
+     */
+    private String noteLabel2;
 
-/**
- * Constructor for the Note class.
- * It sets the noteID, tabID, noteName, noteLabel1, and noteLabel2.
- *
- * @param tab The Tab object that this Note belongs to.
- * @param noteID The unique identifier for this Note.
- * @param noteName The name of this Note.
- * @param noteLabel1 The first label of this Note.
- * @param noteLabel2 The second label of this Note.
- */
-public Note(
-        Tab tab,
-        int noteID,
-        String noteName,
-        String noteLabel1,
-        String noteLabel2
-) {
-    this.noteID = noteID;
-    this.tabID = tab.getTabID();
-    this.noteName = noteName;
-    this.noteLabel1 = noteLabel1;
-    this.noteLabel2 = noteLabel2;
-}
+    /**
+     * Constructor for the Note class.
+     * It sets the noteID, tabID, noteName, noteLabel1, and noteLabel2.
+     *
+     * @param tab        The Tab object that this Note belongs to.
+     * @param noteID     The unique identifier for this Note.
+     * @param noteName   The name of this Note.
+     * @param noteLabel1 The first label of this Note.
+     * @param noteLabel2 The second label of this Note.
+     */
+    public Note(
+            Tab tab,
+            int noteID,
+            String noteName,
+            String noteLabel1,
+            String noteLabel2
+    ) {
+        this.noteID = noteID;
+        this.tabID = tab.getTabID();
+        this.noteName = noteName;
+        this.noteLabel1 = noteLabel1;
+        this.noteLabel2 = noteLabel2;
+    }
 
 
     /**
@@ -189,14 +189,19 @@ public Note(
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editName(String newName) {
-        this.noteName = newName;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "notes",
                 "note_name",
                 newName,
                 "note_id",
                 String.valueOf(this.noteID)
         );
+
+        if (result > 0) {
+            this.noteName = newName;
+        }
+
+        return result;
     }
 
 
@@ -208,14 +213,19 @@ public Note(
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editContent(String newContent) {
-        this.noteContent = newContent;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "notes",
                 "note_content",
                 newContent,
                 "note_id",
                 String.valueOf(this.noteID)
         );
+
+        if (result > 0) {
+            this.noteContent = newContent;
+        }
+
+        return result;
     }
 
 
