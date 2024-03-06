@@ -173,7 +173,6 @@ public class Notebook {
                             noteLabel2
                     ));
                 }
-
             }
         } catch (Exception e) {
             // Print any exceptions that occur

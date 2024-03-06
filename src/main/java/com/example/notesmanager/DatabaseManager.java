@@ -141,10 +141,6 @@ public abstract class DatabaseManager {
             // Close the database connection
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the selection process
-            System.out.println("Select done");
-
-            // Return the result set
             return resultSet;
 
         } catch (SQLException e) {
@@ -323,68 +319,5 @@ public abstract class DatabaseManager {
             return -1;
         }
     }
-
-    public static String getColorHexById(int colorId) {
-        String colorHex = "#000000"; // Valeur par défaut pour le noir
-        try {
-            Connection conn = openDatabaseConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT color_hex FROM colors WHERE color_id = ?");
-            stmt.setInt(1, colorId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                colorHex = rs.getString("color_hex");
-            }
-
-            rs.close();
-            stmt.close();
-            closeDatabaseConnection(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return colorHex;
-    }
-
-    public static List<String> getColorNames() {
-        List<String> colorNames = new ArrayList<>();
-        try {
-            Connection conn = openDatabaseConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT color_name FROM colors");
-
-            while (rs.next()) {
-                colorNames.add(rs.getString("color_name"));
-            }
-
-            rs.close();
-            stmt.close();
-            closeDatabaseConnection(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return colorNames;
-    }
-
-    public static int getColorIdByName(String colorName) {
-        int colorId = -1;
-        try {
-            Connection conn = openDatabaseConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT color_id FROM colors WHERE color_name = ?");
-            stmt.setString(1, colorName);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                colorId = rs.getInt("color_id");
-            }
-
-            rs.close();
-            stmt.close();
-            closeDatabaseConnection(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return colorId;
-    }
-
 
 }

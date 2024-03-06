@@ -12,6 +12,9 @@ import java.util.ArrayList;
 public class Binder {
 
 
+    // Parent notebook of this binder
+    private Notebook notebook;
+
     // An ArrayList that holds all the Tab objects associated with this Binder.
     private ArrayList<Tab> tabs = new ArrayList<>();
 
@@ -42,6 +45,7 @@ public class Binder {
             int binderColorID
     ) {
         this.binderID = binderID;
+        this.notebook = notebook;
         this.userID = notebook.getUserID();
         this.binderName = binderName;
         this.binderColorID = binderColorID;
@@ -226,7 +230,7 @@ public class Binder {
     }
 
     public String getColorHex() {
-        return DatabaseManager.getColorHexById(this.binderColorID);
+        return NotebookColor.getHexColorByID(this.binderColorID);
     }
 
 

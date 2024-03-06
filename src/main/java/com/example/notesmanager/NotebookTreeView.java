@@ -5,6 +5,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 
 
@@ -21,6 +22,7 @@ public class NotebookTreeView {
 
 
     public void createTreeView() {
+
         System.out.println(">>>>>>>> Creating tree view");
 
         binderTree.setRoot(rootItem);
@@ -45,10 +47,8 @@ public class NotebookTreeView {
 
                     tabItem.getChildren().add(noteItem);
                 }
-
                 binderItem.getChildren().add(tabItem);
             }
-
             rootItem.getChildren().add(binderItem);
         }
     }

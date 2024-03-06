@@ -217,7 +217,7 @@ public void addNoteToList(Note note) {
     }
 
     public String getColorHex() {
-        return DatabaseManager.getColorHexById(this.tabColorID);
+        return NotebookColor.getHexColorByID(this.tabColorID);
     }
 
 }

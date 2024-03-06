@@ -14,10 +14,7 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -127,11 +124,13 @@ public class MainWindow extends Application {
      */
     @FXML
     public void initialize() {
+
         // Set the text of the userNameLabel to greet the user
         userNameLabel.setText("Bonjour " + user.getUserName());
 
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
+
 
         // Get binders from the notebook
         binders = notebook.getBinders();
@@ -149,8 +148,17 @@ public class MainWindow extends Application {
         // Set the content of the note area to the content of the current note
         setNoteLabelDropdownContent();
 
+
+
+
+
+
+
+
         // Generate the tree view for the notebook
         generateTreeView();
+
+
     }
 
 
@@ -321,23 +329,21 @@ public class MainWindow extends Application {
 
             String binderName = result.get();
 
-            List<String> colorNames = DatabaseManager.getColorNames();
-            ChoiceDialog<String> dialogColor = new ChoiceDialog<>(colorNames.get(0), colorNames);
+            List<String> colorNames = NotebookColor.getAllColorNames();
+            ChoiceDialog<String> dialogColor = new ChoiceDialog<>(colorNames.getFirst(), colorNames);
             dialogColor.setTitle("Choix de la couleur");
-            dialogColor.setHeaderText("Choissez une couleur pour le nouveau classeur :");
+            dialogColor.setHeaderText("Choisissez une couleur pour le nouveau classeur :");
             dialogColor.setContentText("Couleur :");
 
             Optional<String> colorResult = dialogColor.showAndWait();
             if (colorResult.isPresent()) {
-                int binderColorId = DatabaseManager.getColorIdByName(colorResult.get());
+                int binderColorId = NotebookColor.getColorIDByName(colorResult.get());
 
                 Binder newBinder = notebook.createBinder(binderName, binderColorId);
 
                 //  code hexadécimal de la couleur du nouveau classeur
-                String colorHex = DatabaseManager.getColorHexById(binderColorId);
-
+                String colorHex = NotebookColor.getHexColorByID(binderColorId);
                 Node circle = getColorCircle(colorHex);
-
 
                 TreeItem<String> newBinderItem = new TreeItem<>(binderName);
                 newBinderItem.setGraphic(circle);
@@ -386,7 +392,7 @@ public class MainWindow extends Application {
                 if (result.isPresent()) {
                     String tabName = result.get();
 
-                    List<String> colorNames = DatabaseManager.getColorNames();
+                    List<String> colorNames = NotebookColor.getAllColorNames();
                     ChoiceDialog<String> choiceDialog = new ChoiceDialog<>(colorNames.get(0), colorNames);
                     choiceDialog.setTitle("Choix de la couleur");
                     choiceDialog.setHeaderText("Choisissez une couleur pour le nouvel intercalaire :");
@@ -394,14 +400,13 @@ public class MainWindow extends Application {
 
                     Optional<String> colorResult = choiceDialog.showAndWait();
                     if (colorResult.isPresent()) {
-                        int tabColorID = DatabaseManager.getColorIdByName(colorResult.get());
+                        int tabColorID = NotebookColor.getColorIDByName(colorResult.get());
 
                         if (tabColorID >= 0) {
                             Tab newtab = binder.createTab(tabName, tabColorID);
 
                             //  code hexadécimal de la couleur du nouveau classeur
-                            String colorHex = DatabaseManager.getColorHexById(tabColorID);
-
+                            String colorHex = NotebookColor.getHexColorByID(tabColorID);
                             Node circle = getColorCircle(colorHex);
 
                             TreeItem<String> newTabItem = new TreeItem<>(tabName);
