@@ -317,7 +317,7 @@ public class Notebook {
      * @param tabName Le nom du Tab (intervalaire) à rechercher.
      * @return Le premier Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
      */
-    public Tab getTabByDividerName(String tabName) {
+    public Tab getTabByName(String tabName) {
         for (Binder binder : binders) {
             for (Tab tab : binder.getTabs()) {
                 if (tab.getTabName().equalsIgnoreCase(tabName)) {
