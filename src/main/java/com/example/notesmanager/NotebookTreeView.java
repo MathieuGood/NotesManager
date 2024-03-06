@@ -1,11 +1,14 @@
 package com.example.notesmanager;
 
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +71,6 @@ public class NotebookTreeView {
 
                 ArrayList<Note> notes = tab.getNotes();
                 for (Note note : notes) {
-
                     TreeItem<String> noteItem = new TreeItem<>(note.getNoteName());
 
                     tabItem.getChildren().add(noteItem);
@@ -77,6 +79,48 @@ public class NotebookTreeView {
             }
             rootItem.getChildren().add(binderItem);
         }
+
+
+        binderTree.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                TreeItem<String> item = binderTree.getSelectionModel().getSelectedItem();
+                if (item != null && item.getParent() != null && item.getParent().getParent() != null) {
+                    TreeItem<String> parent = item.getParent();
+                    TreeItem<String> grandParent = parent.getParent();
+                    if (rootItem.getChildren().contains(grandParent)) {
+                        String noteName = item.getValue();
+                        System.out.println(item.toString());
+                        System.out.println("Clic sur la Binder: " + grandParent.getValue());
+                        System.out.println("Clic sur la Tabe: " + parent.getValue());
+                        System.out.println("Clic sur la note: " + noteName);
+
+                        ResultSet resultSet = Note.fetchNoteContentByNoteName(noteName, parent.getValue(), grandParent.getValue());
+
+                        Note note = null;
+                        try {
+                            while (resultSet.next()) {
+
+                                note = new Note(
+                                        resultSet.getInt(1),
+                                        Integer.parseInt(resultSet.getString(2)),
+                                        resultSet.getString(3),
+                                        resultSet.getString(4),
+                                        resultSet.getString(5),
+                                        resultSet.getString(6)
+                                );
+                            }
+
+                        } catch (Exception e) {
+                            System.out.println("error " + e );
+                        }
+
+
+                        System.out.println("afficahge dans le listener de l'id - " + note.getNoteID());
+                        System.out.println("afficahge dans le listener de du titre - " + note.getNoteName());
+                    }
+                }
+            }
+        });
     }
 
 

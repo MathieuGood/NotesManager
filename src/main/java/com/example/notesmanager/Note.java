@@ -1,6 +1,5 @@
 package com.example.notesmanager;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -62,6 +61,35 @@ public class Note {
         this.noteName = noteName;
         this.noteLabel1 = noteLabel1;
         this.noteLabel2 = noteLabel2;
+    }
+
+    /**
+     * This constructor creates a new Note object with a given noteName, tabName and binderName.
+     *
+     * @param noteName The Tab object that this Note belongs to.
+
+     */
+    public Note(
+            int noteID,
+            int tabId,
+            String noteName,
+            String noteContent,
+            String noteLabel1,
+            String noteLabel2
+    ) {
+
+        this.noteID = noteID;
+        this.tabID = tabId;
+        this.noteName = noteName;
+        this.noteContent = noteContent;
+        this.noteLabel1 = noteLabel1;
+        this.noteLabel2 = noteLabel2;
+
+
+        System.out.println("nouveau constructor");
+
+        System.out.println("affichage de l'id dans le constructeur " + noteID);
+
     }
 
 
@@ -178,6 +206,69 @@ public class Note {
                 System.out.println("Error : " + e);
             }
         }
+    }
+
+    public static ResultSet fetchNoteContentByNoteName(String noteName, String tabName, String binderName) {
+
+        int binderIdFromName = 0;
+        int tabIdFromName = 0;
+
+        ResultSet resultSetNote = null;
+
+        // GetId binder from the name
+        String[] fieldsBinder = {"binders.binder_id"};
+        String[] conditionFieldsBinder = {"binders.binder_name"};
+        String[] conditionValuesBinder = {binderName};
+
+        ResultSet resultSetBinder = DatabaseManager.select("binders", fieldsBinder, conditionFieldsBinder, conditionValuesBinder);
+
+        try {
+            while (resultSetBinder.next()) binderIdFromName = resultSetBinder.getInt(1);
+        } catch (Exception e) {
+            System.out.println("Error : " + e);
+        }
+
+        // Si binder trouvé
+        if (binderIdFromName > 0) {
+            String[] fieldsTab = {"tabs.tab_id"};
+            String[] conditionFieldsTab = {"tabs.tab_name","tabs.binder_id"};
+            String[] conditionValuesTab = {tabName, String.valueOf(binderIdFromName)};
+
+            ResultSet resultSetTab = DatabaseManager.select("tabs", fieldsTab, conditionFieldsTab, conditionValuesTab);
+
+            try {
+                while (resultSetTab.next()) tabIdFromName = resultSetTab.getInt(1);
+            } catch (Exception e) {
+                System.out.println("Error : " + e);
+            }
+        }
+
+        if (tabIdFromName > 0) {
+            String[] fieldsNote = {
+                    "notes.note_id",
+                    "notes.tab_id",
+                    "notes.note_name",
+                    "notes.note_content",
+                    "notes.note_label1_id",
+                    "notes.note_label2_id",
+            };
+            String[] conditionFieldsNote = {"notes.note_name","notes.tab_id"};
+            String[] conditionValuesNote = {noteName, String.valueOf(tabIdFromName)};
+
+            resultSetNote = DatabaseManager.select("notes", fieldsNote, conditionFieldsNote, conditionValuesNote);
+
+            // while non nécessaire
+//            try {
+//                while (resultSetNote.next()) noteIdFromName = resultSetNote.getInt(1);
+//            } catch (Exception e) {
+//                System.out.println("Error : " + e);
+//            }
+        }
+
+        System.out.println("binder Id " + binderIdFromName);
+        System.out.println("tab Id " + tabIdFromName);
+
+        return resultSetNote;
     }
 
 

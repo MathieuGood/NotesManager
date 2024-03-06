@@ -141,6 +141,8 @@ public class MainWindow extends Application {
         note = binders.get(0).getTabs().get(0).getNotes().get(1);
 
         // Initialize NoteArea with the note and the HTMLEditor from the user interface
+
+//        area = fillNoteArea(noteArea);
         area = new NoteArea(note, noteArea);
 
         // Set the content of the note area to the content of the current note
@@ -294,6 +296,9 @@ public class MainWindow extends Application {
         notebookTreeView.createTreeView();
     }
 
+    public void fillNoteArea() {
+
+    }
 
     /**
      * The application initialization method. This method is called after the init method has returned, and after the system is ready for the application to begin running.
