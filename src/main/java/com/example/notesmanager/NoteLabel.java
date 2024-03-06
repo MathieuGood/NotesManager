@@ -23,6 +23,7 @@ public class NoteLabel {
         System.out.println("Constructing CustomLabel");
     }
 
+
     /**
      * Fetches all labels from the database.
      * @return A ResultSet containing all labels from the database.
@@ -39,6 +40,7 @@ public class NoteLabel {
                 conditionValues
         );
     }
+
 
     /**
      * Injects results from fetchAllLabels() into labelNames HashMap.
@@ -65,6 +67,7 @@ public class NoteLabel {
     public String getLabelName(int labelID) {
         return labelNames.get(labelID);
     }
+
 
     /**
      * Returns all labels stored in the labelNames HashMap.

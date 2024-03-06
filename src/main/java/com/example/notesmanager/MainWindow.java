@@ -138,13 +138,13 @@ public class MainWindow extends Application {
         binders = notebook.getBinders();
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
-        note = binders.get(0).getTabs().get(0).getNotes().get(1);
+        note = binders.getFirst().getTabs().getFirst().getNotes().getFirst();
 
         // Initialize NoteArea with the note and the HTMLEditor from the user interface
         area = new NoteArea(note, noteArea);
 
         // Set the content of the note area to the content of the current note
-        setNoteLabelDropdownContent();
+        setLabelFilterDropdownContent();
 
         // Generate the tree view for the notebook
         generateTreeView();
@@ -200,10 +200,13 @@ public class MainWindow extends Application {
 
 
     /**
-     * This method is called when a label is saved.
-     * It checks if the source of the event is a MenuItem, and if so, retrieves the text of the label and prints it to the console.
+     * This method is used to set the label filter for the notebook.
+     * It is triggered when a MenuItem (representing a label) is selected from the dropdown menu.
+     * The method retrieves the name of the selected label, filters the notes in the notebook by this label,
+     * and then rerenders the tree view to reflect the filtered notes.
+     * It also expands the root of the tree view.
      *
-     * @param e the action event
+     * @param e the action event triggered when a MenuItem is selected
      */
     public void setLabelFilter(ActionEvent e) {
         // Check if the source of the event is a MenuItem
@@ -212,12 +215,31 @@ public class MainWindow extends Application {
             String labelName = selectedLabel.getText();
             System.out.println(labelName);
 
-            // Filter notes by label name and rerender the tree view
-            notebook.setNotebookContent(labelName);
-            generateTreeView();
+            // If the label name is "All labels", set the notebook content to all notes
+            if (labelName.equals("All labels")) {
+                // Reset the style of all MenuItems
+                    btnFilterLabel.setText("All labels");
 
-            // TODO :  Unfold the tree view
-            binderTree.getRoot().setExpanded(true);
+                notebook.setNotebookContent();
+                generateTreeView();
+            } else {
+                // Filter notes by label name and rerender the tree view
+                notebook.setNotebookContent(labelName);
+
+                // Change the text of the selected label to surround it with brackets
+                btnFilterLabel.setText(labelName);
+
+                // Render the tree view for the notebook
+                generateTreeView();
+
+                // Unfold all the binders and tabs in the tree view
+                for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
+                    binder.setExpanded(true);
+                    for (TreeItem<String> tab : binder.getChildren()) {
+                        tab.setExpanded(true);
+                    }
+                }
+            }
         }
     }
 
@@ -240,7 +262,7 @@ public class MainWindow extends Application {
      * It fetches all labels from the database and adds them as menu items to the dropdown menu.
      * Each menu item is set to trigger the setFilter method when selected.
      */
-    public void setNoteLabelDropdownContent() {
+    public void setLabelFilterDropdownContent() {
         // Fetch all labels from the database
         Map<Integer, String> labelsResult = fetchAllLabels();
 

@@ -29,7 +29,7 @@
        
       <MenuButton fx:id="btnFilterLabel" layoutX="307.0" layoutY="10.0" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
         <items>
-
+            <MenuItem onAction="#setLabelFilter" text="All labels" />
         </items>
       </MenuButton>
       <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />

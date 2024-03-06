@@ -71,12 +71,37 @@ public class NotebookTreeView {
 
                     TreeItem<String> noteItem = new TreeItem<>(note.getNoteName());
 
+                    // Print note name on click on a note in the tree view
+                    noteItem.addEventHandler(TreeItem.treeNotificationEvent(), event -> {
+                        System.out.println("Clicked on note: " + note.getNoteName());
+                    });
+
+
+
+
                     tabItem.getChildren().add(noteItem);
                 }
                 binderItem.getChildren().add(tabItem);
             }
             rootItem.getChildren().add(binderItem);
         }
+
+        binderTree.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                TreeItem<String> item = binderTree.getSelectionModel().getSelectedItem();
+                if (item != null && item.getParent() != null && item.getParent().getParent() != null) {
+                    TreeItem<String> parent = item.getParent();
+                    TreeItem<String> grandParent = parent.getParent();
+                    if (rootItem.getChildren().contains(grandParent)) {
+                        String noteName = item.getValue();
+                        System.out.println(item.toString());
+                        System.out.println("Clic sur la note: " + noteName);
+                    }
+                }
+            }
+        });
+
+
     }
 
 

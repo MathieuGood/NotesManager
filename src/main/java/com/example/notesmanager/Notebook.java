@@ -113,6 +113,7 @@ public class Notebook {
         setNotebookContent(null);
     }
 
+
     /**
      * Sets the content of the Notebook by fetching all related content from the database.
      * The method fetches all content related to the Notebook and iterates over the ResultSet.
