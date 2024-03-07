@@ -390,9 +390,62 @@ public class MainWindow extends Application {
 
 
     @FXML
+    private void editBinderMenu(ActionEvent actionEvent) {
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() == binderTree.getRoot()) {
+
+            String oldBinderName = selectedItem.getValue();
+            Binder selectedBinder = notebook.getBinderByName(oldBinderName);
+
+            if (selectedBinder != null) {
+
+                TextInputDialog nameDialog = new TextInputDialog(selectedBinder.getBinderName());
+                nameDialog.setTitle("Modification du Classeur");
+                nameDialog.setHeaderText("Modifiez le nom du classeur :");
+                nameDialog.setContentText("Nom :");
+
+                Optional<String> nameResult = nameDialog.showAndWait();
+                nameResult.ifPresent(newName -> {
+                    selectedBinder.editName(newName);
+                    selectedItem.setValue(newName);
+                });
+
+
+                List<String> colorNames = NotebookColor.getAllColorNames();
+                String currentColorName = NotebookColor.getColorNameByID(selectedBinder.getBinderColorID());
+                ChoiceDialog<String> colorDialog = new ChoiceDialog<>(currentColorName, colorNames);
+                colorDialog.setTitle("Modification de la Couleur du Classeur");
+                colorDialog.setHeaderText("Choisissez une nouvelle couleur pour le classeur :");
+                colorDialog.setContentText("Couleur :");
+
+                Optional<String> colorResult = colorDialog.showAndWait();
+                colorResult.ifPresent(newColorName -> {
+                    int newColorID = NotebookColor.getColorIDByName(newColorName);
+                    selectedBinder.editColor(newColorID);
+
+                    String colorHex = NotebookColor.getHexColorByID(newColorID);
+                    Node circle = getColorCircle(colorHex);
+                    selectedItem.setGraphic(circle);
+                });
+            } else {
+                showAlert("Classeur non trouvé.");
+            }
+        } else {
+            showAlert("Veuillez sélectionner un classeur à éditer.");
+        }
+    }
+
+
+
+
+/*
+    @FXML
     private void editBinderMenu() {
 
     }
+
+ */
 
     @FXML
     private void deleteBinderMenu() {
@@ -464,9 +517,67 @@ public class MainWindow extends Application {
 
 
     @FXML
+    private void editTabMenu() {
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() != null) {
+
+            if (!selectedItem.getParent().equals(binderTree.getRoot())) {
+                String selectedTabName = selectedItem.getValue();
+                Tab selectedTab = notebook.getTabByName(selectedTabName);
+
+                if (selectedTab != null) {
+
+                    TextInputDialog nameDialog = new TextInputDialog(selectedTab.getTabName());
+                    nameDialog.setTitle("Modification de l'intercalaire");
+                    nameDialog.setHeaderText("Modifiez le nom de l'intercalaire :");
+                    nameDialog.setContentText("Nom :");
+
+                    Optional<String> nameResult = nameDialog.showAndWait();
+                    nameResult.ifPresent(newName -> {
+
+                        selectedTab.editName(newName);
+                        selectedItem.setValue(newName);
+                    });
+
+
+                    List<String> colorNames = NotebookColor.getAllColorNames();
+                    ChoiceDialog<String> colorDialog = new ChoiceDialog<>(NotebookColor.getHexColorByID(selectedTab.getTabColorID()), colorNames);
+                    colorDialog.setTitle("Modification de la couleur de l'intercalaire");
+                    colorDialog.setHeaderText("Choisissez une nouvelle couleur pour l'intercalaire :");
+                    colorDialog.setContentText("Couleur :");
+
+                    Optional<String> colorResult = colorDialog.showAndWait();
+                    colorResult.ifPresent(newColorName -> {
+                        int newColorID = NotebookColor.getColorIDByName(newColorName);
+                        if (newColorID >= 0) {
+                            selectedTab.editColor(newColorID);
+
+                            String colorHex = NotebookColor.getHexColorByID(newColorID);
+                            Node circle = getColorCircle(colorHex);
+                            selectedItem.setGraphic(circle);
+                        }
+                    });
+                } else {
+                    showAlert("Intercalaire non trouvé.");
+                }
+            } else {
+                showAlert("Veuillez sélectionner un intercalaire à éditer.");
+            }
+        } else {
+            showAlert("Aucun élément sélectionné.");
+        }
+    }
+
+
+
+    /*
+    @FXML
     private void editTabMenu(ActionEvent event) {
 
     }
+
+     */
 
     @FXML
     private void deleteTabMenu(ActionEvent event) {
@@ -487,7 +598,7 @@ public class MainWindow extends Application {
 
         if (selectedDivider != null && selectedDivider.getParent() != null && selectedDivider.getParent().getParent() == binderTree.getRoot()) {
 
-            Tab selectedTab = notebook.getTabByDividerName(selectedDivider.getValue());
+            Tab selectedTab = notebook.getTabByName(selectedDivider.getValue());
 
             if (selectedTab != null) {
                 TextInputDialog dialog = new TextInputDialog("Nom de la Note");
@@ -519,10 +630,88 @@ public class MainWindow extends Application {
     @FXML
     private void editNoteMenu(ActionEvent event) {
 
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() != null) {
+
+            Tab selectedTab = notebook.getTabByName(selectedItem.getParent().getValue());
+
+            if (selectedTab != null) {
+
+                Note selectedNote = selectedTab.getNotes().stream()
+                        .filter(note -> note.getNoteName().equals(selectedItem.getValue()))
+                        .findFirst().orElse(null);
+
+                if (selectedNote != null) {
+
+                    TextInputDialog dialog = new TextInputDialog(selectedNote.getNoteContent());
+                    dialog.setTitle("Modification du nom de la note");
+                    dialog.setHeaderText("Modifiez le nom de la note :");
+                    dialog.setContentText("Nom :");
+
+                    Optional<String> result = dialog.showAndWait();
+                    result.ifPresent(newName -> {
+
+                        int updateResult = selectedNote.editName(newName);
+                        if (updateResult > 0) {
+                            selectedItem.setValue(newName);
+                        } else {
+                            showAlert("Erreur lors de la mise à jour du nom de la note.");
+                        }
+
+                    });
+                } else {
+                    showAlert("Note non trouvé.");
+                }
+            } else {
+                showAlert("Intercalaire non trouvé.");
+            }
+        } else  {
+            showAlert("Veuillez sélectionner une note à éditer.");
+        }
+
     }
 
     @FXML
-    private void deleteNoteMenu(ActionEvent event) {
+    private void deleteNoteMenu() {
+
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() != null && selectedItem.getParent().getParent() != null) {
+
+            Tab selectedTab = notebook.getTabByName(selectedItem.getParent().getValue());
+
+            if (selectedTab != null) {
+                Note selectedNote = selectedTab.getNotes().stream()
+                        .filter(note->note.getNoteName().equals(selectedItem.getValue()))
+                        .findFirst().orElse(null);
+
+                if (selectedNote != null) {
+
+                    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmAlert.setTitle("Confirmation de suppression");
+                    confirmAlert.setHeaderText("Supprimer la note \"" + selectedNote.getNoteName() + "\" ?");
+                    confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
+
+                    Optional<ButtonType> result = confirmAlert.showAndWait();
+                    if ( result.isPresent() && result.get() == ButtonType.OK) {
+
+                        int noteID = selectedNote.getNoteID();
+                        int deleteResult = selectedTab.deleteNote(noteID);
+
+                        if (deleteResult > 0) {
+                            selectedItem.getParent().getChildren().remove(selectedItem);
+                        } else {
+                            showAlert("Erreur lors de la suppression de la note.");
+                        }
+                    } else {
+                        showAlert("Intercalaire non trouvé.");
+                    }
+                } else {
+                    showAlert("Veuillez sélectionner une note à supprimer.");
+                }
+            }
+        }
 
     }
 
