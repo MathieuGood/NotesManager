@@ -329,4 +329,32 @@ public class Notebook {
         return null;
     }
 
+
+    public Note getNoteFromBinderTabNoteName(String noteName, String tabName, String binderName) {
+
+        ArrayList<Binder> binders = this.getBinders();
+        for (Binder binder : binders) {
+
+            if (binder.getBinderName().equals(binderName)) {
+                System.out.println("Binder " + binderName + " found.");
+
+                ArrayList<Tab> tabs = binder.getTabs();
+                for (Tab tab : tabs) {
+                    if (tab.getTabName().equals(tabName)) {
+                        System.out.println("Tab " + tabName + " found.");
+
+                        ArrayList<Note> notes = tab.getNotes();
+                        for (Note note : notes) {
+                            if (note.getNoteName().equals(noteName)) {
+                                return note;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
 }

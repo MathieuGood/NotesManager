@@ -225,39 +225,39 @@ public class MainWindow extends Application {
 
 
     public void setNoteLabel(ActionEvent e) {
-        // Check if the source of the event is a MenuItem
-        if (e.getSource() instanceof MenuItem selectedLabel) {
-            // Retrieve name of the label
-            String labelName = selectedLabel.getText();
-            System.out.println(labelName);
-
-            // Clear the style of all MenuItems
-            for (MenuItem label : btnFilterLabel.getItems()) {
-                label.setStyle("");
-            }
-
-            // Apply visual effect (bold) to the selected labels that match noteLabel1 or noteLabel2
-            if (labelName.equals(note.getNoteLabel1()) || labelName.equals(note.getNoteLabel2())) {
-                selectedLabel.setStyle("-fx-font-weight: bold");
-            }
-
-            // Add the selected label to the note
-            note.addNoteLabel(labelName);
-
-            // Change the text of the selected label to surround it with brackets
-            btnFilterLabel.setText(labelName);
-
-            // Render the tree view for the notebook
-            generateTreeView();
-
-            // Unfold all the binders and tabs in the tree view
-            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
-                binder.setExpanded(true);
-                for (TreeItem<String> tab : binder.getChildren()) {
-                    tab.setExpanded(true);
-                }
-            }
-        }
+//        // Check if the source of the event is a MenuItem
+//        if (e.getSource() instanceof MenuItem selectedLabel) {
+//            // Retrieve name of the label
+//            String labelName = selectedLabel.getText();
+//            System.out.println(labelName);
+//
+//            // Clear the style of all MenuItems
+//            for (MenuItem label : btnFilterLabel.getItems()) {
+//                label.setStyle("");
+//            }
+//
+//            // Apply visual effect (bold) to the selected labels that match noteLabel1 or noteLabel2
+//            if (labelName.equals(note.getNoteLabel1()) || labelName.equals(note.getNoteLabel2())) {
+//                selectedLabel.setStyle("-fx-font-weight: bold");
+//            }
+//
+//            // Add the selected label to the note
+//            note.addNoteLabel(labelName);
+//
+//            // Change the text of the selected label to surround it with brackets
+//            btnFilterLabel.setText(labelName);
+//
+//            // Render the tree view for the notebook
+//            generateTreeView();
+//
+//            // Unfold all the binders and tabs in the tree view
+//            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
+//                binder.setExpanded(true);
+//                for (TreeItem<String> tab : binder.getChildren()) {
+//                    tab.setExpanded(true);
+//                }
+//            }
+//        }
 
     }
 

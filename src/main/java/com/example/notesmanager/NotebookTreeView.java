@@ -6,7 +6,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -77,9 +76,6 @@ public class NotebookTreeView {
                         System.out.println("Clicked on note: " + note.getNoteName());
                     });
 
-
-
-
                     tabItem.getChildren().add(noteItem);
                 }
                 binderItem.getChildren().add(tabItem);
@@ -97,25 +93,7 @@ public class NotebookTreeView {
                     if (rootItem.getChildren().contains(grandParent)) {
                         String noteName = item.getValue();
 
-                        ResultSet resultSet = Note.fetchNoteContentByNoteName(noteName, parent.getValue(), grandParent.getValue());
-
-                        Note note = null;
-                        try {
-                            while (resultSet.next()) {
-
-                                note = new Note(
-                                        resultSet.getInt(1),
-                                        Integer.parseInt(resultSet.getString(2)),
-                                        resultSet.getString(3),
-                                        resultSet.getString(4),
-                                        resultSet.getString(5),
-                                        resultSet.getString(6)
-                                );
-                            }
-
-                        } catch (Exception e) {
-                            System.out.println("error " + e );
-                        }
+                        Note note = notebook.getNoteFromBinderTabNoteName(noteName, parent.getValue(), grandParent.getValue());
 
                         NoteArea.setContentInNoteArea(note);
                     }
