@@ -280,45 +280,32 @@ public abstract class DatabaseManager {
      * @return The number of rows affected by the delete.
      */
     public static int delete(String table, String conditionField, String conditionValue) {
-        // Print a message indicating the start of the deletion process
         System.out.println("Deleting from table " + table + " where " + conditionField + " = " + conditionValue);
 
         try {
-            // Open a connection to the database
             Connection connection = openDatabaseConnection();
+            String query = "DELETE FROM " + table + " WHERE " + conditionField + " = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
 
-            // Construct the SQL DELETE query
-            String query = "DELETE FROM " + table + " WHERE ? = ?";
+            statement.setString(1, conditionValue);
 
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-
-            // Set values for the prepared statement
-            statement.setString(1, conditionField);
-            statement.setString(2, conditionValue);
-
-            // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
             System.out.println("Executing QUERY : " + statement.toString());
 
-            // Close the database connection
             closeDatabaseConnection(connection);
-
-            // Print a message indicating the end of the deletion process
             System.out.println("   > Delete done with result " + queryResult);
 
-            // Return the number of rows affected
             return queryResult;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // Print an error message if a SQL integrity constraint violation occurs
             System.out.println("SQL Integrity Constraint Violation : " + e);
             return 0;
 
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
             System.out.println("SQL Error : " + e);
             return -1;
         }
     }
+
 
 }

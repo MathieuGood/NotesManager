@@ -310,7 +310,7 @@ public class MainWindow extends Application {
     /************* Binders ******************/
 
     @FXML
-    private void addBinderMenu(ActionEvent actionEvent) {
+    private void addBinderMenu() {
 
         TextInputDialog dialog = new TextInputDialog("Nom du Classeur");
         dialog.setTitle("Création d'un Nouveau Classeur");
@@ -349,7 +349,7 @@ public class MainWindow extends Application {
 
 
     @FXML
-    private void editBinderMenu(ActionEvent actionEvent) {
+    private void editBinderMenu() {
         TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null && selectedItem.getParent() == binderTree.getRoot()) {
@@ -395,20 +395,38 @@ public class MainWindow extends Application {
         }
     }
 
-
-
-
-/*
-    @FXML
-    private void editBinderMenu() {
-
-    }
-
- */
-
     @FXML
     private void deleteBinderMenu() {
 
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() == binderTree.getRoot()) {
+            String binderName = selectedItem.getValue();
+            Binder selectedBinder = notebook.getBinderByName(binderName);
+
+
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Confirmation de suppression");
+            confirmAlert.setHeaderText("Supprimer le classeur \"" + binderName + "\" ?");
+            confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible et supprimera tous les intercalaires et notes associés.");
+
+            Optional<ButtonType> result = confirmAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                // Suppression du classeur
+                int binderID = selectedBinder.getBinderID();
+                int deleteResult = notebook.deleteBinder(binderID);
+
+                if (deleteResult > 0) {
+
+                    binderTree.getRoot().getChildren().remove(selectedItem);
+                } else {
+                    showAlert("Erreur lors de la suppression du classeur.");
+                }
+            }
+        } else {
+            showAlert("Veuillez sélectionner un classeur à supprimer.");
+        }
     }
 
 
@@ -529,17 +547,46 @@ public class MainWindow extends Application {
     }
 
 
-
-    /*
     @FXML
-    private void editTabMenu(ActionEvent event) {
+    private void deleteTabMenu() {
 
-    }
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
 
-     */
+        if (selectedItem != null && selectedItem.getParent() != null && !selectedItem.getParent().equals(binderTree.getRoot())) {
 
-    @FXML
-    private void deleteTabMenu(ActionEvent event) {
+            String selectedTabName = selectedItem.getValue();
+            Tab selectedTab = notebook.getTabByName(selectedTabName);
+
+            if ( (selectedTab != null)) {
+
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Confirmation de suppression");
+                confirmAlert.setHeaderText("Supprimer l'intercalaire \"" + selectedTabName + "\" ?");
+                confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
+
+                Optional<ButtonType> result = confirmAlert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    Binder binder = notebook.getBinderByName(selectedItem.getParent().getValue());
+                    if (binder != null) {
+                        int TabID = selectedTab.getTabID();
+                        int deleteResult = binder.deleteTab(TabID);
+                        if ( deleteResult > 0) {
+                            selectedItem.getParent().getChildren().remove(selectedItem);
+                        } else {
+                            showAlert("Erreur lors de la suppression de l'intercalaire.");
+                        }
+
+                    }
+                }else  {
+                    showAlert("Intercalaire non trouvé.");
+                }
+
+
+            } else {
+                showAlert("Veuillez sélectionner un intercalaire à supprimer.");
+            }
+
+        }
 
     }
 
@@ -552,12 +599,12 @@ public class MainWindow extends Application {
 
         System.out.println("Selected item: " + binderTree.getSelectionModel().getSelectedItem());
 
-        TreeItem<String> selectedDivider = binderTree.getSelectionModel().getSelectedItem();
+        TreeItem<String> selectedNameTab = binderTree.getSelectionModel().getSelectedItem();
 
 
-        if (selectedDivider != null && selectedDivider.getParent() != null && selectedDivider.getParent().getParent() == binderTree.getRoot()) {
+        if (selectedNameTab != null && selectedNameTab.getParent() != null && selectedNameTab.getParent().getParent() == binderTree.getRoot()) {
 
-            Tab selectedTab = notebook.getTabByName(selectedDivider.getValue());
+            Tab selectedTab = notebook.getTabByName(selectedNameTab.getValue());
 
             if (selectedTab != null) {
                 TextInputDialog dialog = new TextInputDialog("Nom de la Note");
@@ -572,7 +619,7 @@ public class MainWindow extends Application {
 
                     // Mettez à jour l'interface utilisateur
                     TreeItem<String> newNoteItem = new TreeItem<>(name);
-                    selectedDivider.getChildren().add(newNoteItem);
+                    selectedNameTab.getChildren().add(newNoteItem);
 
 
                     noteArea.setHtmlText(newNote.getNoteContent());
@@ -672,6 +719,8 @@ public class MainWindow extends Application {
         }
 
     }
+
+
 
 
     private void showAlert(String message) {
