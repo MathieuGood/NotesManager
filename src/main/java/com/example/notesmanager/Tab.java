@@ -223,7 +223,7 @@ public class Tab {
         System.out.println("\n***");
         System.out.println("deleteNote() : " + " noteID " + noteID);
 
-        int result = DatabaseManager.delete("notes", "noteID", String.valueOf(noteID));
+        int result = DatabaseManager.delete("notes", "note_id", String.valueOf(noteID));
 
         // If the delete operation was successful, remove the note from the ArrayList
         if (result > 0) {

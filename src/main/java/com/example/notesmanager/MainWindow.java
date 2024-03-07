@@ -631,7 +631,45 @@ public class MainWindow extends Application {
     }
 
     @FXML
-    private void deleteNoteMenu(ActionEvent event) {
+    private void deleteNoteMenu() {
+
+        TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() != null && selectedItem.getParent().getParent() != null) {
+
+            Tab selectedTab = notebook.getTabByName(selectedItem.getParent().getValue());
+
+            if (selectedTab != null) {
+                Note selectedNote = selectedTab.getNotes().stream()
+                        .filter(note->note.getNoteName().equals(selectedItem.getValue()))
+                        .findFirst().orElse(null);
+
+                if (selectedNote != null) {
+
+                    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmAlert.setTitle("Confirmation de suppression");
+                    confirmAlert.setHeaderText("Supprimer la note \"" + selectedNote.getNoteName() + "\" ?");
+                    confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
+
+                    Optional<ButtonType> result = confirmAlert.showAndWait();
+                    if ( result.isPresent() && result.get() == ButtonType.OK) {
+
+                        int noteID = selectedNote.getNoteID();
+                        int deleteResult = selectedTab.deleteNote(noteID);
+
+                        if (deleteResult > 0) {
+                            selectedItem.getParent().getChildren().remove(selectedItem);
+                        } else {
+                            showAlert("Erreur lors de la suppression de la note.");
+                        }
+                    } else {
+                        showAlert("Intercalaire non trouvé.");
+                    }
+                } else {
+                    showAlert("Veuillez sélectionner une note à supprimer.");
+                }
+            }
+        }
 
     }
 
