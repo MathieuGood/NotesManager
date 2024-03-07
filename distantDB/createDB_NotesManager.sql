@@ -111,8 +111,6 @@ INSERT INTO tabs(tab_name,
 VALUES ('Java', 1, 2),
        ('React Native', 1, 3),
        ('SQL', 1, 4),
-       ('JavaScript', 1, 7),
-       ('PHP', 1, 8),
        ('Python', 1, 9)
 ;
 
