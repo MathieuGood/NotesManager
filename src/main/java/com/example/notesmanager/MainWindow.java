@@ -38,17 +38,6 @@ public class MainWindow extends Application {
 
 
     /**
-     * public MenuButton btnCreateAction;
-     * The primary stage for this application, onto which the application scene can be set.
-     */
-    private Stage stage;
-
-    /**
-     * The scene for this application. The scene is the container for the visible content in the JavaFX scene graph.
-     */
-    private Scene scene;
-
-    /**
      * The root node of the scene graph. It is an intermediate container for complex scene graph.
      */
     private Parent root;
@@ -76,9 +65,6 @@ public class MainWindow extends Application {
      */
     @FXML
     HTMLEditor noteArea;
-
-    @FXML
-    static HTMLEditor noteAreaStatic;
 
     /**
      * The TreeView UI element for displaying the binder structure in the application.
@@ -109,16 +95,6 @@ public class MainWindow extends Application {
      */
     ArrayList<Binder> binders;
 
-    /**
-     * The current note being displayed or edited in the application.
-     */
-    Note note;
-
-    /**
-     * The area where the content of the current note is displayed and edited.
-     */
-    NoteArea area;
-
     static NoteArea areaStatic;
 
 
@@ -136,36 +112,16 @@ public class MainWindow extends Application {
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
 
-        //
-        // FOR DEVELOPMENT PURPOSES ONLY
-        //
-        // Get binders from the notebook
-        binders = notebook.getBinders();
-        // Get the first note from the first tab of the first binder
-        // This is the note that will be displayed when the MainWindow is opened
-        note = binders.get(0).getTabs().get(0).getNotes().get(2);
-
-        // Initialize NoteArea with the note and the HTMLEditor from the user interface
-
-//        area = fillNoteArea(noteArea);
-//        area = new NoteArea(note, noteArea);
-
-//        NoteArea.setNote(note);
+        // Initialize blank NoteArea in the HTMLEditor from the user interface
         NoteArea.setNoteArea(noteArea);
-        NoteArea.setNote(note);
 
         // Set the content of the note area to the content of the current note
         setNoteLabelDropdownContent();
 
         // Generate the tree view for the notebook
         generateTreeView();
-
     }
 
-    public static void fillNoteArea(Note note) {
-
-//        areaStatic = new NoteArea(note);
-    }
 
     /**
      * This method is called when the logout button is pressed.
@@ -200,16 +156,9 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is called when the save note button is pressed.
-     * It retrieves the HTML content from the note area and sets it as the content of the current note.
-     * It also prints a debug message to the console.
-     *
-     * @param e the action event
-     */
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
-        area.setContent(content);
+        NoteArea.note.editContent(content);
         System.out.println("btn save note");
     }
 

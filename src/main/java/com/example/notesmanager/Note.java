@@ -256,13 +256,6 @@ public class Note {
             String[] conditionValuesNote = {noteName, String.valueOf(tabIdFromName)};
 
             resultSetNote = DatabaseManager.select("notes", fieldsNote, conditionFieldsNote, conditionValuesNote);
-
-            // while non nécessaire
-//            try {
-//                while (resultSetNote.next()) noteIdFromName = resultSetNote.getInt(1);
-//            } catch (Exception e) {
-//                System.out.println("Error : " + e);
-//            }
         }
 
         System.out.println("binder Id " + binderIdFromName);
@@ -318,6 +311,4 @@ public class Note {
 
         return result;
     }
-
-
 }

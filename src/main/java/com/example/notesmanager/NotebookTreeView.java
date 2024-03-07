@@ -1,10 +1,8 @@
 package com.example.notesmanager;
 
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -89,10 +87,6 @@ public class NotebookTreeView {
                     TreeItem<String> grandParent = parent.getParent();
                     if (rootItem.getChildren().contains(grandParent)) {
                         String noteName = item.getValue();
-                        System.out.println(item.toString());
-                        System.out.println("Clic sur la Binder: " + grandParent.getValue());
-                        System.out.println("Clic sur la Tabe: " + parent.getValue());
-                        System.out.println("Clic sur la note: " + noteName);
 
                         ResultSet resultSet = Note.fetchNoteContentByNoteName(noteName, parent.getValue(), grandParent.getValue());
 
@@ -114,9 +108,7 @@ public class NotebookTreeView {
                             System.out.println("error " + e );
                         }
 
-//                        MainWindow.fillNoteArea(note);
-                        System.out.println("afficahge dans le listener de l'id - " + note.getNoteID());
-                        System.out.println("afficahge dans le listener de du titre - " + note.getNoteName());
+                        NoteArea.setContentInNoteArea(note);
                     }
                 }
             }
