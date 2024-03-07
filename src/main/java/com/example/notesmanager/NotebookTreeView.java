@@ -114,7 +114,7 @@ public class NotebookTreeView {
                             System.out.println("error " + e );
                         }
 
-
+//                        MainWindow.fillNoteArea(note);
                         System.out.println("afficahge dans le listener de l'id - " + note.getNoteID());
                         System.out.println("afficahge dans le listener de du titre - " + note.getNoteName());
                     }

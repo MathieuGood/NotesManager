@@ -77,6 +77,9 @@ public class MainWindow extends Application {
     @FXML
     HTMLEditor noteArea;
 
+    @FXML
+    static HTMLEditor noteAreaStatic;
+
     /**
      * The TreeView UI element for displaying the binder structure in the application.
      * It is annotated with @FXML so its value can be injected from the FXML file.
@@ -116,6 +119,8 @@ public class MainWindow extends Application {
      */
     NoteArea area;
 
+    static NoteArea areaStatic;
+
 
     /**
      * The initialize method is called after all the FXML fields have been injected.
@@ -138,12 +143,16 @@ public class MainWindow extends Application {
         binders = notebook.getBinders();
         // Get the first note from the first tab of the first binder
         // This is the note that will be displayed when the MainWindow is opened
-        note = binders.get(0).getTabs().get(0).getNotes().get(1);
+        note = binders.get(0).getTabs().get(0).getNotes().get(2);
 
         // Initialize NoteArea with the note and the HTMLEditor from the user interface
 
 //        area = fillNoteArea(noteArea);
-        area = new NoteArea(note, noteArea);
+//        area = new NoteArea(note, noteArea);
+
+//        NoteArea.setNote(note);
+        NoteArea.setNoteArea(noteArea);
+        NoteArea.setNote(note);
 
         // Set the content of the note area to the content of the current note
         setNoteLabelDropdownContent();
@@ -153,6 +162,10 @@ public class MainWindow extends Application {
 
     }
 
+    public static void fillNoteArea(Note note) {
+
+//        areaStatic = new NoteArea(note);
+    }
 
     /**
      * This method is called when the logout button is pressed.
@@ -294,10 +307,6 @@ public class MainWindow extends Application {
     public void generateTreeView() {
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
-    }
-
-    public void fillNoteArea() {
-
     }
 
     /**
@@ -469,6 +478,7 @@ public class MainWindow extends Application {
                     selectedDivider.getChildren().add(newNoteItem);
 
 
+                    // A voir si cette ligne est utile
                     noteArea.setHtmlText(newNote.getNoteContent());
                 });
             } else {
