@@ -9,50 +9,27 @@ import javafx.scene.web.HTMLEditor;
 public class NoteArea {
 
     // The Note object associated with this NoteArea.
-    Note note;
+    static Note note;
 
     // The HTMLEditor object used to display and edit the note's content.
-    HTMLEditor noteArea;
+    static HTMLEditor noteArea;
 
-    /**
-     * Constructs a new NoteArea object with the given Note and HTMLEditor.
-     *
-     * @param note     the Note object to be associated with this NoteArea
-     * @param noteArea the HTMLEditor object to be used for displaying and editing the note's content
-     */
-    public NoteArea(Note note, HTMLEditor noteArea) {
-        this.note = note;
-        this.noteArea = noteArea;
-        String noteContent = getContent();
-        if (!noteContent.isEmpty()) {
-            noteArea.setHtmlText(noteContent + "<br>" + note.getNoteLabel1() + "<br>" + note.getNoteLabel2());
-        }
+    public static Note getNote() {
+        return note;
     }
 
-    /**
-     * Returns the content of the note.
-     *
-     * @return the content of the note
-     */
-    public String getContent() {
-        this.note.fetchNoteContent();
-        System.out.println("NOTE CONTENT :");
-        System.out.println(this.note.getNoteContent());
-        return this.note.getNoteContent();
+    public static void setContentInNoteArea(Note note) {
+        NoteArea.note = note;
+        note.fetchNoteContent();
+
+        noteArea.setHtmlText(note.getNoteContent());
     }
 
-    /**
-     * Sets the content of the note to the given string and updates the HTMLEditor's content.
-     *
-     * @param newContent the new content for the note
-     */
-    public void setContent(String newContent) {
-        try {
-            note.editContent(newContent);
-            System.out.println("Saved");
-        } catch (Exception ex) {
-            System.out.println("Error : " + ex);
-        }
-        this.noteArea.setHtmlText(newContent);
+    public static HTMLEditor getNoteArea() {
+        return noteArea;
+    }
+
+    public static void setNoteArea(HTMLEditor noteArea) {
+        NoteArea.noteArea = noteArea;
     }
 }

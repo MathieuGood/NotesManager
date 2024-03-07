@@ -39,17 +39,6 @@ public class MainWindow extends Application {
 
 
     /**
-     * public MenuButton btnCreateAction;
-     * The primary stage for this application, onto which the application scene can be set.
-     */
-    private Stage stage;
-
-    /**
-     * The scene for this application. The scene is the container for the visible content in the JavaFX scene graph.
-     */
-    private Scene scene;
-
-    /**
      * The root node of the scene graph. It is an intermediate container for complex scene graph.
      */
     private Parent root;
@@ -110,15 +99,7 @@ public class MainWindow extends Application {
      */
     ArrayList<Binder> binders;
 
-    /**
-     * The current note being displayed or edited in the application.
-     */
-    Note note;
-
-    /**
-     * The area where the content of the current note is displayed and edited.
-     */
-    NoteArea area;
+    static NoteArea areaStatic;
 
 
     /**
@@ -135,17 +116,8 @@ public class MainWindow extends Application {
         // Initialize the notebook with the current user
         notebook = new Notebook(user);
 
-        //
-        // FOR DEVELOPMENT PURPOSES ONLY
-        //
-        // Get binders from the notebook
-        binders = notebook.getBinders();
-        // Get the first note from the first tab of the first binder
-        // This is the note that will be displayed when the MainWindow is opened
-        note = binders.getFirst().getTabs().getFirst().getNotes().getFirst();
-
-        // Initialize NoteArea with the note and the HTMLEditor from the user interface
-        area = new NoteArea(note, noteArea);
+        // Initialize blank NoteArea in the HTMLEditor from the user interface
+        NoteArea.setNoteArea(noteArea);
 
         // Set the content of note filter dropdown menu
         setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter);
@@ -202,7 +174,7 @@ public class MainWindow extends Application {
      */
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
-        area.setContent(content);
+        NoteArea.note.editContent(content);
         System.out.println("btn save note");
     }
 
@@ -533,6 +505,7 @@ public class MainWindow extends Application {
                     selectedDivider.getChildren().add(newNoteItem);
 
 
+                    // A voir si cette ligne est utile
                     noteArea.setHtmlText(newNote.getNoteContent());
                 });
             } else {
