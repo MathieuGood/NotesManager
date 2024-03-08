@@ -34,6 +34,8 @@ public class NoteArea {
         NoteArea.note = note;
         note.fetchNoteContent();
         noteArea.setHtmlText(note.getNoteContent());
+        noteTitle.setText(note.getNoteName());
+
     }
 
     public static Note getNote() {
