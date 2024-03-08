@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.HTMLEditor;
@@ -48,6 +49,24 @@ public class MainWindow extends Application {
      */
     @FXML
     Label userNameLabel;
+
+    /**
+     * The label displaying the note's title. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
+    @FXML
+    Label noteTitle;
+
+    /**
+     * Pane that integrates the HTMLEditor, the note title, and the labels. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
+    @FXML
+    private Pane noteSelectedPane;
+
+    /**
+     * Pane that integrates the message prompting to select a note. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
+    @FXML
+    private Pane waitingNoteSelectedPane;
 
     /**
      * The logout and save buttons. They are annotated with @FXML so their values can be injected from the FXML file.
@@ -117,7 +136,7 @@ public class MainWindow extends Application {
         notebook = new Notebook(user);
 
         // Initialize blank NoteArea in the HTMLEditor from the user interface
-        NoteArea.setNoteArea(noteArea);
+        NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle);
 
         // Set the content of note filter dropdown menu
         setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter);
@@ -125,10 +144,8 @@ public class MainWindow extends Application {
         // Set the content of note label selector dropdown menu
         setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel);
 
-
         // Generate the tree view for the notebook
         generateTreeView();
-
     }
 
 

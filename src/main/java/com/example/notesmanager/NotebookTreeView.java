@@ -96,6 +96,12 @@ public class NotebookTreeView {
                         Note note = notebook.getNoteFromBinderTabNoteName(noteName, parent.getValue(), grandParent.getValue());
 
                         NoteArea.setContentInNoteArea(note);
+
+                        if (!NoteArea.getNoteSelectedPaneStatus()) {
+                            NoteArea.setPaneNoteContentVisible();
+                        }
+
+                        System.out.println(NoteArea.getNoteSelectedPaneStatus());
                     }
                 }
             }
