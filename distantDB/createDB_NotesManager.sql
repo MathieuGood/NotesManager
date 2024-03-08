@@ -158,7 +158,7 @@ VALUES
 
 UPDATE notes
 SET note_label1_id = 2,
-    note_label2_id=4
+    note_label2_id = 4
 WHERE note_id = 1;
 
 
@@ -187,9 +187,14 @@ VALUES ('Important', 1),
 
 
 -- Add unique constraints on binders, tabs and notes relatively to their user
-ALTER TABLE binders ADD CONSTRAINT UC_user_binder_name UNIQUE (user_id, binder_name);
-ALTER TABLE tabs ADD CONSTRAINT UC_binder_tab_name UNIQUE (binder_id, tab_name);
-ALTER TABLE notes ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name);
+ALTER TABLE binders
+    ADD CONSTRAINT UC_user_binder_name UNIQUE (user_id, binder_name);
+ALTER TABLE tabs
+    ADD CONSTRAINT UC_binder_tab_name UNIQUE (binder_id, tab_name);
+ALTER TABLE notes
+    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name);
+ALTER TABLE labels
+    ADD CONSTRAINT UC_label_name UNIQUE (label_name);
 
 
 -- Create a view to get all notes from all users
@@ -209,6 +214,37 @@ FROM binders
          LEFT JOIN tabs ON tabs.binder_id = binders.binder_id
          LEFT JOIN notes ON notes.tab_id = tabs.tab_id
 ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE UpdateNoteLabelToNull(IN input_label_id INT, IN input_note_id INT, OUT success INT)
+BEGIN
+    DECLARE label1_value INT;
+    DECLARE label2_value INT;
+    DECLARE label_found BOOLEAN DEFAULT FALSE;
+
+    -- Get the current values of note_label1_id and note_label2_id for the given note_id
+    SELECT note_label1_id, note_label2_id INTO label1_value, label2_value FROM notes WHERE note_id = input_note_id LIMIT 1;
+
+    -- Check if input_label_id matches either note_label1_id or note_label2_id
+    IF label1_value = input_label_id THEN
+        UPDATE notes SET note_label1_id = NULL WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    ELSEIF label2_value = input_label_id THEN
+        UPDATE notes SET note_label2_id = NULL WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    END IF;
+
+    -- Set success based on whether the label was found and updated
+    IF label_found THEN
+        SET success = 1;
+    ELSE
+        SET success = 0;
+    END IF;
+END //
+
+DELIMITER ;
 
 
 

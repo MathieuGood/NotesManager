@@ -21,7 +21,6 @@ public class NoteArea {
     public static void setContentInNoteArea(Note note) {
         NoteArea.note = note;
         note.fetchNoteContent();
-
         noteArea.setHtmlText(note.getNoteContent());
     }
 

@@ -30,7 +30,7 @@ import java.util.*;
  * @see Stage
  * @see Scene
  * @see Parent
- * @see NoteLabel
+ * @see LabelMenuBuilder
  * @see Button
  * @see MenuButton
  * @see HTMLEditor
@@ -225,39 +225,42 @@ public class MainWindow extends Application {
 
 
     public void setNoteLabel(ActionEvent e) {
-//        // Check if the source of the event is a MenuItem
-//        if (e.getSource() instanceof MenuItem selectedLabel) {
-//            // Retrieve name of the label
-//            String labelName = selectedLabel.getText();
-//            System.out.println(labelName);
-//
-//            // Clear the style of all MenuItems
-//            for (MenuItem label : btnFilterLabel.getItems()) {
-//                label.setStyle("");
-//            }
-//
-//            // Apply visual effect (bold) to the selected labels that match noteLabel1 or noteLabel2
-//            if (labelName.equals(note.getNoteLabel1()) || labelName.equals(note.getNoteLabel2())) {
-//                selectedLabel.setStyle("-fx-font-weight: bold");
-//            }
-//
-//            // Add the selected label to the note
-//            note.addNoteLabel(labelName);
-//
-//            // Change the text of the selected label to surround it with brackets
-//            btnFilterLabel.setText(labelName);
-//
-//            // Render the tree view for the notebook
-//            generateTreeView();
-//
-//            // Unfold all the binders and tabs in the tree view
-//            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
-//                binder.setExpanded(true);
-//                for (TreeItem<String> tab : binder.getChildren()) {
-//                    tab.setExpanded(true);
-//                }
-//            }
-//        }
+        // Check if the source of the event is a MenuItem
+        if (e.getSource() instanceof MenuItem selectedLabel) {
+            // Retrieve name of the label
+            String labelName = selectedLabel.getText();
+            System.out.println(labelName);
+
+            // Get current Note object from NoteArea
+            Note note = NoteArea.getNote();
+
+            // If the selected label is already in the note, set the style of the MenuItem to bold
+            ArrayList<NoteLabel> labels = note.getLabels();
+            for (NoteLabel label : labels) {
+                System.out.println("Label in note : " + label.getLabelName());
+                if (label.getLabelName().equals(labelName)) {
+                    selectedLabel.setStyle("-fx-font-weight: bold");
+                }
+            }
+
+            // Add the selected label to the note
+            note.addNoteLabel(labelName);
+
+            // Change the text of the MenuItem mathcing the selected label in the list to surround it with brackets
+            selectedLabel.setStyle("-fx-font-weight: bold");
+
+
+            // Render the tree view for the notebook
+            generateTreeView();
+
+            // Unfold all the binders and tabs in the tree view
+            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
+                binder.setExpanded(true);
+                for (TreeItem<String> tab : binder.getChildren()) {
+                    tab.setExpanded(true);
+                }
+            }
+        }
 
     }
 
@@ -309,7 +312,7 @@ public class MainWindow extends Application {
      * @return a map where the key is the label's ID and the value is the label's name
      */
     public Map<Integer, String> fetchAllLabels() {
-        NoteLabel noteLabels = new NoteLabel();
+        LabelMenuBuilder noteLabels = new LabelMenuBuilder();
 
         // Call the getAllLabels method of the NoteLabel instance to fetch all labels from the database
         // The labels are stored in a map where the key is the label's ID and the value is the label's name
@@ -498,7 +501,7 @@ public class MainWindow extends Application {
                 Optional<String> result = dialog.showAndWait();
                 result.ifPresent(name -> {
 
-                    Note newNote = selectedTab.createNote(name, "");
+                    Note newNote = selectedTab.createNote(name);
 
                     // Mettez à jour l'interface utilisateur
                     TreeItem<String> newNoteItem = new TreeItem<>(name);

@@ -176,13 +176,24 @@ public class Notebook {
 
                 // If the note ID is not null, create a new Note object and add it to the notes list of the last tab of the last binder
                 if (noteID != 0) {
+                    System.out.println("Checking if " + noteLabel1 + " or " + noteLabel2 + " is null");
+                    // Create a list of LabelNote objects to store the note's labels
+                    ArrayList<NoteLabel> labels = new ArrayList<>();
+                    if (noteLabel1 != null) {
+                        labels.add(new NoteLabel(noteLabel1));
+                        System.out.println("Adding label " + noteLabel1 + " to note " + noteName);
+                    }
+                    if (noteLabel2 != null) {
+                        labels.add(new NoteLabel(noteLabel2));
+                        System.out.println("Adding label " + noteLabel2 + " to note " + noteName);
+                    }
+
                     System.out.println("\t>> Note : " + noteName);
                     binders.getLast().getTabs().getLast().addNoteToList(new Note(
                             binders.getLast().getTabs().getLast(),
                             noteID,
                             noteName,
-                            noteLabel1,
-                            noteLabel2
+                            labels
                     ));
                 }
             }
