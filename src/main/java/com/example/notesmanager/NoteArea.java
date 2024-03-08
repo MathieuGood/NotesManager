@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.web.HTMLEditor;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * The NoteArea class represents the area where a note is displayed and edited.
@@ -16,8 +17,11 @@ public class NoteArea {
     // The Note object associated with this NoteArea.
     static Note note;
 
-    // The Label object used to display and edit the title note.
+    // The Label object used to display the title note.
     static Label noteTitle;
+
+    // The Label object used to display the note's labels.
+    static Label noteLabels;
 
     // The HTMLEditor object used to display and edit the note's content.
     static HTMLEditor noteArea;
@@ -30,12 +34,29 @@ public class NoteArea {
     @FXML
     private static Pane waitingNoteSelectedPane;
 
+    
     public static void setContentInNoteArea(Note note) {
         NoteArea.note = note;
         note.fetchNoteContent();
+
         noteArea.setHtmlText(note.getNoteContent());
         noteTitle.setText(note.getNoteName());
+        NoteArea.setLabelsText();
+    }
 
+
+    public static void setLabelsText() {
+
+        ArrayList<NoteLabel> labels = note.getLabels();
+
+        String allLabels = "";
+
+        for (int i = 0; i < labels.size(); i++) {
+            if (i == labels.size() - 1) allLabels += labels.get(i).getLabelName();
+            else allLabels += labels.get(i).getLabelName() + " - ";
+        }
+
+        noteLabels.setText(allLabels);
     }
 
     public static Note getNote() {
@@ -53,11 +74,13 @@ public class NoteArea {
             HTMLEditor noteArea,
             Pane noteSelectedPane,
             Pane waitingNoteSelectedPane,
-            Label noteTitle) {
+            Label noteTitle,
+            Label noteLables) {
         NoteArea.noteArea = noteArea;
         NoteArea.noteSelectedPane = noteSelectedPane;
         NoteArea.waitingNoteSelectedPane = waitingNoteSelectedPane;
         NoteArea.noteTitle = noteTitle;
+        NoteArea.noteLabels = noteLables;
 
         noteSelectedPane.setVisible(false);
         waitingNoteSelectedPane.setVisible(true);
