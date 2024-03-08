@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class LoginWindow extends Application {
     // The PasswordField where the user enters their password for login. It is annotated with @FXML so its value can be injected from the FXML file.
     @FXML
     private PasswordField inputLoginPassword;
+
 
 
     /**
@@ -128,6 +130,7 @@ public class LoginWindow extends Application {
             if (user != null) {
                 // Static user
                 MainWindow.setUser(user);
+
 
                 // Navigate to MainWindow
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));

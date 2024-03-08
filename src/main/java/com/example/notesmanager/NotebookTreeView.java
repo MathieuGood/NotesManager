@@ -79,7 +79,6 @@ public class NotebookTreeView {
 
 
 
-
                     tabItem.getChildren().add(noteItem);
                 }
                 binderItem.getChildren().add(tabItem);
@@ -118,6 +117,12 @@ public class NotebookTreeView {
                         }
 
                         NoteArea.setContentInNoteArea(note);
+
+                        if (!NoteArea.getNoteSelectedPaneStatus()) {
+                            NoteArea.setPaneNoteContentVisible();
+                        }
+
+                        System.out.println(NoteArea.getNoteSelectedPaneStatus());
                     }
                 }
             }
