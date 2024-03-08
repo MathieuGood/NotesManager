@@ -36,20 +36,22 @@ public class NoteArea {
         noteArea.setHtmlText(note.getNoteContent());
     }
 
+    public static Note getNote() {
+        return note;
+    }
 
     /**
      * This method is called when the main window is called the first time.
      *
-     * @param noteArea the HTMLEditor object
-     * @param noteSelectedPane the Pane object that display content
+     * @param noteArea                the HTMLEditor object
+     * @param noteSelectedPane        the Pane object that display content
      * @param waitingNoteSelectedPane the Pane object that display waiting message
      */
     public static void setNoteArea(
             HTMLEditor noteArea,
             Pane noteSelectedPane,
             Pane waitingNoteSelectedPane,
-            Label noteTitle)
-    {
+            Label noteTitle) {
         NoteArea.noteArea = noteArea;
         NoteArea.noteSelectedPane = noteSelectedPane;
         NoteArea.waitingNoteSelectedPane = waitingNoteSelectedPane;
