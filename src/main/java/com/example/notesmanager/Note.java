@@ -1,14 +1,17 @@
 package com.example.notesmanager;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Represents a note in a tab in a note-taking application.
  * It contains methods to get and set the note's properties, and to interact with the database.
  */
 public class Note {
+
+
+    private ArrayList<NoteLabel> labels = new ArrayList<>();
 
     /**
      * The unique identifier for this Note.
@@ -30,95 +33,20 @@ public class Note {
      */
     private String noteContent;
 
-    /**
-     * The first label of this Note.
-     */
-    private String noteLabel1;
 
-    /**
-     * The second label of this Note.
-     */
-    private String noteLabel2;
+    private LabelMenuBuilder notebookLabel;
 
-    private NoteLabel notebookLabel;
 
-    /**
-     * Constructor for the Note class.
-     * It sets the noteID, tabID, noteName, noteLabel1, and noteLabel2.
-     *
-     * @param tab        The Tab object that this Note belongs to.
-     * @param noteID     The unique identifier for this Note.
-     * @param noteName   The name of this Note.
-     * @param noteLabel1 The first label of this Note.
-     * @param noteLabel2 The second label of this Note.
-     */
     public Note(
             Tab tab,
             int noteID,
             String noteName,
-            String noteLabel1,
-            String noteLabel2
+            ArrayList<NoteLabel> labels
     ) {
         this.noteID = noteID;
         this.tabID = tab.getTabID();
         this.noteName = noteName;
-        this.noteLabel1 = noteLabel1;
-        this.noteLabel2 = noteLabel2;
-    }
-
-    /**
-     * This constructor creates a new Note object with a given noteName, tabName and binderName.
-     *
-     * @param noteName The Tab object that this Note belongs to.
-
-     */
-    public Note(
-            int noteID,
-            int tabId,
-            String noteName,
-            String noteContent,
-            String noteLabel1,
-            String noteLabel2
-    ) {
-
-        this.noteID = noteID;
-        this.tabID = tabId;
-        this.noteName = noteName;
-        this.noteContent = noteContent;
-        this.noteLabel1 = noteLabel1;
-        this.noteLabel2 = noteLabel2;
-
-
-        System.out.println("nouveau constructor");
-
-        System.out.println("affichage de l'id dans le constructeur " + noteID);
-
-    }
-
-
-    /**
-     * This constructor creates a new Note object with a given Tab, noteID, noteName, and noteContent.
-     * The noteID, noteName, and noteContent are directly assigned, while the tabID is retrieved from the given Tab object.
-     *
-     * @param tab         The Tab object that this Note belongs to.
-     * @param noteID      The unique identifier for this Note.
-     * @param noteName    The name of this Note.
-     * @param noteContent The content of this Note.
-     */
-    public Note(
-            Tab tab,
-            int noteID,
-            String noteName,
-            String noteContent,
-            String noteLabel1,
-            String noteLabel2
-    ) {
-        this.noteID = noteID;
-        this.tabID = tab.getTabID();
-        this.noteName = noteName;
-        this.noteContent = noteContent;
-        this.noteLabel1 = noteLabel1;
-        this.noteLabel2 = noteLabel2;
+        this.labels = labels;
     }
 
 
@@ -152,13 +80,18 @@ public class Note {
     }
 
 
-    public String getNoteLabel1() {
-        return noteLabel1;
+//    public String getNoteLabel1() {
+//        return noteLabel1;
+//    }
+//
+//    public String getNoteLabel2() {
+//        return noteLabel2;
+//    }
+
+    public ArrayList<NoteLabel> getLabels() {
+        return labels;
     }
 
-    public String getNoteLabel2() {
-        return noteLabel2;
-    }
 
     /**
      * Returns the content of this Note.
@@ -234,7 +167,7 @@ public class Note {
         // Si binder trouvé
         if (binderIdFromName > 0) {
             String[] fieldsTab = {"tabs.tab_id"};
-            String[] conditionFieldsTab = {"tabs.tab_name","tabs.binder_id"};
+            String[] conditionFieldsTab = {"tabs.tab_name", "tabs.binder_id"};
             String[] conditionValuesTab = {tabName, String.valueOf(binderIdFromName)};
 
             ResultSet resultSetTab = DatabaseManager.select("tabs", fieldsTab, conditionFieldsTab, conditionValuesTab);
@@ -255,7 +188,7 @@ public class Note {
                     "notes.note_label1_id",
                     "notes.note_label2_id",
             };
-            String[] conditionFieldsNote = {"notes.note_name","notes.tab_id"};
+            String[] conditionFieldsNote = {"notes.note_name", "notes.tab_id"};
             String[] conditionValuesNote = {noteName, String.valueOf(tabIdFromName)};
 
             resultSetNote = DatabaseManager.select("notes", fieldsNote, conditionFieldsNote, conditionValuesNote);
@@ -325,22 +258,26 @@ public class Note {
 
     public void addNoteLabel(String labelName) {
         String field;
-        notebookLabel = new NoteLabel();
+        // Get the label ID from the label name
+        notebookLabel = new LabelMenuBuilder();
         int labelID = notebookLabel.getLabelID(labelName);
 
-        if (noteLabel1 != null && noteLabel2 != null &&!noteLabel1.equals("null") && !noteLabel2.equals("null")) {
+        // Check if the note already has two labels or if the chosen label is already applied to the note (take in account that labels can be empty)
+        if (labels.size() == 2) {
             System.out.println("Can't apply label " + labelName + " Note already has two labels");
             return;
+        } else if (labels.stream().anyMatch(label -> label.getLabelName().equals(labelName))) {
+            System.out.println("Can't apply label " + labelName + " Note already has this label");
+            return;
         } else {
-
-            if (noteLabel1 == null || noteLabel1.equals("null")) {
-                noteLabel1 = labelName;
+            // Determine which field to update in the database
+            if (labels.isEmpty()) {
                 field = "note_label1_id";
             } else {
-                noteLabel2 = labelName;
                 field = "note_label2_id";
             }
 
+            // Update the note in the database
             int result = DatabaseManager.update(
                     "notes",
                     field,
@@ -349,8 +286,29 @@ public class Note {
                     String.valueOf(this.noteID)
             );
 
+            // If the update operation was successful, add the label to the note's labels list
+            if (result > 0) {
+                labels.add(new NoteLabel(labelName));
+            }
+
         }
 
+    }
+
+    public void removeNoteLabel(String labelName) {
+        String field;
+
+        // Update the note in the database
+        String[] args = {String.valueOf(this.noteID), labelName};
+        int result = DatabaseManager.call(
+                "remove_note_label",
+                args
+        );
+
+        // If the update operation was successful, remove the label from the note's labels list
+        if (result > 0) {
+            labels.removeIf(label -> label.getLabelName().equals(labelName));
+        }
     }
 
 }
