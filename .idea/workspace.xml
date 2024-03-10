@@ -4,7 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e4c3f98-fc05-49ea-9937-e57ada2638dc" name="Changes" comment="" />
+    <list default="true" id="0e4c3f98-fc05-49ea-9937-e57ada2638dc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LabelMenuBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NoteLabel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NotebookColor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NotebookTreeView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/stylesheet.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/notes-manager-icon.icns" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/notes-manager-icon2.icns" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/distantDB/createDB_NotesManager.sql" beforeDir="false" afterPath="$PROJECT_DIR$/distantDB/createDB_NotesManager.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/distantDB/testQueries_NotesManager.sql" beforeDir="false" afterPath="$PROJECT_DIR$/distantDB/testQueries_NotesManager.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Binder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/FormatChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/FormatChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/LoginWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Note.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NoteArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/NoteArea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Notebook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/RegisterWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/RegisterWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Tab.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/Tab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notesmanager/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/loginWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/loginWindow.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/notesmanager/mainWindow.fxml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,31 +68,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.LoginWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MainWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Application.RegisterWindow.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.LoginWindow.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.MainWindow.executor": "Run",
+    "Application.RegisterWindow.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "make-window-responsive",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/DevInfo/NotesManager/src/main/java/com/example/notesmanager",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mariadb&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DevInfo\NotesManager\src\main\java\com\example\notesmanager" />
@@ -91,6 +118,8 @@
       <workItem from="1709297800893" duration="28000" />
       <workItem from="1709297856287" duration="2831000" />
       <workItem from="1710078834013" duration="54000" />
+      <workItem from="1710079199922" duration="190000" />
+      <workItem from="1710079735464" duration="1690000" />
     </task>
     <servers />
   </component>
