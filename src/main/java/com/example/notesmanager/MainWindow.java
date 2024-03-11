@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -79,6 +81,14 @@ public class MainWindow extends Application {
      */
     @FXML
     Button btnLogOut, btnSave;
+
+    Button btnCreateLabel, btnEditLabel, btnDeleteLabel;
+
+    TextField nameField;
+
+    Label categoryLabel;
+
+    ComboBox<String> categoryBox;
 
     /**
      * The button for creating a new label. It is annotated with @FXML so its value can be injected from the FXML file.
@@ -284,6 +294,159 @@ public class MainWindow extends Application {
                 }
             }
         }
+
+    }
+
+
+    public void handleLabels() {
+        System.out.println("handle labels function");
+
+        createDialog();
+    }
+
+    public void createDialog() {
+
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("");
+        dialog.setHeaderText("This is a custom dialog");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        Label nameLabel = new Label("Intitulé du label:");
+        nameField = new TextField();
+        nameField.setPrefWidth(400);
+
+        // Créez la boîte de disposition horizontale pour contenir les boutons
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(10); // Définit l'espacement entre les boutons
+
+        // Créez les boutons de suppression et de modification
+        btnCreateLabel = new Button("Ajouter");
+        btnEditLabel = new Button("Modifier");
+        btnDeleteLabel = new Button("Supprimer");
+
+
+        // Ajoutez les boutons à la boîte de disposition horizontale
+        buttonBox.getChildren().addAll(btnCreateLabel, btnEditLabel, btnDeleteLabel);
+
+        // Desactiver les boutons initialement
+        btnDeleteLabel.setDisable(true);
+        btnEditLabel.setDisable(true);
+
+        Label categoryLabel = new Label("Liste des labels:");
+        categoryBox = new ComboBox<>();
+
+        Map<Integer, String> labelsResult = fetchAllLabels();
+        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
+            categoryBox.getItems().add(entry.getValue());
+        }
+
+        categoryBox.setOnAction(event -> {
+            String selectedValue = categoryBox.getValue();
+            nameField.setText(selectedValue);
+
+            btnEditLabel.setDisable(false);
+            btnDeleteLabel.setDisable(false);
+        });
+
+        categoryBox.setPrefWidth(400);
+
+        // Ajoutez la boîte de disposition horizontale à la grille
+        grid.add(buttonBox, 1, 0);
+        grid.add(nameLabel, 0, 1);
+        grid.add(nameField, 1, 1);
+        grid.add(categoryLabel, 0, 2);
+        grid.add(categoryBox, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialog.getDialogPane().getButtonTypes().add(cancelButtonType);
+
+        btnCreateLabel.setOnAction(e -> { actionsLabel(nameField, "create", null);});
+        btnEditLabel.setOnAction(e -> actionsLabel(nameField, "edit", categoryBox.getValue()));
+        btnDeleteLabel.setOnAction(e -> actionsLabel(nameField, "delete", null));
+
+        dialog.showAndWait();
+    }
+
+    public void actionsLabel(TextField nameField, String action, String selectedLabel) {
+
+        String labelField = nameField.getText();
+        String headerText = null;
+        String contentText = null;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Statut");
+
+        if (FormatChecker.checkLabelFormat(labelField)) {
+            int result;
+
+            if (action.equals("create") && !categoryBox.getItems().contains(labelField))
+                result = LabelMenuBuilder.createLabel(labelField);
+            else if (action.equals("edit") && !categoryBox.getItems().contains(labelField))
+                result = LabelMenuBuilder.updateLabel(selectedLabel, labelField);
+            else if (action.equals("delete"))
+                result = LabelMenuBuilder.deleteLabel(labelField);
+            else
+                result = -1;
+
+            System.out.println("result " + result);
+            if(result > 0) {
+                if (action.equals("create")) {
+                    headerText = "Insertion réussie";
+                    contentText = "Le label " + labelField + " est bien inséré en BDD";
+                } else if (action.equals("edit")) {
+                    categoryBox.getItems().remove(selectedLabel);
+                    headerText = "Update réussie";
+                    contentText = "Le label " + labelField + " est bien modifié en BDD";
+                } else if (action.equals("delete")) {
+                    headerText = "delete réussie";
+                    contentText = "Le label " + labelField + " est bien supprimer en BDD";
+                }
+
+                alert.setHeaderText(headerText);
+                alert.setContentText(contentText);
+
+                categoryBox.getItems().add(labelField);
+            } else if (result == -1) {
+                alert.setHeaderText("Action impossible");
+                alert.setContentText("Le label " + labelField + " existe déjà dans la liste");
+                nameField.clear();
+            } else {
+                alert.setHeaderText("Une erreur s'est produit");
+                alert.setContentText("Echec dans d'exécution pour le label " + labelField);
+            }
+
+            nameField.clear();
+        } else {
+            System.out.println("Incorrect format for label. Length need to be 4 and 10");
+            alert.setHeaderText("Impossible to execute the action");
+            alert.setContentText("Format of label is incorrect.");
+        }
+
+        alert.show();
+    }
+
+
+    public void editLabel(TextField nameField) {
+
+        String labelField = nameField.getText();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Statut édition");
+
+        if (!categoryBox.getItems().contains(labelField)) {
+
+        } else {
+            alert.setHeaderText("Insertion echouée");
+            alert.setContentText("Le label " + labelField + " existe déjà en bdd");
+            nameField.clear();
+        }
+
+        alert.show();
 
     }
 

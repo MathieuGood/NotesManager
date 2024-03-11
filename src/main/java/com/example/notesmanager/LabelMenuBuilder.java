@@ -86,4 +86,36 @@ public class LabelMenuBuilder {
         return labelNames;
     }
 
+
+    public static int createLabel(String labelName) {
+        String[] fields = {"label_name"};
+        String[] values = {labelName};
+
+        int result =  DatabaseManager.insert("labels", fields, values);
+
+        return result;
+    }
+
+    public static int updateLabel(String labelName, String newLabelName) {
+        System.out.println("updateLabel function ");
+
+        int result =  DatabaseManager.update("labels", "label_name", newLabelName, "label_name", labelName);
+
+        System.out.println("result dans updateLabel " + result);
+
+        return result;
+    }
+
+    public static int deleteLabel(String labelName) {
+
+        System.out.println("deletelabel function ");
+        System.out.println(labelName);
+
+        int result =  DatabaseManager.delete("labels", "label_name", labelName);
+
+        System.out.println("result dans deleteLabel " + result);
+
+        return result;
+    }
+
 }
