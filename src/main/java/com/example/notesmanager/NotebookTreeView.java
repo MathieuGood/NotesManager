@@ -1,6 +1,8 @@
 package com.example.notesmanager;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
@@ -96,6 +98,16 @@ public class NotebookTreeView {
                         Note note = notebook.getNoteFromBinderTabNoteName(noteName, parent.getValue(), grandParent.getValue());
 
                         NoteArea.setContentInNoteArea(note);
+
+                        // TODO : move this code to method in LabelMenuBuilder
+                        // Add checkmarks to the labels that are already in the note
+//                        for (MenuItem menuItem : LabelMenuBuilder.labelMenuItems) {
+//                            if (note.getLabels().contains(menuItem.getText())) {
+//                                menuItem.setGraphic(new Label("\u2713"));
+//                            } else {
+//                                menuItem.setGraphic(null);
+//                            }
+//                        }
 
                         if (!NoteArea.getNoteSelectedPaneStatus()) {
                             NoteArea.setPaneNoteContentVisible();
