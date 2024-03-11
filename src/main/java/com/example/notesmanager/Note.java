@@ -256,7 +256,7 @@ public class Note {
     }
 
 
-    public void addNoteLabel(String labelName) {
+    public int addNoteLabel(String labelName) {
         String field;
         // Get the label ID from the label name
         notebookLabel = new LabelMenuBuilder();
@@ -264,51 +264,94 @@ public class Note {
 
         // Check if the note already has two labels or if the chosen label is already applied to the note (take in account that labels can be empty)
         if (labels.size() == 2) {
+
             System.out.println("Can't apply label " + labelName + " Note already has two labels");
-            return;
-        } else if (labels.stream().anyMatch(label -> label.getLabelName().equals(labelName))) {
-            System.out.println("Can't apply label " + labelName + " Note already has this label");
-            return;
-        } else {
-            // Determine which field to update in the database
-            if (labels.isEmpty()) {
-                field = "note_label1_id";
-            } else {
-                field = "note_label2_id";
+            // Print all labels in the note
+            System.out.println("Labels in note " + this.noteID + " : ");
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
             }
 
-            // Update the note in the database
-            int result = DatabaseManager.update(
-                    "notes",
-                    field,
+            // TODO : Add alert
+
+            return 0;
+
+        } else if (labels.stream().anyMatch(label -> label.getLabelName().equals(labelName))) {
+            System.out.println("Can't apply label " + labelName + " Note already has this label");
+            System.out.println("Labels in note " + this.noteID + " : ");
+
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+
+            // TODO : Add alert
+
+            return 0;
+
+        } else {
+            // Update the note in the database with the new label
+            String[] inArgs = {
+                    // ID of label to add
                     String.valueOf(labelID),
-                    "note_id",
+                    // ID of the note to which the label is added
                     String.valueOf(this.noteID)
-            );
+            };
+
+            int result = DatabaseManager.call(
+                    "UpdateNoteLabelToNewValue",
+                    inArgs,
+                    ""
+                    );
 
             // If the update operation was successful, add the label to the note's labels list
             if (result > 0) {
                 labels.add(new NoteLabel(labelName));
             }
 
+            return result;
         }
 
     }
 
-    public void removeNoteLabel(String labelName) {
-        String field;
 
-        // Update the note in the database
-        String[] args = {String.valueOf(this.noteID), labelName};
+    public int removeNoteLabel(String labelName) {
+        // Get the label ID from the label name
+        notebookLabel = new LabelMenuBuilder();
+        int labelID = notebookLabel.getLabelID(labelName);
+
+        // Get the label ID from the label name
+        String[] inArgs = {
+                // ID of label to remove
+                String.valueOf(labelID),
+                // ID of the note from which the label is removed
+                String.valueOf(this.noteID)
+        };
+
         int result = DatabaseManager.call(
-                "remove_note_label",
-                args
+                "UpdateNoteLabelToNull",
+                inArgs,
+                ""
         );
 
         // If the update operation was successful, remove the label from the note's labels list
         if (result > 0) {
+
+            // Print content of labels ArrayList
+            System.out.println("Before removing label " + labelName + " from note " + this.noteID);
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+
             labels.removeIf(label -> label.getLabelName().equals(labelName));
+
+            // Print content of labels ArrayList
+            System.out.println("After removing label " + labelName + " from note " + this.noteID);
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
         }
+
+        return result;
     }
 
 }

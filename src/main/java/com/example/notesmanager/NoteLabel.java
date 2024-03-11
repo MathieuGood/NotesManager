@@ -13,6 +13,7 @@ public class NoteLabel {
         return labelName;
     }
 
+
     public void setLabelName(String labelName) {
         this.labelName = labelName;
     }

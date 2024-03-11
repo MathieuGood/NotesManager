@@ -318,42 +318,48 @@ public abstract class DatabaseManager {
     }
 
 
-    public static int call(String procedureName, String[] parameters) {
-        // Print a message indicating the start of the deletion process
-        System.out.println("Calling " + procedureName + " with parameters " + Arrays.toString(parameters));
+    public static int call(String procedureName, String[] inParameters, String outParameter) {
+        // Print a message indicating the start of the procedure call
+        System.out.println("Calling " + procedureName + " with parameters " + Arrays.toString(inParameters));
 
         try {
             // Open a connection to the database
             Connection connection = openDatabaseConnection();
 
-            // Construct the SQL DELETE query
-            String query = "CALL " + procedureName + "(" + String.join(", ", Collections.nCopies(parameters.length, "?")) + ")";
-
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            // Construct the SQL CALL query
+            String query = "{CALL " + procedureName + "(" + String.join(", ", Collections.nCopies(inParameters.length + 1, "?")) + ")}";
+            System.out.println("Query string before prepared statement : " + query);
+            CallableStatement statement = connection.prepareCall(query);
 
             // Set values for the prepared statement
-            for (int i = 0; i < parameters.length; i++) {
-                statement.setString(i + 1, parameters[i]);
+            for (int i = 0; i < inParameters.length; i++) {
+                statement.setString(i + 1, inParameters[i]);
             }
 
-            // Execute the statement and get the number of rows affected
-            int queryResult = statement.executeUpdate();
-            System.out.println("Executing QUERY : " + statement.toString());
+            // Register the OUT parameter
+            statement.registerOutParameter(inParameters.length + 1, Types.INTEGER);
 
-            // Close the database connection
+            // Execute the statement
+            statement.execute();
+
+            // Retrieve the value of the OUT parameter
+            int success = statement.getInt(inParameters.length + 1);
+
+            // Close the statement and the database connection
+            statement.close();
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the deletion process
-            System.out.println("   > Procedure called and returned " + queryResult);
+            // Print a message indicating the end of the procedure call
+            System.out.println("Procedure called and returned " + success);
 
-            // Return the result (1 if success, 0 if failure)
-            return queryResult;
-
+            // Return the result
+            return success;
         } catch (SQLException e) {
             // Print an error message if a SQL exception occurs
             System.out.println("SQL Error : " + e);
             return -1;
         }
     }
+
 
 }

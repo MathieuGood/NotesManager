@@ -150,6 +150,7 @@ public class MainWindow extends Application {
         // Set the content of note label selector dropdown menu
         setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel);
 
+
         // Generate the tree view for the notebook
         generateTreeView();
     }
@@ -202,15 +203,6 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is used to set the label filter for the notebook.
-     * It is triggered when a MenuItem (representing a label) is selected from the dropdown menu.
-     * The method retrieves the name of the selected label, filters the notes in the notebook by this label,
-     * and then rerenders the tree view to reflect the filtered notes.
-     * It also expands the root of the tree view.
-     *
-     * @param e the action event triggered when a MenuItem is selected
-     */
     public void setLabelFilter(ActionEvent e) {
         // Check if the source of the event is a MenuItem
         if (e.getSource() instanceof MenuItem selectedLabel) {
@@ -248,41 +240,42 @@ public class MainWindow extends Application {
 
 
     public void setNoteLabel(ActionEvent e) {
+
+        System.out.println("\n******************* FUNCTION setNoteLabel");
+        // Get current Note object from NoteArea
+        Note note = NoteArea.getNote();
+
         // Check if the source of the event is a MenuItem
-        if (e.getSource() instanceof MenuItem selectedLabel) {
+        if (e.getSource() instanceof MenuItem selectedLabel && note != null) {
             // Retrieve name of the label
             String labelName = selectedLabel.getText();
-            System.out.println(labelName);
+            System.out.println("Selected label" + labelName);
 
-            // Get current Note object from NoteArea
-            Note note = NoteArea.getNote();
-
-            // If the selected label is already in the note, set the style of the MenuItem to bold
+            System.out.println("Listing labels in note : " + note.getNoteName());
+            // If the selected label is already in the note, delete it from the note, else add it to the note
             ArrayList<NoteLabel> labels = note.getLabels();
             for (NoteLabel label : labels) {
-                System.out.println("Label in note : " + label.getLabelName());
+                System.out.println("Label : " + label.getLabelName());
                 if (label.getLabelName().equals(labelName)) {
-                    selectedLabel.setStyle("-fx-font-weight: bold");
+                    System.out.println("Label already in note. Removing it.");
+                    int removeLabelResult = note.removeNoteLabel(labelName);
+                    if (removeLabelResult > 0) {
+                        // Remove the checkmark sign before the corresponding label in the dropdown menu
+                        selectedLabel.setGraphic(null);
+                    }
+                    return;
                 }
             }
 
             // Add the selected label to the note
-            note.addNoteLabel(labelName);
-
-            // Change the text of the MenuItem mathcing the selected label in the list to surround it with brackets
-            selectedLabel.setStyle("-fx-font-weight: bold");
-
-
-            // Render the tree view for the notebook
-            generateTreeView();
-
-            // Unfold all the binders and tabs in the tree view
-            for (TreeItem<String> binder : binderTree.getRoot().getChildren()) {
-                binder.setExpanded(true);
-                for (TreeItem<String> tab : binder.getChildren()) {
-                    tab.setExpanded(true);
-                }
+            System.out.println("Adding label " + labelName + " to note " + note.getNoteName());
+            int addLabelResult = note.addNoteLabel(labelName);
+            if (addLabelResult > 0) {
+                System.out.println("Label added to note.");
+                // Add a checkmark sign before the corresponding label in the dropdown menu
+                selectedLabel.setGraphic(new Label("✔"));
             }
+
         }
 
     }
@@ -624,7 +617,7 @@ public class MainWindow extends Application {
             String selectedTabName = selectedItem.getValue();
             Tab selectedTab = notebook.getTabByName(selectedTabName);
 
-            if ( (selectedTab != null)) {
+            if ((selectedTab != null)) {
 
                 Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
                 confirmAlert.setTitle("Confirmation de suppression");
@@ -637,14 +630,14 @@ public class MainWindow extends Application {
                     if (binder != null) {
                         int TabID = selectedTab.getTabID();
                         int deleteResult = binder.deleteTab(TabID);
-                        if ( deleteResult > 0) {
+                        if (deleteResult > 0) {
                             selectedItem.getParent().getChildren().remove(selectedItem);
                         } else {
                             showAlert("Erreur lors de la suppression de l'intercalaire.");
                         }
 
                     }
-                }else  {
+                } else {
                     showAlert("Intercalaire non trouvé.");
                 }
 
@@ -739,7 +732,7 @@ public class MainWindow extends Application {
             } else {
                 showAlert("Intercalaire non trouvé.");
             }
-        } else  {
+        } else {
             showAlert("Veuillez sélectionner une note à éditer.");
         }
 
@@ -756,7 +749,7 @@ public class MainWindow extends Application {
 
             if (selectedTab != null) {
                 Note selectedNote = selectedTab.getNotes().stream()
-                        .filter(note->note.getNoteName().equals(selectedItem.getValue()))
+                        .filter(note -> note.getNoteName().equals(selectedItem.getValue()))
                         .findFirst().orElse(null);
 
                 if (selectedNote != null) {
@@ -767,7 +760,7 @@ public class MainWindow extends Application {
                     confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
 
                     Optional<ButtonType> result = confirmAlert.showAndWait();
-                    if ( result.isPresent() && result.get() == ButtonType.OK) {
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
 
                         int noteID = selectedNote.getNoteID();
                         int deleteResult = selectedTab.deleteNote(noteID);
@@ -787,8 +780,6 @@ public class MainWindow extends Application {
         }
 
     }
-
-
 
 
     private void showAlert(String message) {

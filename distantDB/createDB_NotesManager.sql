@@ -166,23 +166,20 @@ CREATE TABLE labels
 (
     label_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
     label_name     VARCHAR(50),
-    label_color_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (label_id),
-    FOREIGN KEY (label_color_id) REFERENCES colors (color_id)
+    PRIMARY KEY (label_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO labels(label_name,
-                   label_color_id)
-VALUES ('Important', 1),
-       ('Urgent', 2),
-       ('Work', 3),
-       ('Personal', 4),
-       ('School', 5),
-       ('Home', 6),
-       ('Fun', 7),
-       ('Family', 8),
-       ('Friends', 9)
+INSERT INTO labels(label_name)
+VALUES ('Important'),
+       ('Urgent'),
+       ('Work'),
+       ('Personal'),
+       ('School'),
+       ('Home'),
+       ('Fun'),
+       ('Family'),
+       ('Friends')
 ;
 
 
@@ -216,6 +213,7 @@ FROM binders
 ;
 
 
+-- Create a stored procedure to update the label of a note to NULL, leaving the other label unchanged, dynamically finding the right column to update
 DELIMITER //
 
 CREATE PROCEDURE UpdateNoteLabelToNull(IN input_label_id INT, IN input_note_id INT, OUT success INT)
@@ -245,6 +243,40 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+-- Create a stored procedure to update the label of a note to the inputted value, leaving the other label unchanged, dynamically finding the right column to update (column with NULL value)
+DELIMITER //
+
+CREATE PROCEDURE UpdateNoteLabelToNewValue(IN input_label_id INT, IN input_note_id INT, OUT success INT)
+BEGIN
+    DECLARE label1_value INT;
+    DECLARE label2_value INT;
+    DECLARE label_found BOOLEAN DEFAULT FALSE;
+
+    -- Get the current values of note_label1_id and note_label2_id for the given note_id
+    SELECT note_label1_id, note_label2_id INTO label1_value, label2_value FROM notes WHERE note_id = input_note_id LIMIT 1;
+
+    -- Check if input_label_id matches either note_label1_id or note_label2_id
+    IF label1_value IS NULL THEN
+        UPDATE notes SET note_label1_id = input_label_id WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    ELSEIF label2_value IS NULL THEN
+        UPDATE notes SET note_label2_id = input_label_id WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    END IF;
+
+    -- Set success based on whether the label was found and updated
+    IF label_found THEN
+        SET success = 1;
+    ELSE
+        SET success = 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+
 
 
 
