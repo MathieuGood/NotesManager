@@ -121,8 +121,8 @@ CREATE TABLE notes
     note_name      VARCHAR(50),
     note_content   LONGTEXT,
     tab_id         INT UNSIGNED NOT NULL,
-    note_label1_id INT DEFAULT NULL,
-    note_label2_id INT DEFAULT NULL,
+    note_label1_id INT UNSIGNED DEFAULT NULL,
+    note_label2_id INT UNSIGNED DEFAULT NULL,
     PRIMARY KEY (note_id),
     FOREIGN KEY (tab_id) REFERENCES tabs (tab_id)
         ON DELETE CASCADE
@@ -164,8 +164,8 @@ WHERE note_id = 1;
 
 CREATE TABLE labels
 (
-    label_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    label_name     VARCHAR(50),
+    label_id   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    label_name VARCHAR(50),
     PRIMARY KEY (label_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -189,7 +189,13 @@ ALTER TABLE binders
 ALTER TABLE tabs
     ADD CONSTRAINT UC_binder_tab_name UNIQUE (binder_id, tab_name);
 ALTER TABLE notes
-    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name);
+    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name)
+    ,
+    ADD CONSTRAINT FK_note_label1 FOREIGN KEY (note_label1_id) REFERENCES labels (label_id)
+        ON DELETE SET NULL,
+    ADD CONSTRAINT FK_note_label2 FOREIGN KEY (note_label2_id) REFERENCES labels (label_id)
+        ON DELETE SET NULL
+;
 ALTER TABLE labels
     ADD CONSTRAINT UC_label_name UNIQUE (label_name);
 
@@ -223,7 +229,11 @@ BEGIN
     DECLARE label_found BOOLEAN DEFAULT FALSE;
 
     -- Get the current values of note_label1_id and note_label2_id for the given note_id
-    SELECT note_label1_id, note_label2_id INTO label1_value, label2_value FROM notes WHERE note_id = input_note_id LIMIT 1;
+    SELECT note_label1_id, note_label2_id
+    INTO label1_value, label2_value
+    FROM notes
+    WHERE note_id = input_note_id
+    LIMIT 1;
 
     -- Check if input_label_id matches either note_label1_id or note_label2_id
     IF label1_value = input_label_id THEN
@@ -255,7 +265,11 @@ BEGIN
     DECLARE label_found BOOLEAN DEFAULT FALSE;
 
     -- Get the current values of note_label1_id and note_label2_id for the given note_id
-    SELECT note_label1_id, note_label2_id INTO label1_value, label2_value FROM notes WHERE note_id = input_note_id LIMIT 1;
+    SELECT note_label1_id, note_label2_id
+    INTO label1_value, label2_value
+    FROM notes
+    WHERE note_id = input_note_id
+    LIMIT 1;
 
     -- Check if input_label_id matches either note_label1_id or note_label2_id
     IF label1_value IS NULL THEN
@@ -275,9 +289,6 @@ BEGIN
 END //
 
 DELIMITER ;
-
-
-
 
 
 COMMIT;
