@@ -560,7 +560,7 @@ public class MainWindow extends Application {
 
 
                     List<String> colorNames = NotebookColor.getAllColorNames();
-                    ChoiceDialog<String> colorDialog = new ChoiceDialog<>(NotebookColor.getHexColorByID(selectedTab.getTabColorID()), colorNames);
+                    ChoiceDialog<String> colorDialog = new ChoiceDialog<>(NotebookColor.getColorNameByID(selectedTab.getTabColorID()), colorNames);
                     colorDialog.setTitle("Modification de la couleur de l'intercalaire");
                     colorDialog.setHeaderText("Choisissez une nouvelle couleur pour l'intercalaire :");
                     colorDialog.setContentText("Couleur :");
