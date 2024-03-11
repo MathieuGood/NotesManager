@@ -355,11 +355,13 @@ public class MainWindow extends Application {
 
         dialog.getDialogPane().setContent(grid);
 
-        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        dialog.getDialogPane().getButtonTypes().add(cancelButtonType);
+        dialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
-        btnCreateLabel.setOnAction(e -> { actionsLabel(nameField, "create", null);});
+        btnCreateLabel.setOnAction(e -> {
+            actionsLabel(nameField, "create", null);
+        });
         btnEditLabel.setOnAction(e -> actionsLabel(nameField, "edit", categoryBox.getValue()));
         btnDeleteLabel.setOnAction(e -> actionsLabel(nameField, "delete", null));
 
@@ -388,23 +390,28 @@ public class MainWindow extends Application {
                 result = -1;
 
             System.out.println("result " + result);
-            if(result > 0) {
+            if (result > 0) {
                 if (action.equals("create")) {
+                    // Add the new label to the categoryBox
+                    categoryBox.getItems().add(labelField);
                     headerText = "Insertion réussie";
                     contentText = "Le label " + labelField + " est bien inséré en BDD";
                 } else if (action.equals("edit")) {
-                    categoryBox.getItems().remove(selectedLabel);
+                    // Update text in categoryBox to the new label name
+                    categoryBox.getItems().set(categoryBox.getItems().indexOf(selectedLabel), labelField);
                     headerText = "Update réussie";
                     contentText = "Le label " + labelField + " est bien modifié en BDD";
                 } else if (action.equals("delete")) {
+                    // Remove the selected label from the categoryBox
+                    categoryBox.getItems().remove(selectedLabel);
                     headerText = "delete réussie";
                     contentText = "Le label " + labelField + " est bien supprimer en BDD";
                 }
 
+                // Set the alert's header and content text
                 alert.setHeaderText(headerText);
                 alert.setContentText(contentText);
 
-                categoryBox.getItems().add(labelField);
             } else if (result == -1) {
                 alert.setHeaderText("Action impossible");
                 alert.setContentText("Le label " + labelField + " existe déjà dans la liste");
