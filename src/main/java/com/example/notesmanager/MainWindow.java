@@ -57,6 +57,12 @@ public class MainWindow extends Application {
     Label noteTitle;
 
     /**
+     * The label displaying note's labels. It is annotated with @FXML so its value can be injected from the FXML file.
+     */
+    @FXML
+    Label noteLabels;
+
+    /**
      * Pane that integrates the HTMLEditor, the note title, and the labels. It is annotated with @FXML so its value can be injected from the FXML file.
      */
     @FXML
@@ -136,7 +142,7 @@ public class MainWindow extends Application {
         notebook = new Notebook(user);
 
         // Initialize blank NoteArea in the HTMLEditor from the user interface
-        NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle);
+        NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle, noteLabels);
 
         // Set the content of note filter dropdown menu
         setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter);
