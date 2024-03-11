@@ -285,13 +285,12 @@ public abstract class DatabaseManager {
             Connection connection = openDatabaseConnection();
 
             // Construct the SQL DELETE query
-            String query = "DELETE FROM " + table + " WHERE ? = ?";
+            String query = "DELETE FROM " + table + " WHERE " + conditionField + " = ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             // Set values for the prepared statement
-            statement.setString(1, conditionField);
-            statement.setString(2, conditionValue);
+            statement.setString(1, conditionValue);
 
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
