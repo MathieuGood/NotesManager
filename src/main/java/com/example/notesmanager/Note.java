@@ -34,7 +34,7 @@ public class Note {
     private String noteContent;
 
 
-    private LabelMenuBuilder notebookLabel;
+    private LabelManager notebookLabel;
 
 
     public Note(
@@ -256,10 +256,10 @@ public class Note {
     }
 
 
-    public int addNoteLabel(String labelName) {
+    public int attachLabelToNote(String labelName) {
         String field;
         // Get the label ID from the label name
-        notebookLabel = new LabelMenuBuilder();
+        notebookLabel = new LabelManager();
         int labelID = notebookLabel.getLabelID(labelName);
 
         // Check if the note already has two labels or if the chosen label is already applied to the note (take in account that labels can be empty)
@@ -301,7 +301,7 @@ public class Note {
                     "UpdateNoteLabelToNewValue",
                     inArgs,
                     ""
-                    );
+            );
 
             // If the update operation was successful, add the label to the note's labels list
             if (result > 0) {
@@ -314,9 +314,9 @@ public class Note {
     }
 
 
-    public int removeNoteLabel(String labelName) {
+    public int detachLabelFromNote(String labelName) {
         // Get the label ID from the label name
-        notebookLabel = new LabelMenuBuilder();
+        notebookLabel = new LabelManager();
         int labelID = notebookLabel.getLabelID(labelName);
 
         // Get the label ID from the label name

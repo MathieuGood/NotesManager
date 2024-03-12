@@ -33,7 +33,7 @@ import java.util.*;
  * @see Stage
  * @see Scene
  * @see Parent
- * @see LabelMenuBuilder
+ * @see LabelManager
  * @see Button
  * @see MenuButton
  * @see HTMLEditor
@@ -268,7 +268,7 @@ public class MainWindow extends Application {
                 System.out.println("Label : " + label.getLabelName());
                 if (label.getLabelName().equals(labelName)) {
                     System.out.println("Label already in note. Removing it.");
-                    int removeLabelResult = note.removeNoteLabel(labelName);
+                    int removeLabelResult = note.detachLabelFromNote(labelName);
                     if (removeLabelResult > 0) {
                         // Remove the checkmark sign before the corresponding label in the dropdown menu
                         selectedLabel.setGraphic(null);
@@ -279,7 +279,7 @@ public class MainWindow extends Application {
 
             // Add the selected label to the note
             System.out.println("Adding label " + labelName + " to note " + note.getNoteName());
-            int addLabelResult = note.addNoteLabel(labelName);
+            int addLabelResult = note.attachLabelToNote(labelName);
             if (addLabelResult > 0) {
                 System.out.println("Label added to note.");
                 // Add a checkmark sign before the corresponding label in the dropdown menu
@@ -381,11 +381,11 @@ public class MainWindow extends Application {
             int result;
 
             if (action.equals("create") && !categoryBox.getItems().contains(labelField))
-                result = LabelMenuBuilder.createLabel(labelField);
+                result = LabelManager.createLabel(labelField);
             else if (action.equals("edit") && !categoryBox.getItems().contains(labelField))
-                result = LabelMenuBuilder.updateLabel(selectedLabel, labelField);
+                result = LabelManager.updateLabel(selectedLabel, labelField);
             else if (action.equals("delete"))
-                result = LabelMenuBuilder.deleteLabel(labelField);
+                result = LabelManager.deleteLabel(labelField);
             else
                 result = -1;
 
@@ -498,7 +498,7 @@ public class MainWindow extends Application {
      * @return a map where the key is the label's ID and the value is the label's name
      */
     public Map<Integer, String> fetchAllLabels() {
-        LabelMenuBuilder noteLabels = new LabelMenuBuilder();
+        LabelManager noteLabels = new LabelManager();
 
         // Call the getAllLabels method of the NoteLabel instance to fetch all labels from the database
         // The labels are stored in a map where the key is the label's ID and the value is the label's name

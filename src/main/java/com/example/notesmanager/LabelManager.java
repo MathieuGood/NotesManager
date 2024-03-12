@@ -7,7 +7,7 @@ import java.util.Map;
  * The NoteLabel class represents the labels that can be assigned to notes.
  * It contains methods to fetch and store labels from the database, and to get label names and IDs.
  */
-public class LabelMenuBuilder {
+public class LabelManager {
 
     /**
      * A HashMap to store label IDs and their corresponding names.
@@ -18,7 +18,7 @@ public class LabelMenuBuilder {
      * Constructor for the CustomLabel class.
      * It sets the content of the labels by fetching them from the database.
      */
-    LabelMenuBuilder() {
+    LabelManager() {
         setLabelList();
         System.out.println("Constructing CustomLabel");
     }
