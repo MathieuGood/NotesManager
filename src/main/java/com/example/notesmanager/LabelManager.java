@@ -23,10 +23,13 @@ public class LabelManager {
     public static void updateLabels() {
         ResultSet resultSet = fetchAllLabels();
         try {
+            // Clear the labels HashMap
+            labels = new java.util.HashMap<>();
             System.out.println("Updating labels in LabelManager class");
             while (resultSet.next()) {
                 int labelID = resultSet.getInt(1);
                 String labelName = resultSet.getString(2);
+                // Add label to labels HashMap
                 labels.put(labelID, labelName);
                 System.out.println("Label ID : " + labelID + " Label Name : " + labelName);
             }
