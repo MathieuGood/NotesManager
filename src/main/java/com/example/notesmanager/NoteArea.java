@@ -2,6 +2,7 @@ package com.example.notesmanager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.HTMLEditor;
 
@@ -23,6 +24,8 @@ public class NoteArea {
     // The Label object used to display the note's labels.
     static Label noteLabels;
 
+    static MenuButton btnChooseLabel;
+
     // The HTMLEditor object used to display and edit the note's content.
     static HTMLEditor noteArea;
 
@@ -42,6 +45,7 @@ public class NoteArea {
         noteArea.setHtmlText(note.getNoteContent());
         noteTitle.setText(note.getNoteName());
         NoteArea.setLabelsText();
+        btnChooseLabel.setDisable(false);
     }
 
 
@@ -75,15 +79,19 @@ public class NoteArea {
             Pane noteSelectedPane,
             Pane waitingNoteSelectedPane,
             Label noteTitle,
-            Label noteLables) {
+            Label noteLables,
+            MenuButton btnChooseLabel) {
         NoteArea.noteArea = noteArea;
         NoteArea.noteSelectedPane = noteSelectedPane;
         NoteArea.waitingNoteSelectedPane = waitingNoteSelectedPane;
         NoteArea.noteTitle = noteTitle;
         NoteArea.noteLabels = noteLables;
+        NoteArea.btnChooseLabel = btnChooseLabel;
+
 
         noteSelectedPane.setVisible(false);
         waitingNoteSelectedPane.setVisible(true);
+        btnChooseLabel.setDisable(true);
     }
 
 
