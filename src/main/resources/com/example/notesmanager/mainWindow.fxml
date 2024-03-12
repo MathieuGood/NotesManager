@@ -13,72 +13,72 @@
 <?import javafx.scene.web.HTMLEditor?>
 
 <AnchorPane prefHeight="435.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notesmanager.MainWindow">
-   <children>
-      <Label fx:id="userNameLabel" layoutX="366.0" layoutY="15.0" text="Bonjour :" />
-      <SplitPane dividerPositions="0.2" layoutX="-1.0" layoutY="73.0" prefHeight="329.0" prefWidth="600.0">
-         <items>
-            <AnchorPane minWidth="100.0" prefHeight="361.0" prefWidth="294.0">
-               <children>
-                  <TreeView fx:id="binderTree" layoutY="21.0" prefHeight="391.0" prefWidth="116.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane minWidth="200.0" prefHeight="200.0">
-               <children>
-                  <Pane fx:id="noteSelectedPane" prefHeight="361.0" prefWidth="475.0">
-                     <children>
-                        <HTMLEditor fx:id="noteArea" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutY="28.0" prefHeight="325.0" prefWidth="475.0" />
-                        <Label fx:id="noteTitle" layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="133.0" text="titre de la note" />
-                        <Label fx:id="noteLabels" layoutX="311.0" layoutY="6.0" text="lables de la note" />
-                     </children>
-                  </Pane>
-                  <Pane fx:id="waitingNoteSelectedPane" prefHeight="361.0" prefWidth="475.0">
-                     <children>
-                        <Label layoutX="140.0" layoutY="171.0" prefHeight="20.0" prefWidth="191.0" text="Veuillez sélectionner une note">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-               </children></AnchorPane>
-         </items>
-      </SplitPane>
-       
-      <MenuButton fx:id="btnFilterLabel" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
-        <items>
-            <MenuItem onAction="#setLabelFilter" text="All labels" />
-        </items>
-      </MenuButton>
-      <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />
-      <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#logOut" text="Quitter" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+    <children>
+        <Label fx:id="userNameLabel" layoutX="366.0" layoutY="15.0" text="Bonjour :" />
+        <SplitPane dividerPositions="0.2" layoutX="-1.0" layoutY="73.0" prefHeight="329.0" prefWidth="600.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">
+            <items>
+                <AnchorPane minWidth="100.0" prefHeight="361.0" prefWidth="294.0">
+                    <children>
+                        <TreeView fx:id="binderTree" layoutY="21.0" prefHeight="391.0" prefWidth="116.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minWidth="200.0" prefHeight="200.0">
+                    <children>
+                        <AnchorPane fx:id="noteSelectedPane" focusTraversable="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <HTMLEditor fx:id="noteArea" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="23.0" />
+                                <Label fx:id="noteTitle" layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="133.0" text="titre de la note" />
+                                <Label fx:id="noteLabels" layoutX="311.0" layoutY="6.0" text="lables de la note" />
+                            </children>
+                        </AnchorPane>
+                        <Pane fx:id="waitingNoteSelectedPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label layoutX="140.0" layoutY="171.0" prefHeight="20.0" prefWidth="191.0" text="Veuillez sélectionner une note">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </Pane>
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
 
-       <MenuButton fx:id="btnCreateAction" layoutX="131.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.topAnchor="10.0">
-           <items>
+        <MenuButton fx:id="btnFilterLabel" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
+            <items>
+                <MenuItem onAction="#setLabelFilter" text="All labels" />
+            </items>
+        </MenuButton>
+        <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />
+        <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#logOut" text="Quitter" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
 
-               <MenuItem onAction="#addBinderMenu" text="Add Binder" />
-               <MenuItem onAction="#editBinderMenu" text="Edit Binder" />
-               <MenuItem onAction="#deleteBinderMenu" text="Delete Binder" />
+        <MenuButton fx:id="btnCreateAction" layoutX="131.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.topAnchor="10.0">
+            <items>
 
-               <SeparatorMenuItem />
+                <MenuItem onAction="#addBinderMenu" text="Add Binder" />
+                <MenuItem onAction="#editBinderMenu" text="Edit Binder" />
+                <MenuItem onAction="#deleteBinderMenu" text="Delete Binder" />
 
-               <MenuItem onAction="#addTabMenu" text="Add Tab" />
-               <MenuItem onAction="#editTabMenu" text="Edit Tab" />
-               <MenuItem onAction="#deleteTabMenu" text="Delete Tab" />
+                <SeparatorMenuItem />
 
-               <SeparatorMenuItem />
+                <MenuItem onAction="#addTabMenu" text="Add Tab" />
+                <MenuItem onAction="#editTabMenu" text="Edit Tab" />
+                <MenuItem onAction="#deleteTabMenu" text="Delete Tab" />
 
-               <MenuItem onAction="#addNoteMenu" text="Add Note" />
-               <MenuItem onAction="#editNoteMenu" text="Edit Note" />
-               <MenuItem onAction="#deleteNoteMenu" text="Delete Note" />
+                <SeparatorMenuItem />
 
-           </items>
-       </MenuButton>
-      <MenuButton fx:id="btnChooseLabel" layoutX="249.0" layoutY="10.0" mnemonicParsing="false" prefWidth="105.0" text="Choose label">
-        <items>
-        </items>
-      </MenuButton>
-      <Button fx:id="btnHandleLabels" layoutX="14.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleLabels" prefHeight="25.0" prefWidth="117.0" text="Gestion des labels" />
+                <MenuItem onAction="#addNoteMenu" text="Add Note" />
+                <MenuItem onAction="#editNoteMenu" text="Edit Note" />
+                <MenuItem onAction="#deleteNoteMenu" text="Delete Note" />
+
+            </items>
+        </MenuButton>
+        <MenuButton fx:id="btnChooseLabel" layoutX="249.0" layoutY="10.0" mnemonicParsing="false" prefWidth="105.0" text="Choose label">
+            <items>
+            </items>
+        </MenuButton>
+        <Button fx:id="btnHandleLabels" layoutX="14.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleLabels" prefHeight="25.0" prefWidth="117.0" text="Gestion des labels" />
 
 
-   </children>
+    </children>
 </AnchorPane>
