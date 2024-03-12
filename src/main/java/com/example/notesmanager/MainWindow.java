@@ -297,6 +297,8 @@ public class MainWindow extends Application {
         createDialog();
     }
 
+
+    // Create a dialog to handle labels
     public void createDialog() {
 
         Dialog<String> dialog = new Dialog<>();
@@ -331,8 +333,9 @@ public class MainWindow extends Application {
         Label categoryLabel = new Label("Liste des labels:");
         categoryBox = new ComboBox<>();
 
-        Map<Integer, String> labelsResult = fetchAllLabels();
-        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
+        // Fetch all labels from the database and add them to the categoryBox
+        Map<Integer, String> labels = LabelManager.getAllLabels();
+        for (Map.Entry<Integer, String> entry : labels.entrySet()) {
             categoryBox.getItems().add(entry.getValue());
         }
 
@@ -471,10 +474,10 @@ public class MainWindow extends Application {
      */
     public void setLabelFilterDropdownContent(MenuButton menuButton, EventHandler<ActionEvent> callback) {
         // Fetch all labels from the database
-        Map<Integer, String> labelsResult = fetchAllLabels();
+        Map<Integer, String> labels = LabelManager.getAllLabels();
 
         // Loop over the fetched labels
-        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
+        for (Map.Entry<Integer, String> entry : labels.entrySet()) {
 
             // Create a new menu item for each label
             MenuItem label = new MenuItem(entry.getValue());
@@ -487,32 +490,6 @@ public class MainWindow extends Application {
         }
     }
 
-
-    /**
-     * This method is used to fetch all labels from the database.
-     * It creates a new instance of the NoteLabel class and calls its getAllLabels method to retrieve all labels.
-     * The labels are stored in a map where the key is the label's ID and the value is the label's name.
-     * The method then iterates over the map and prints each label's ID and name to the console.
-     * Finally, it returns the map of labels.
-     *
-     * @return a map where the key is the label's ID and the value is the label's name
-     */
-    public Map<Integer, String> fetchAllLabels() {
-        LabelManager noteLabels = new LabelManager();
-
-        // Call the getAllLabels method of the NoteLabel instance to fetch all labels from the database
-        // The labels are stored in a map where the key is the label's ID and the value is the label's name
-        Map<Integer, String> labelsResult = noteLabels.getAllLabels();
-
-        // Iterate over the map of labels
-        for (Map.Entry<Integer, String> entry : labelsResult.entrySet()) {
-            // Print each label's ID and name to the console
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-        }
-
-        // Return the map of labels
-        return labelsResult;
-    }
 
     /**
      * This method is used to generate the tree view for the notebook.
