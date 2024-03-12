@@ -784,10 +784,9 @@ public class MainWindow extends Application {
                         }
 
                     }
-                } else {
-                    showAlert("Intercalaire non trouvé.");
+                } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
+                    System.out.println("Vous avez annulé la suppressionde l'intercalaire.");
                 }
-
 
             } else {
                 showAlert("Veuillez sélectionner un intercalaire à supprimer.");
@@ -885,9 +884,10 @@ public class MainWindow extends Application {
 
     }
 
+
+    /**************************************************/
     @FXML
     private void deleteNoteMenu() {
-
         TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null && selectedItem.getParent() != null && selectedItem.getParent().getParent() != null) {
@@ -920,16 +920,16 @@ public class MainWindow extends Application {
                         } else {
                             showAlert("Erreur lors de la suppression de la note.");
                         }
-                    } else {
-                        showAlert("Intercalaire non trouvé.");
+                    } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
+                        System.out.println("Vous avez annulé la suppression de la note.");
                     }
                 } else {
                     showAlert("Veuillez sélectionner une note à supprimer.");
                 }
             }
         }
-
     }
+
 
 
     private void showAlert(String message) {
