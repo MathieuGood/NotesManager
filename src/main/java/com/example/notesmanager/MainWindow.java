@@ -151,7 +151,6 @@ public class MainWindow extends Application {
         // Set the content of note label selector dropdown menu
         setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
 
-
         // Generate the tree view for the notebook
         generateTreeView();
     }
@@ -239,6 +238,15 @@ public class MainWindow extends Application {
         }
     }
 
+    private void updateNoteAre(Note note) {
+        notebook.setNotebookContent();
+        generateTreeView();
+        int noteID = note.getNoteID();
+        Note newNote = notebook.getNoteByID(noteID);
+        NoteArea.setContentInNoteArea(newNote);
+        NoteArea.setLabelsText();
+    }
+
 
     public void setNoteLabel(ActionEvent e) {
 
@@ -264,6 +272,8 @@ public class MainWindow extends Application {
                         // Remove the checkmark sign before the corresponding label in the dropdown menu
                         selectedLabel.setGraphic(null);
                     }
+
+                    updateNoteAre(note);
                     return;
                 }
             }
@@ -275,6 +285,8 @@ public class MainWindow extends Application {
                 System.out.println("Label added to note.");
                 // Add a checkmark sign before the corresponding label in the dropdown menu
                 selectedLabel.setGraphic(new Label("✔"));
+
+                updateNoteAre(note);
             }
 
         }
@@ -350,13 +362,6 @@ public class MainWindow extends Application {
         dialog.getDialogPane().setContent(grid);
 
         ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
-        // On click on closeButtonType button, run these two methods
-        // Set the content of note filter dropdown menu
-        //        setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, false);
-        //
-        //        // Set the content of note label selector dropdown menu
-        //        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
-
 
         dialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
@@ -417,6 +422,19 @@ public class MainWindow extends Application {
 
                 setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, true);
                 setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
+                notebook.setNotebookContent();
+
+                // Obtain the ID of the note in NoteArea
+                Note currentNote = NoteArea.getNote();
+
+                if (currentNote != null) {
+                    int noteID = currentNote.getNoteID();
+                    // Get the note from the notebook, set the content in the NoteArea, and update the labels text
+                    Note note = notebook.getNoteByID(noteID);
+                    NoteArea.setContentInNoteArea(note);
+                    NoteArea.setLabelsText();
+                }
+
 
             } else if (result == -1) {
                 alert.setHeaderText("Action impossible");
@@ -467,6 +485,11 @@ public class MainWindow extends Application {
 
         // Clear MenuItems from the dropdown menu
         menuButton.getItems().clear();
+
+        // Add a new menu item for all labels
+        MenuItem allLabels = new MenuItem("All labels");
+        allLabels.setOnAction(callback);
+        menuButton.getItems().add(allLabels);
 
         // Loop over the fetched labels
         for (Map.Entry<Integer, String> entry : labels.entrySet()) {
@@ -819,8 +842,7 @@ public class MainWindow extends Application {
                     TreeItem<String> newNoteItem = new TreeItem<>(name);
                     selectedNameTab.getChildren().add(newNoteItem);
 
-
-                    // A voir si cette ligne est utile
+                    NoteArea.setContentInNoteArea(newNote);
                     noteArea.setHtmlText(newNote.getNoteContent());
                 });
             } else {
@@ -859,6 +881,7 @@ public class MainWindow extends Application {
                         int updateResult = selectedNote.editName(newName);
                         if (updateResult > 0) {
                             selectedItem.setValue(newName);
+                            NoteArea.noteTitle.setText(newName);
                         } else {
                             showAlert("Erreur lors de la mise à jour du nom de la note.");
                         }
@@ -921,7 +944,6 @@ public class MainWindow extends Application {
             }
         }
     }
-
 
 
     private void showAlert(String message) {

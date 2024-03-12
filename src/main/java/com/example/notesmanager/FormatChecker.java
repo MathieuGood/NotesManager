@@ -62,7 +62,7 @@ public abstract class FormatChecker {
 
 
     public static boolean checkLabelFormat(String nameLabel) {
-        final String regexPattern = "^(?!$).{4,10}$";
+        final String regexPattern = "^(?!$).{2,16}$";
         return regexChecker(nameLabel, regexPattern);
     }
 }

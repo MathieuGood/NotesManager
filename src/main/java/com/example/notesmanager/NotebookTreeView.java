@@ -99,15 +99,12 @@ public class NotebookTreeView {
 
                         NoteArea.setContentInNoteArea(note);
 
-                        // TODO : move this code to method in LabelMenuBuilder
-                        // Add checkmarks to the labels that are already in the note
-//                        for (MenuItem menuItem : LabelMenuBuilder.labelMenuItems) {
-//                            if (note.getLabels().contains(menuItem.getText())) {
-//                                menuItem.setGraphic(new Label("\u2713"));
-//                            } else {
-//                                menuItem.setGraphic(null);
-//                            }
-//                        }
+                        // TODO : Clear the checkmarks from the MenuItems in the "Choose labels" menu
+
+
+                        // TODO : Add checkmarks to the labels that are already in the note
+
+
 
                         if (!NoteArea.getNoteSelectedPaneStatus()) {
                             NoteArea.setPaneNoteContentVisible();

@@ -45,6 +45,7 @@ public class NoteArea {
     }
 
 
+
     public static void setLabelsText() {
 
         ArrayList<NoteLabel> labels = note.getLabels();
@@ -57,6 +58,11 @@ public class NoteArea {
         }
 
         noteLabels.setText(allLabels);
+
+        System.out.println("CALLING setLabelsText() :");
+        System.out.println("Note ID : " + note.getNoteID());
+        System.out.println("Note Name : " + note.getNoteName());
+        System.out.println("Note Labels : " + allLabels);
     }
 
     public static Note getNote() {
