@@ -89,7 +89,7 @@ public class LoginWindow extends Application {
 
 
             // Set the primary stage properties
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             stage.setTitle("NotesManager");
             stage.setScene(scene);
             stage.show();
