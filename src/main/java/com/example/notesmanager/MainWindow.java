@@ -86,8 +86,6 @@ public class MainWindow extends Application {
 
     TextField nameField;
 
-    Label categoryLabel;
-
     ComboBox<String> categoryBox;
 
     /**
@@ -128,13 +126,6 @@ public class MainWindow extends Application {
      * The notebook associated with the current user. This notebook contains all the binders and notes for the user.
      */
     Notebook notebook;
-
-    /**
-     * A list of binders in the notebook. Each binder can contain multiple tabs, and each tab can contain multiple notes.
-     */
-    ArrayList<Binder> binders;
-
-    static NoteArea areaStatic;
 
 
     /**
@@ -367,7 +358,6 @@ public class MainWindow extends Application {
         //        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
 
 
-
         dialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
         btnCreateLabel.setOnAction(e -> actionsLabel(nameField, "create", null));
@@ -400,26 +390,33 @@ public class MainWindow extends Application {
 
             System.out.println("result " + result);
             if (result > 0) {
-                if (action.equals("create")) {
-                    // Add the new label to the categoryBox
-                    categoryBox.getItems().add(labelField);
-                    headerText = "Insertion réussie";
-                    contentText = "Le label " + labelField + " est bien inséré en BDD";
-                } else if (action.equals("edit")) {
-                    // Update text in categoryBox to the new label name
-                    categoryBox.getItems().set(categoryBox.getItems().indexOf(selectedLabel), labelField);
-                    headerText = "Update réussie";
-                    contentText = "Le label " + labelField + " est bien modifié en BDD";
-                } else if (action.equals("delete")) {
-                    // Remove the selected label from the categoryBox
-                    categoryBox.getItems().remove(selectedLabel);
-                    headerText = "delete réussie";
-                    contentText = "Le label " + labelField + " est bien supprimer en BDD";
+                switch (action) {
+                    case "create" -> {
+                        // Add the new label to the categoryBox
+                        categoryBox.getItems().add(labelField);
+                        headerText = "Insertion réussie";
+                        contentText = "Le label " + labelField + " est bien inséré en BDD";
+                    }
+                    case "edit" -> {
+                        // Update text in categoryBox to the new label name
+                        categoryBox.getItems().set(categoryBox.getItems().indexOf(selectedLabel), labelField);
+                        headerText = "Update réussie";
+                        contentText = "Le label " + labelField + " est bien modifié en BDD";
+                    }
+                    case "delete" -> {
+                        // Remove the selected label from the categoryBox
+                        categoryBox.getItems().remove(selectedLabel);
+                        headerText = "delete réussie";
+                        contentText = "Le label " + labelField + " est bien supprimer en BDD";
+                    }
                 }
 
                 // Set the alert's header and content text
                 alert.setHeaderText(headerText);
                 alert.setContentText(contentText);
+
+                setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, true);
+                setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
 
             } else if (result == -1) {
                 alert.setHeaderText("Action impossible");
@@ -438,25 +435,6 @@ public class MainWindow extends Application {
         }
 
         alert.show();
-    }
-
-
-    public void editLabel(TextField nameField) {
-
-        String labelField = nameField.getText();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Statut édition");
-
-        if (!categoryBox.getItems().contains(labelField)) {
-
-        } else {
-            alert.setHeaderText("Insertion echouée");
-            alert.setContentText("Le label " + labelField + " existe déjà en bdd");
-            nameField.clear();
-        }
-
-        alert.show();
-
     }
 
 
@@ -486,6 +464,9 @@ public class MainWindow extends Application {
 
         // Fetch all labels from the database
         Map<Integer, String> labels = LabelManager.getAllLabels();
+
+        // Clear MenuItems from the dropdown menu
+        menuButton.getItems().clear();
 
         // Loop over the fetched labels
         for (Map.Entry<Integer, String> entry : labels.entrySet()) {
@@ -953,8 +934,7 @@ public class MainWindow extends Application {
 
 
     private Node getColorCircle(String colorHex) {
-        Circle circle = new Circle(5, Color.web(colorHex));
-        return circle;
+        return new Circle(5, Color.web(colorHex));
     }
 
 }
