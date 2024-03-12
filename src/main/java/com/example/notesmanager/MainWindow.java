@@ -880,9 +880,9 @@ public class MainWindow extends Application {
 
                 if (selectedNote != null) {
 
-                    TextInputDialog dialog = new TextInputDialog(selectedNote.getNoteContent());
-                    dialog.setTitle("Modification du nom de la note");
-                    dialog.setHeaderText("Modifiez le nom de la note :");
+                    TextInputDialog dialog = new TextInputDialog(selectedNote.getNoteName());
+                    dialog.setTitle("Modification du titre de la note");
+                    dialog.setHeaderText("Modifiez le titre de la note :");
                     dialog.setContentText("Nom :");
 
                     Optional<String> result = dialog.showAndWait();
