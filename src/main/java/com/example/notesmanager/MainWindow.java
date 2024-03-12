@@ -937,6 +937,9 @@ public class MainWindow extends Application {
 
                         if (deleteResult > 0) {
                             selectedItem.getParent().getChildren().remove(selectedItem);
+
+                            noteSelectedPane.setVisible(false);
+                            waitingNoteSelectedPane.setVisible(true);
                         } else {
                             showAlert("Erreur lors de la suppression de la note.");
                         }

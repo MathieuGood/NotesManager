@@ -119,7 +119,7 @@ CREATE TABLE notes
 (
     note_id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
     note_name      VARCHAR(50),
-    note_content   LONGTEXT,
+    note_content   LONGTEXT DEFAULT "",
     tab_id         INT UNSIGNED NOT NULL,
     note_label1_id INT UNSIGNED DEFAULT NULL,
     note_label2_id INT UNSIGNED DEFAULT NULL,
