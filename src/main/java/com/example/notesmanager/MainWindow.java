@@ -143,7 +143,7 @@ public class MainWindow extends Application {
         notebook = new Notebook(user);
 
         // Initialize blank NoteArea in the HTMLEditor from the user interface
-        NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle, noteLabels);
+        NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle, noteLabels, btnChooseLabel);
 
         // Set the content of note filter dropdown menu
         setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, false);
@@ -932,6 +932,7 @@ public class MainWindow extends Application {
 
                             noteSelectedPane.setVisible(false);
                             waitingNoteSelectedPane.setVisible(true);
+                            NoteArea.btnChooseLabel.setDisable(true);
                         } else {
                             showAlert("Erreur lors de la suppression de la note.");
                         }
