@@ -1,11 +1,17 @@
 package com.example.notesmanager;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /**
- * The Note class represents a note in a tab in a note-taking application.
+ * Represents a note in a tab in a note-taking application.
  * It contains methods to get and set the note's properties, and to interact with the database.
  */
 public class Note {
 
+
+    private ArrayList<NoteLabel> labels = new ArrayList<>();
 
     /**
      * The unique identifier for this Note.
@@ -27,32 +33,20 @@ public class Note {
      */
     private String noteContent;
 
-    /**
-     * An array of unique identifiers for the Labels associated with this Note.
-     * Each element in the array is an ID that corresponds to a Label in the database.
-     */
-    private int[] noteLabelID;
+
+    private LabelManager notebookLabel;
 
 
-    /**
-     * Constructor for the Note class.
-     * Initializes a new Note object with the specified tab, note ID, note name and note content.
-     *
-     * @param tab         The Tab object that this Note belongs to.
-     * @param noteID      The unique identifier for this Note.
-     * @param noteName    The name of this Note.
-     * @param noteContent The content of this Note.
-     */
     public Note(
             Tab tab,
             int noteID,
             String noteName,
-            String noteContent
+            ArrayList<NoteLabel> labels
     ) {
         this.noteID = noteID;
         this.tabID = tab.getTabID();
         this.noteName = noteName;
-        this.noteContent = noteContent;
+        this.labels = labels;
     }
 
 
@@ -86,6 +80,19 @@ public class Note {
     }
 
 
+//    public String getNoteLabel1() {
+//        return noteLabel1;
+//    }
+//
+//    public String getNoteLabel2() {
+//        return noteLabel2;
+//    }
+
+    public ArrayList<NoteLabel> getLabels() {
+        return labels;
+    }
+
+
     /**
      * Returns the content of this Note.
      *
@@ -93,16 +100,6 @@ public class Note {
      */
     public String getNoteContent() {
         return noteContent;
-    }
-
-
-    /**
-     * Returns the array of label IDs associated with this Note.
-     *
-     * @return The array of label IDs associated with this Note.
-     */
-    public int[] getNoteLabelID() {
-        return noteLabelID;
     }
 
     /**
@@ -123,13 +120,91 @@ public class Note {
         this.noteContent = noteContent;
     }
 
+
     /**
-     * Sets the array of label IDs associated with this Note.
-     *
-     * @param noteLabelID The new array of label IDs for this Note.
+     * Fetches the content of this Note from the database.
+     * If the noteContent is null, it queries the database for the note content using the note's ID.
+     * The result is then assigned to the noteContent.
      */
-    public void setNoteLabelID(int[] noteLabelID) {
-        this.noteLabelID = noteLabelID;
+    public void fetchNoteContent() {
+        if (noteContent == null) {
+            ResultSet resultSet = DatabaseManager.select(
+                    "notes",
+                    new String[]{"note_content"},
+                    new String[]{"note_id"},
+                    new String[]{String.valueOf(this.noteID)}
+            );
+
+            try {
+                resultSet.first();
+                noteContent = resultSet.getString(1);
+            } catch (SQLException e) {
+                System.out.println("Error : " + e);
+            }
+        }
+    }
+
+    public static ResultSet fetchNoteContentByNoteName(String noteName, String tabName, String binderName) {
+
+        int binderIdFromName = 0;
+        int tabIdFromName = 0;
+
+        ResultSet resultSetNote = null;
+
+        // GetId binder from the name
+        String[] fieldsBinder = {"binders.binder_id"};
+        String[] conditionFieldsBinder = {"binders.binder_name"};
+        String[] conditionValuesBinder = {binderName};
+
+        ResultSet resultSetBinder = DatabaseManager.select("binders", fieldsBinder, conditionFieldsBinder, conditionValuesBinder);
+
+        try {
+            while (resultSetBinder.next()) binderIdFromName = resultSetBinder.getInt(1);
+        } catch (Exception e) {
+            System.out.println("Error : " + e);
+        }
+
+        // Si binder trouvé
+        if (binderIdFromName > 0) {
+            String[] fieldsTab = {"tabs.tab_id"};
+            String[] conditionFieldsTab = {"tabs.tab_name", "tabs.binder_id"};
+            String[] conditionValuesTab = {tabName, String.valueOf(binderIdFromName)};
+
+            ResultSet resultSetTab = DatabaseManager.select("tabs", fieldsTab, conditionFieldsTab, conditionValuesTab);
+
+            try {
+                while (resultSetTab.next()) tabIdFromName = resultSetTab.getInt(1);
+            } catch (Exception e) {
+                System.out.println("Error : " + e);
+            }
+        }
+
+        if (tabIdFromName > 0) {
+            String[] fieldsNote = {
+                    "notes.note_id",
+                    "notes.tab_id",
+                    "notes.note_name",
+                    "notes.note_content",
+                    "notes.note_label1_id",
+                    "notes.note_label2_id",
+            };
+            String[] conditionFieldsNote = {"notes.note_name", "notes.tab_id"};
+            String[] conditionValuesNote = {noteName, String.valueOf(tabIdFromName)};
+
+            resultSetNote = DatabaseManager.select("notes", fieldsNote, conditionFieldsNote, conditionValuesNote);
+        }
+
+        System.out.println("binder Id " + binderIdFromName);
+        System.out.println("tab Id " + tabIdFromName);
+
+        return resultSetNote;
+
+        // noteID
+        // noteName
+        // noteContent
+        // tabID
+
+
     }
 
 
@@ -141,14 +216,19 @@ public class Note {
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editName(String newName) {
-        this.noteName = newName;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "notes",
                 "note_name",
                 newName,
                 "note_id",
                 String.valueOf(this.noteID)
         );
+
+        if (result > 0) {
+            this.noteName = newName;
+        }
+
+        return result;
     }
 
 
@@ -160,15 +240,118 @@ public class Note {
      * @return The result of the update operation. Typically, the number of rows affected.
      */
     public int editContent(String newContent) {
-        this.noteContent = newContent;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "notes",
                 "note_content",
                 newContent,
                 "note_id",
                 String.valueOf(this.noteID)
         );
+
+        if (result > 0) {
+            this.noteContent = newContent;
+        }
+
+        return result;
     }
 
+
+    public int attachLabelToNote(String labelName) {
+        String field;
+        // Get the label ID from the label name
+        notebookLabel = new LabelManager();
+        int labelID = notebookLabel.getLabelID(labelName);
+
+        // Check if the note already has two labels or if the chosen label is already applied to the note (take in account that labels can be empty)
+        if (labels.size() == 2) {
+
+            System.out.println("Can't apply label " + labelName + " Note already has two labels");
+            // Print all labels in the note
+            System.out.println("Labels in note " + this.noteID + " : ");
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+
+            // TODO : Add alert
+
+            return 0;
+
+        } else if (labels.stream().anyMatch(label -> label.getLabelName().equals(labelName))) {
+            System.out.println("Can't apply label " + labelName + " Note already has this label");
+            System.out.println("Labels in note " + this.noteID + " : ");
+
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+
+            // TODO : Add alert
+
+            return 0;
+
+        } else {
+            // Update the note in the database with the new label
+            String[] inArgs = {
+                    // ID of label to add
+                    String.valueOf(labelID),
+                    // ID of the note to which the label is added
+                    String.valueOf(this.noteID)
+            };
+
+            int result = DatabaseManager.call(
+                    "UpdateNoteLabelToNewValue",
+                    inArgs,
+                    ""
+            );
+
+            // If the update operation was successful, add the label to the note's labels list
+            if (result > 0) {
+                labels.add(new NoteLabel(labelName));
+            }
+
+            return result;
+        }
+
+    }
+
+
+    public int detachLabelFromNote(String labelName) {
+        // Get the label ID from the label name
+        notebookLabel = new LabelManager();
+        int labelID = notebookLabel.getLabelID(labelName);
+
+        // Get the label ID from the label name
+        String[] inArgs = {
+                // ID of label to remove
+                String.valueOf(labelID),
+                // ID of the note from which the label is removed
+                String.valueOf(this.noteID)
+        };
+
+        int result = DatabaseManager.call(
+                "UpdateNoteLabelToNull",
+                inArgs,
+                ""
+        );
+
+        // If the update operation was successful, remove the label from the note's labels list
+        if (result > 0) {
+
+            // Print content of labels ArrayList
+            System.out.println("Before removing label " + labelName + " from note " + this.noteID);
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+
+            labels.removeIf(label -> label.getLabelName().equals(labelName));
+
+            // Print content of labels ArrayList
+            System.out.println("After removing label " + labelName + " from note " + this.noteID);
+            for (NoteLabel label : labels) {
+                System.out.println(label.getLabelName());
+            }
+        }
+
+        return result;
+    }
 
 }

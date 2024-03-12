@@ -4,26 +4,20 @@ import java.sql.*;
 
 
 /**
- * The User class represents a user in the system.
+ * Represents a user in the system.
  * It contains fields for the user's ID, name, and email, and methods for getting and setting these values.
  * It also contains methods for creating a new user and checking if a user's password matches the one stored in the database.
  */
 public class User {
 
 
-    /**
-     * The unique identifier for the user.
-     */
+    // The unique identifier for the User.
     private int userID;
 
-    /**
-     * The name of the user.
-     */
+    // The name of the User.
     private String userName;
 
-    /**
-     * The email of the user.
-     */
+    // The email of the User.
     private String userEmail;
 
 
@@ -100,16 +94,18 @@ public class User {
 
 
     /**
-     * Creates a new User and inserts it into the database.
+     * Creates a new user in the database.
      * <p>
-     * This method first prints a message to the console indicating that a new user is being created.
-     * It then defines the fields and values for the new user, and calls the DatabaseManager's insert method to insert the new user into the database.
-     * Finally, it creates a new User object with the returned user ID, and the provided name and email, and returns this new User.
+     * This method takes in a user's name, email, and password, and inserts these values into the 'users' table in the database.
+     * The fields for the new user are 'user_name', 'user_email', and 'user_password'.
+     * The method uses the DatabaseManager's insert method to perform the database operation.
+     * After the new user is created, the method prints a message to the console indicating the user's ID.
+     * The user's ID is then returned.
      *
      * @param userName     The name of the new user.
      * @param userEmail    The email of the new user.
      * @param userPassword The password of the new user.
-     * @return The newly created User.
+     * @return The ID of the new user.
      */
     public static int createUser(String userName, String userEmail, String userPassword) {
         System.out.println("Creating new user " + userName + " / " + userEmail);

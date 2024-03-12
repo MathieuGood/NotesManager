@@ -12,30 +12,22 @@ import java.util.ArrayList;
 public class Binder {
 
 
-    /**
-     * List of Tabs in this Binder.
-     */
+    // Parent notebook of this binder
+    private Notebook notebook;
+
+    // An ArrayList that holds all the Tab objects associated with this Binder.
     private ArrayList<Tab> tabs = new ArrayList<>();
 
-
-    /**
-     * The unique identifier for this Binder.
-     */
+    // The unique identifier for this Binder.
     private final int binderID;
 
-    /**
-     * The unique identifier for the User who owns this Binder.
-     */
+    // The unique identifier for the User that owns this Binder.
     private final int userID;
 
-    /**
-     * The name of this Binder.
-     */
+    // The name of this Binder.
     private String binderName;
 
-    /**
-     * The unique identifier for the color of this Binder.
-     */
+    // The unique identifier for the color of this Binder.
     private int binderColorID;
 
 
@@ -53,10 +45,10 @@ public class Binder {
             int binderColorID
     ) {
         this.binderID = binderID;
+        this.notebook = notebook;
         this.userID = notebook.getUserID();
         this.binderName = binderName;
         this.binderColorID = binderColorID;
-        this.tabs = fetchAllTabs();
     }
 
 
@@ -97,6 +89,11 @@ public class Binder {
      */
     public ArrayList<Tab> getTabs() {
         return tabs;
+    }
+
+
+    public void addTabToList(Tab tab) {
+        tabs.add(tab);
     }
 
 
@@ -159,14 +156,18 @@ public class Binder {
      * @return The result of the database update operation.
      */
     public int editName(String newName) {
-        this.binderName = newName;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "binders",
                 "binder_name",
                 newName,
                 "binder_id",
-                String.valueOf(this.binderID)
-        );
+                String.valueOf(this.binderID));
+
+        if (result > 0) {
+            this.binderName = newName;
+        }
+
+        return result;
     }
 
 
@@ -177,14 +178,19 @@ public class Binder {
      * @return The result of the database update operation.
      */
     public int editColor(int newColorID) {
-        this.binderColorID = newColorID;
-        return DatabaseManager.update(
+        int result = DatabaseManager.update(
                 "binders",
                 "binder_color_id",
                 String.valueOf(newColorID),
                 "binder_id",
                 String.valueOf(this.binderID)
         );
+
+        if (result > 0) {
+            this.binderColorID = newColorID;
+        }
+
+        return result;
     }
 
 
@@ -197,6 +203,13 @@ public class Binder {
      * @return The new Tab object.
      */
     public Tab createTab(String tabName, int tabColorID) {
+
+        // Vérif si l'ID de couleur n'est pas négatif avant de faire l'insertion
+        if (tabColorID < 0) {
+            System.err.println("Erreur : L'ID de la couleur est hors de portée.");
+            return null;
+        }
+
         System.out.println("\n***");
         System.out.println("createTab() : " + tabName + " / binderID " + binderID + " / colorID " + tabColorID);
 
@@ -205,7 +218,10 @@ public class Binder {
 
         int tabID = DatabaseManager.insert("tabs", fields, values);
 
-        return new Tab(this, tabID, tabName, tabColorID);
+        Tab tab = new Tab(this, tabID, tabName, tabColorID);
+        tabs.add(tab);
+
+        return tab;
     }
 
 
@@ -219,6 +235,38 @@ public class Binder {
         System.out.println("\n***");
         System.out.println("deleteTab() : " + " tabID " + tabID);
 
-        return DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
+        int result = DatabaseManager.delete("tabs", "tab_id", String.valueOf(tabID));
+
+        // If query is successful, remove the Binder object from the ArrayList
+        if (result > 0) {
+            for (Tab tab : tabs) {
+                if (tab.getTabID() == tabID) {
+                    tabs.remove(tab);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public String getColorHex() {
+        return NotebookColor.getHexColorByID(this.binderColorID);
+    }
+
+
+    /**
+     * Recherche un Tab (intervalaire) par son nom.
+     *
+     * @param tabName Le nom du Tab (intervalaire) à rechercher.
+     * @return Le Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
+     */
+    public Tab findTabByName(String tabName) {
+        for (Tab tab : this.tabs) {
+            if (tab.getTabName().equals(tabName)) {
+                return tab;
+            }
+        }
+        return null;
     }
 }

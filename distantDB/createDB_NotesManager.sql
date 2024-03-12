@@ -110,126 +110,185 @@ INSERT INTO tabs(tab_name,
                  tab_color_id)
 VALUES ('Java', 1, 2),
        ('React Native', 1, 3),
-       ('SQL', 1, 4)
+       ('SQL', 1, 4),
+       ('Python', 1, 9)
 ;
 
 
 CREATE TABLE notes
 (
-    note_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    note_name     VARCHAR(50),
-    note_color_id INT UNSIGNED,
-    note_content  LONGTEXT,
-    tab_id        INT UNSIGNED NOT NULL,
+    note_id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    note_name      VARCHAR(50),
+    note_content   LONGTEXT DEFAULT "",
+    tab_id         INT UNSIGNED NOT NULL,
+    note_label1_id INT UNSIGNED DEFAULT NULL,
+    note_label2_id INT UNSIGNED DEFAULT NULL,
     PRIMARY KEY (note_id),
     FOREIGN KEY (tab_id) REFERENCES tabs (tab_id)
         ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO notes(note_name,
-                  note_color_id,
-                  note_content,
-                  tab_id)
-VALUES ('Syntax', NULL, 'Print a statement : System.out.println("This is a statement")', 1),
-       ('Create a class', 2, 'Do not forget to add the constructor.', 1),
-       ('React Native Introduction', 4, 'React Native is a framework for building native apps using React.', 2),
-       ('SQL Introduction', NULL,
-        'SQL is a standard language for storing, manipulating and retrieving data in databases.', 3)
+INSERT INTO notes(note_name, note_content, tab_id)
+VALUES
+    -- Notes for Java tab
+    ('Java Basics', 'Learn about variables, data types, and operators in Java.', 1),
+    ('Java OOP Concepts', 'Understand concepts like classes, objects, inheritance, and polymorphism.', 1),
+    ('Java Collections', 'Explore Java collections framework including ArrayList, HashMap, and LinkedList.', 1),
+    ('Exception Handling', 'Study how to handle exceptions in Java using try-catch blocks.', 1),
+    ('File Handling', 'Learn to read from and write to files in Java using FileReader and FileWriter.', 1),
+    ('Multithreading', 'Understand the basics of multithreading and synchronization in Java.', 1),
+
+    -- Notes for React Native tab
+    ('React Native Setup', 'Follow the React Native documentation to set up your development environment.', 2),
+    ('React Native Components', 'Understand basic components like View, Text, and Image in React Native.', 2),
+    ('React Navigation', 'Learn how to implement navigation in React Native using React Navigation library.', 2),
+    ('State Management', 'Explore state management options in React Native including useState and useContext.', 2),
+    ('Redux Integration', 'Integrate Redux into your React Native app for centralized state management.', 2),
+    ('Styling in React Native', 'Learn different methods to style components in React Native using StyleSheet.', 2),
+
+    -- Notes for SQL tab
+    ('SQL Queries', 'Practice writing SQL SELECT queries to retrieve data from a database.', 3),
+    ('SQL Joins', 'Understand different types of SQL joins like INNER JOIN, LEFT JOIN, and RIGHT JOIN.', 3),
+    ('SQL DDL Commands', 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
+    ('SQL DML Commands', 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
+    ('Database Normalization', 'Understand the normalization process to organize data in a relational database.', 3),
+    ('Transactions in SQL', 'Study transactions and their importance in maintaining data integrity in SQL.', 3)
 ;
+
+UPDATE notes
+SET note_label1_id = 2,
+    note_label2_id = 4
+WHERE note_id = 1;
 
 
 CREATE TABLE labels
 (
-    label_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    label_name     VARCHAR(50),
-    label_color_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (label_id),
-    FOREIGN KEY (label_color_id) REFERENCES colors (color_id)
+    label_id   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    label_name VARCHAR(50),
+    PRIMARY KEY (label_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO labels(label_name,
-                   label_color_id)
-VALUES ('Important', 1),
-       ('Urgent', 2),
-       ('Work', 3),
-       ('Personal', 4),
-       ('School', 5),
-       ('Home', 6),
-       ('Fun', 7),
-       ('Family', 8),
-       ('Friends', 9)
+INSERT INTO labels(label_name)
+VALUES ('Important'),
+       ('Urgent'),
+       ('Work'),
+       ('Personal'),
+       ('School'),
+       ('Home'),
+       ('Fun'),
+       ('Family'),
+       ('Friends')
 ;
 
 
-CREATE TABLE tag
-(
-    note_id  INT UNSIGNED NOT NULL,
-    label_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (note_id, label_id),
-    FOREIGN KEY (note_id) REFERENCES notes (note_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (label_id) REFERENCES labels (label_id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
-INSERT INTO tag(note_id,
-                label_id)
-VALUES (1, 1),
-       (2, 2);
+-- Add unique constraints on binders, tabs and notes relatively to their user
+ALTER TABLE binders
+    ADD CONSTRAINT UC_user_binder_name UNIQUE (user_id, binder_name);
+ALTER TABLE tabs
+    ADD CONSTRAINT UC_binder_tab_name UNIQUE (binder_id, tab_name);
+ALTER TABLE notes
+    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name)
+    ,
+    ADD CONSTRAINT FK_note_label1 FOREIGN KEY (note_label1_id) REFERENCES labels (label_id)
+        ON DELETE SET NULL,
+    ADD CONSTRAINT FK_note_label2 FOREIGN KEY (note_label2_id) REFERENCES labels (label_id)
+        ON DELETE SET NULL
+;
+ALTER TABLE labels
+    ADD CONSTRAINT UC_label_name UNIQUE (label_name);
 
 
 -- Create a view to get all notes from all users
 CREATE VIEW viewAllUserNotes AS
-SELECT binder_name, tab_name, note_name, note_content
-FROM notes
-         INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-         INNER JOIN binders ON tabs.binder_id = binders.binder_id
-         INNER JOIN users ON binders.user_id = users.user_id;
-
-
--- Create a view to get all notes from all user with their labels
-CREATE VIEW viewAllUserNotesWithLabels AS
-SELECT binder_name, tab_name, note_name, note_content, label_name, color_hex
-FROM notes
-         INNER JOIN tabs ON notes.tab_id = tabs.tab_id
-         INNER JOIN binders ON tabs.binder_id = binders.binder_id
-         INNER JOIN users ON binders.user_id = users.user_id
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-         LEFT JOIN colors ON labels.label_color_id = colors.color_id;
-
-
--- Create a view to get all the directory tree for one user displaying the binders, tabs and notes with their respective color code
-
-CREATE VIEW viewDirectoryTree AS
-SELECT binder_name, binder_color_id, tab_name, tab_color_id, note_name, note_color_id
+SELECT binders.binder_id,
+       binders.binder_name,
+       binders.binder_color_id,
+       tabs.tab_id,
+       tabs.tab_name,
+       tabs.tab_color_id,
+       notes.note_id,
+       notes.note_name,
+       notes.note_label1_id,
+       notes.note_label2_id
 FROM binders
-         LEFT JOIN tabs ON binders.binder_id = tabs.binder_id
-         LEFT JOIN notes ON tabs.tab_id = notes.tab_id
-         INNER JOIN colors ON binders.binder_color_id = colors.color_id 
-         AND tabs.tab_color_id = colors.color_id;
-         
+         LEFT JOIN users ON binders.user_id = users.user_id
+         LEFT JOIN tabs ON tabs.binder_id = binders.binder_id
+         LEFT JOIN notes ON notes.tab_id = tabs.tab_id
+;
 
--- Create a view to display all the notes (note_id, note_name, note_content, note_color_id, labels) for a specific tab_id
-CREATE VIEW viewNotesForTab AS
-SELECT notes.note_id, note_name, note_content, note_color_id, label_name, color_hex
-FROM notes
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-         LEFT JOIN colors ON notes.note_color_id = colors.color_id
-WHERE tab_id = 1;
 
--- On the same base as viewNotesForTab, display just one entry per note_id with all the labels concatenated (separator: ', ')
-CREATE VIEW viewNotesForTabConcatenated AS
-SELECT notes.note_id, note_name, note_content, note_color_id, GROUP_CONCAT(label_name SEPARATOR ', ') AS labels
-FROM notes
-         LEFT JOIN tag ON notes.note_id = tag.note_id
-         LEFT JOIN labels ON tag.label_id = labels.label_id
-WHERE tab_id = 1
-GROUP BY notes.note_id;
+-- Create a stored procedure to update the label of a note to NULL, leaving the other label unchanged, dynamically finding the right column to update
+DELIMITER //
 
+CREATE PROCEDURE UpdateNoteLabelToNull(IN input_label_id INT, IN input_note_id INT, OUT success INT)
+BEGIN
+    DECLARE label1_value INT;
+    DECLARE label2_value INT;
+    DECLARE label_found BOOLEAN DEFAULT FALSE;
+
+    -- Get the current values of note_label1_id and note_label2_id for the given note_id
+    SELECT note_label1_id, note_label2_id
+    INTO label1_value, label2_value
+    FROM notes
+    WHERE note_id = input_note_id
+    LIMIT 1;
+
+    -- Check if input_label_id matches either note_label1_id or note_label2_id
+    IF label1_value = input_label_id THEN
+        UPDATE notes SET note_label1_id = NULL WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    ELSEIF label2_value = input_label_id THEN
+        UPDATE notes SET note_label2_id = NULL WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    END IF;
+
+    -- Set success based on whether the label was found and updated
+    IF label_found THEN
+        SET success = 1;
+    ELSE
+        SET success = 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+
+-- Create a stored procedure to update the label of a note to the inputted value, leaving the other label unchanged, dynamically finding the right column to update (column with NULL value)
+DELIMITER //
+
+CREATE PROCEDURE UpdateNoteLabelToNewValue(IN input_label_id INT, IN input_note_id INT, OUT success INT)
+BEGIN
+    DECLARE label1_value INT;
+    DECLARE label2_value INT;
+    DECLARE label_found BOOLEAN DEFAULT FALSE;
+
+    -- Get the current values of note_label1_id and note_label2_id for the given note_id
+    SELECT note_label1_id, note_label2_id
+    INTO label1_value, label2_value
+    FROM notes
+    WHERE note_id = input_note_id
+    LIMIT 1;
+
+    -- Check if input_label_id matches either note_label1_id or note_label2_id
+    IF label1_value IS NULL THEN
+        UPDATE notes SET note_label1_id = input_label_id WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    ELSEIF label2_value IS NULL THEN
+        UPDATE notes SET note_label2_id = input_label_id WHERE note_id = input_note_id;
+        SET label_found = TRUE;
+    END IF;
+
+    -- Set success based on whether the label was found and updated
+    IF label_found THEN
+        SET success = 1;
+    ELSE
+        SET success = 0;
+    END IF;
+END //
+
+DELIMITER ;
 
 
 COMMIT;

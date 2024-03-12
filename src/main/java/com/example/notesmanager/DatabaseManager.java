@@ -3,8 +3,7 @@ package com.example.notesmanager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Collections;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * The DatabaseManager class provides methods for interacting with a database.
@@ -21,29 +20,19 @@ public abstract class DatabaseManager {
      */
     final static private Properties properties = loadProperties();
 
-    /**
-     * The host address of the database.
-     */
+    // The host of the database.
     static private String dbHost;
 
-    /**
-     * The port number of the database.
-     */
+    // The port number of the database.
     static private String dbPort;
 
-    /**
-     * The username for the database connection.
-     */
+    // The username used to connect to the database.
     static private String dbUsername;
 
-    /**
-     * The password for the database connection.
-     */
+    // The password used to connect to the database.
     static private String dbPassword;
 
-    /**
-     * The name of the database.
-     */
+    // The name of the database.
     static private String dbName;
 
 
@@ -135,6 +124,7 @@ public abstract class DatabaseManager {
 
             // Prepare the SQL statement
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Set the values for the condition fields in the prepared statement
             if (conditionValues != null && conditionValues.length > 0) {
@@ -149,10 +139,6 @@ public abstract class DatabaseManager {
             // Close the database connection
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the selection process
-            System.out.println("Select done");
-
-            // Return the result set
             return resultSet;
 
         } catch (SQLException e) {
@@ -175,7 +161,6 @@ public abstract class DatabaseManager {
      */
     public static int insert(String table, String[] fields, String[] values) {
         // Print a message indicating the start of the insertion process
-        System.out.println("Inserting into table " + table);
 
         try {
             // Open a connection to the database
@@ -188,6 +173,7 @@ public abstract class DatabaseManager {
             // Construct the SQL INSERT query
             String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Set values for the prepared statement
             for (int i = 0; i < values.length; i++) {
@@ -196,7 +182,7 @@ public abstract class DatabaseManager {
 
             // Execute the statement
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows inserted : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Get last inserted ID
             ResultSet rs = statement.getGeneratedKeys();
@@ -207,7 +193,7 @@ public abstract class DatabaseManager {
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the insertion process
-            System.out.println("Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+            System.out.println("   > Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
 
             // Return the ID of the inserted row
             return lastInsertedID;
@@ -256,13 +242,13 @@ public abstract class DatabaseManager {
 
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows updated : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Close the database connection
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the update process
-            System.out.println("Update done with result " + queryResult);
+            System.out.println("   > Update done with result " + queryResult);
 
             // Return the number of rows affected
             return queryResult;
@@ -299,23 +285,22 @@ public abstract class DatabaseManager {
             Connection connection = openDatabaseConnection();
 
             // Construct the SQL DELETE query
-            String query = "DELETE FROM " + table + " WHERE ? = ?";
+            String query = "DELETE FROM " + table + " WHERE " + conditionField + " = ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             // Set values for the prepared statement
-            statement.setString(1, conditionField);
-            statement.setString(2, conditionValue);
+            statement.setString(1, conditionValue);
 
             // Execute the statement and get the number of rows affected
             int queryResult = statement.executeUpdate();
-            System.out.println("Number of rows deleted : " + queryResult);
+            System.out.println("Executing QUERY : " + statement.toString());
 
             // Close the database connection
             closeDatabaseConnection(connection);
 
             // Print a message indicating the end of the deletion process
-            System.out.println("Delete done with result " + queryResult);
+            System.out.println("   > Delete done with result " + queryResult);
 
             // Return the number of rows affected
             return queryResult;
@@ -325,6 +310,50 @@ public abstract class DatabaseManager {
             System.out.println("SQL Integrity Constraint Violation : " + e);
             return 0;
 
+        } catch (SQLException e) {
+            // Print an error message if a SQL exception occurs
+            System.out.println("SQL Error : " + e);
+            return -1;
+        }
+    }
+
+
+    public static int call(String procedureName, String[] inParameters, String outParameter) {
+        // Print a message indicating the start of the procedure call
+        System.out.println("Calling " + procedureName + " with parameters " + Arrays.toString(inParameters));
+
+        try {
+            // Open a connection to the database
+            Connection connection = openDatabaseConnection();
+
+            // Construct the SQL CALL query
+            String query = "{CALL " + procedureName + "(" + String.join(", ", Collections.nCopies(inParameters.length + 1, "?")) + ")}";
+            System.out.println("Query string before prepared statement : " + query);
+            CallableStatement statement = connection.prepareCall(query);
+
+            // Set values for the prepared statement
+            for (int i = 0; i < inParameters.length; i++) {
+                statement.setString(i + 1, inParameters[i]);
+            }
+
+            // Register the OUT parameter
+            statement.registerOutParameter(inParameters.length + 1, Types.INTEGER);
+
+            // Execute the statement
+            statement.execute();
+
+            // Retrieve the value of the OUT parameter
+            int success = statement.getInt(inParameters.length + 1);
+
+            // Close the statement and the database connection
+            statement.close();
+            closeDatabaseConnection(connection);
+
+            // Print a message indicating the end of the procedure call
+            System.out.println("Procedure called and returned " + success);
+
+            // Return the result
+            return success;
         } catch (SQLException e) {
             // Print an error message if a SQL exception occurs
             System.out.println("SQL Error : " + e);
