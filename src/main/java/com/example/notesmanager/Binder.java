@@ -235,7 +235,7 @@ public class Binder {
         System.out.println("\n***");
         System.out.println("deleteTab() : " + " tabID " + tabID);
 
-        int result = DatabaseManager.delete("tabs", "tabID", String.valueOf(tabID));
+        int result = DatabaseManager.delete("tabs", "tab_id", String.valueOf(tabID));
 
         // If query is successful, remove the Binder object from the ArrayList
         if (result > 0) {
