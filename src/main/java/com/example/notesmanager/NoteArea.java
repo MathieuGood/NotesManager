@@ -2,10 +2,10 @@ package com.example.notesmanager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.HTMLEditor;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +23,8 @@ public class NoteArea {
     // The Label object used to display the note's labels.
     static Label noteLabels;
 
+    static MenuButton btnChooseLabel;
+
     // The HTMLEditor object used to display and edit the note's content.
     static HTMLEditor noteArea;
 
@@ -34,7 +36,7 @@ public class NoteArea {
     @FXML
     private static Pane waitingNoteSelectedPane;
 
-    
+
     public static void setContentInNoteArea(Note note) {
         NoteArea.note = note;
         note.fetchNoteContent();
@@ -42,6 +44,21 @@ public class NoteArea {
         noteArea.setHtmlText(note.getNoteContent());
         noteTitle.setText(note.getNoteName());
         NoteArea.setLabelsText();
+        btnChooseLabel.setDisable(false);
+
+        // In the btnChooseLabel MenuItems, add checkmarks to the labels already attached to the note
+        btnChooseLabel.getItems().forEach(menuItem -> {
+            System.out.println("Print output of the ArrayList note.getLabels() :");
+            note.getLabels().forEach(
+                    label -> {
+                        System.out.println(label.getLabelName());
+                        if (label.getLabelName().equals(menuItem.getText())) {
+                            menuItem.setGraphic(new Label("✔"));
+                        }
+                    }
+            );
+        });
+
     }
 
 
@@ -57,6 +74,11 @@ public class NoteArea {
         }
 
         noteLabels.setText(allLabels);
+
+        System.out.println("CALLING setLabelsText() :");
+        System.out.println("Note ID : " + note.getNoteID());
+        System.out.println("Note Name : " + note.getNoteName());
+        System.out.println("Note Labels : " + allLabels);
     }
 
     public static Note getNote() {
@@ -75,15 +97,19 @@ public class NoteArea {
             Pane noteSelectedPane,
             Pane waitingNoteSelectedPane,
             Label noteTitle,
-            Label noteLables) {
+            Label noteLables,
+            MenuButton btnChooseLabel) {
         NoteArea.noteArea = noteArea;
         NoteArea.noteSelectedPane = noteSelectedPane;
         NoteArea.waitingNoteSelectedPane = waitingNoteSelectedPane;
         NoteArea.noteTitle = noteTitle;
         NoteArea.noteLabels = noteLables;
+        NoteArea.btnChooseLabel = btnChooseLabel;
+
 
         noteSelectedPane.setVisible(false);
         waitingNoteSelectedPane.setVisible(true);
+        btnChooseLabel.setDisable(true);
     }
 
 

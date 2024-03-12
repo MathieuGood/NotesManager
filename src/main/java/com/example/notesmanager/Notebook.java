@@ -52,6 +52,20 @@ public class Notebook {
     }
 
 
+    public Note getNoteByID(int noteID) {
+        for (Binder binder : binders) {
+            for (Tab tab : binder.getTabs()) {
+                for (Note note : tab.getNotes()) {
+                    if (note.getNoteID() == noteID) {
+                        return note;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
     /**
      * Adds a Binder object to the binders list.
      *
