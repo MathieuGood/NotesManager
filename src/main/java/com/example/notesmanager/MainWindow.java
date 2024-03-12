@@ -155,10 +155,10 @@ public class MainWindow extends Application {
         NoteArea.setNoteArea(noteArea, noteSelectedPane, waitingNoteSelectedPane, noteTitle, noteLabels);
 
         // Set the content of note filter dropdown menu
-        setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter);
+        setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, false);
 
         // Set the content of note label selector dropdown menu
-        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel);
+        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
 
 
         // Generate the tree view for the notebook
@@ -359,12 +359,18 @@ public class MainWindow extends Application {
         dialog.getDialogPane().setContent(grid);
 
         ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        // On click on closeButtonType button, run these two methods
+        // Set the content of note filter dropdown menu
+        //        setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, false);
+        //
+        //        // Set the content of note label selector dropdown menu
+        //        setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
+
+
 
         dialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
-        btnCreateLabel.setOnAction(e -> {
-            actionsLabel(nameField, "create", null);
-        });
+        btnCreateLabel.setOnAction(e -> actionsLabel(nameField, "create", null));
         btnEditLabel.setOnAction(e -> actionsLabel(nameField, "edit", categoryBox.getValue()));
         btnDeleteLabel.setOnAction(e -> actionsLabel(nameField, "delete", null));
 
@@ -472,7 +478,12 @@ public class MainWindow extends Application {
      * It fetches all labels from the database and adds them as menu items to the dropdown menu.
      * Each menu item is set to trigger the setFilter method when selected.
      */
-    public void setLabelFilterDropdownContent(MenuButton menuButton, EventHandler<ActionEvent> callback) {
+    public void setLabelFilterDropdownContent(MenuButton menuButton, EventHandler<ActionEvent> callback, boolean updateLabels) {
+
+        if (updateLabels) {
+            LabelManager.updateLabels();
+        }
+
         // Fetch all labels from the database
         Map<Integer, String> labels = LabelManager.getAllLabels();
 
