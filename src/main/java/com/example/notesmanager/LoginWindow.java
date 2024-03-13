@@ -86,7 +86,7 @@ public class LoginWindow extends Application {
             Scene scene = new Scene(fxmlLoader.load());
 
             // Set the primary stage properties
-            primaryStage.setResizable(true);
+            primaryStage.setResizable(false);
             stage.setTitle("NotesManager");
             stage.setScene(scene);
             stage.show();
