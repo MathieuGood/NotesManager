@@ -10,45 +10,28 @@ import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
-/**
- * This class represents a tree view of a notebook.
- * It contains methods to create and manage the tree view.
- */
+
 public class NotebookTreeView {
 
 
-    /**
-     * The TreeView object that represents the binder tree.
-     */
+    
     private TreeView<String> binderTree;
 
-    /**
-     * The Notebook object that contains the data for the notebook.
-     */
+    
     private Notebook notebook;
 
-    /**
-     * The root item of the tree view. It is a TreeItem object with the name "Main node".
-     */
+    
     TreeItem<String> rootItem = new TreeItem<>("Main node");
 
 
-    /**
-     * Constructor for the NotebookTreeView class.
-     *
-     * @param binderTree The tree view object
-     * @param notebook   The notebook object
-     */
+    
     public NotebookTreeView(TreeView<String> binderTree, Notebook notebook) {
         this.binderTree = binderTree;
         this.notebook = notebook;
     }
 
 
-    /**
-     * This method creates the tree view.
-     * It iterates over the binders, tabs, and notes in the notebook and adds them to the tree view.
-     */
+    
     public void createTreeView() {
 
         System.out.println(">>>>>>>> Creating tree view");
@@ -118,12 +101,7 @@ public class NotebookTreeView {
     }
 
 
-    /**
-     * This method creates a circle with the specified color.
-     *
-     * @param colorHex The color of the circle in hexadecimal format
-     * @return A Node object representing the circle
-     */
+    
     private Node getColorCircle(String colorHex) {
         return new Circle(5, Color.web(colorHex));
     }

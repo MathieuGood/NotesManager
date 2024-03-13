@@ -4,10 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 
-/**
- * Represents a Notebook in the application.
- * A Notebook contains a list of Binders.
- */
+
 public class Notebook {
 
 
@@ -18,35 +15,20 @@ public class Notebook {
     private final int userID;
 
 
-    /**
-     * Constructs a Notebook object for the given user.
-     * <p>
-     * This constructor initializes the userID with the ID of the given user.
-     * It also initializes the binders list by calling the fetchAllBinders method, which retrieves all binders associated with the user from the database.
-     *
-     * @param user The User object representing the owner of this notebook.
-     */
+    
     public Notebook(User user) {
         this.userID = user.getUserID();
         setNotebookContent();
     }
 
 
-    /**
-     * Returns the user ID of the owner of this notebook.
-     *
-     * @return The user ID of the owner of this notebook.
-     */
+    
     public int getUserID() {
         return userID;
     }
 
 
-    /**
-     * Returns the list of Binders in this Notebook.
-     *
-     * @return The list of Binders in this Notebook.
-     */
+    
     public ArrayList<Binder> getBinders() {
         return binders;
     }
@@ -66,24 +48,13 @@ public class Notebook {
     }
 
 
-    /**
-     * Adds a Binder object to the binders list.
-     *
-     * @param binder The Binder object to be added to the list.
-     */
+    
     public void addBinderToList(Binder binder) {
         binders.add(binder);
     }
 
 
-    /**
-     * Fetches all content related to the Notebook from the database.
-     * This includes information about binders, tabs, and notes associated with the user.
-     * The method performs a select operation on the database with multiple left joins to retrieve the required data.
-     * The result of the select operation is returned as a ResultSet.
-     *
-     * @return A ResultSet containing all content related to the Notebook.
-     */
+    
     public ResultSet fetchAllNotebookContent() {
 
         System.out.println("\n***");
@@ -118,23 +89,13 @@ public class Notebook {
     }
 
 
-    /**
-     * Sets the content of the Notebook by fetching all related content from the database.
-     * This method is a shorthand for calling setNotebookContent with a null argument,
-     * which means it fetches all content without any label filter.
-     */
+    
     public void setNotebookContent() {
         setNotebookContent(null);
     }
 
 
-    /**
-     * Sets the content of the Notebook by fetching all related content from the database.
-     * The method fetches all content related to the Notebook and iterates over the ResultSet.
-     * For each row in the ResultSet, it checks if the binder ID, tab ID, and note ID correspond to new entities.
-     * If they do, it creates new Binder, Tab, and Note objects and adds them to the appropriate lists.
-     * If an exception occurs during this process, it prints the error to the console.
-     */
+    
     public void setNotebookContent(String labelNameFilter) {
         // Clear the binders list
         binders = new ArrayList<>();
@@ -218,19 +179,7 @@ public class Notebook {
     }
 
 
-    /**
-     * Retrieves all binders associated with the user ID of this notebook.
-     * This method first prints the details of the operation to the console.
-     * Then, it performs a select operation on the "binders" table in the database, retrieving all binders associated with the user ID.
-     * The results of the select operation are stored in a ResultSet.
-     * The method then creates an ArrayList to store Binder objects.
-     * It iterates over the ResultSet, retrieving the binder ID, binder name, and binder color ID for each binder.
-     * For each binder, it prints the details to the console, creates a new Binder object with the retrieved data, and adds the Binder object to the ArrayList.
-     * If an exception occurs during this process, it prints the error to the console and returns null.
-     * If the process completes successfully, it returns the ArrayList of Binder objects.
-     *
-     * @return An ArrayList of Binder objects representing all binders associated with the user ID of this notebook, or null if an exception occurs.
-     */
+    
     private ArrayList<Binder> fetchAllBinders() {
         System.out.println("\n***");
         System.out.println("getAllBinders() for userID " + this.userID + " :");
@@ -271,14 +220,7 @@ public class Notebook {
     }
 
 
-    /**
-     * Creates a new Binder with the specified name and color ID.
-     * It inserts the new binder into the database, and then returns the new Binder object.
-     *
-     * @param binderName    The name for the new Binder.
-     * @param binderColorID The color ID for the new Binder.
-     * @return The new Binder object.
-     */
+    
     public Binder createBinder(String binderName, int binderColorID) {
         System.out.println("\n***");
         System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
@@ -295,14 +237,7 @@ public class Notebook {
     }
 
 
-    /**
-     * Deletes the binder with the specified ID from this notebook.
-     * This method first prints the details of the operation to the console.
-     * Then, it calls the delete method of the DatabaseManager class to perform the operation.
-     *
-     * @param binderID The ID of the binder to delete.
-     * @return The result of the database delete operation.
-     */
+    
     public int deleteBinder(int binderID) {
         System.out.println("\n***");
         System.out.println("deleteBinder() : " + " binderID " + binderID);
@@ -322,12 +257,7 @@ public class Notebook {
         return result;
     }
 
-    /**
-     * Recherche un Binder par son nom.
-     *
-     * @param binderName Le nom du Binder à rechercher.
-     * @return Le Binder correspondant au nom donné, ou null si non trouvé.
-     */
+    
     public Binder getBinderByName(String binderName) {
         for (Binder binder : this.binders) {
             if (binder.getBinderName().equalsIgnoreCase(binderName)) {
@@ -337,12 +267,7 @@ public class Notebook {
         return null;
     }
 
-    /**
-     * Recherche un Tab (intervalaire) par son nom dans tous les classeurs.
-     *
-     * @param tabName Le nom du Tab (intervalaire) à rechercher.
-     * @return Le premier Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
-     */
+    
     public Tab getTabByName(String tabName) {
         for (Binder binder : binders) {
             for (Tab tab : binder.getTabs()) {

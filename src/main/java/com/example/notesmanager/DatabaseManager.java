@@ -5,19 +5,11 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-/**
- * The DatabaseManager class provides methods for interacting with a database.
- * It contains methods to open and close a database connection, as well as to perform select, insert, update, and delete operations.
- * This class is abstract and cannot be instantiated.
- */
+
 public abstract class DatabaseManager {
 
 
-    /**
-     * A Properties object that holds the properties loaded from the properties file.
-     * The properties file contains the database credentials such as host, port, username, password, and database name.
-     * These properties are loaded using the loadProperties() method.
-     */
+    
     final static private Properties properties = loadProperties();
 
     // The host of the database.
@@ -36,15 +28,7 @@ public abstract class DatabaseManager {
     static private String dbName;
 
 
-    /**
-     * This method is used to load the properties from a properties file and set the database credentials.
-     * It creates a new Properties object and attempts to load the properties from a file named "database.properties" located in the project directory.
-     * If the properties file is found and can be read, the properties are loaded into the Properties object and the database credentials are set.
-     * If an IOException occurs during this process, an error message is printed to the console.
-     * The method then returns the Properties object, whether or not the properties were successfully loaded.
-     *
-     * @return A Properties object containing the properties loaded from the properties file, or an empty Properties object if the properties could not be loaded.
-     */
+    
     private static Properties loadProperties() {
         Properties properties = new Properties();
         try (FileInputStream fileInputStream = new FileInputStream("src/main/java/com/example/notesmanager/database.properties")) {
@@ -61,41 +45,19 @@ public abstract class DatabaseManager {
     }
 
 
-    /**
-     * This method opens a connection to the database using the provided database credentials.
-     * It uses the DriverManager to get a connection to the MariaDB database at the specified host and port.
-     * The method then returns the connection object.
-     *
-     * @return A Connection object representing the open database connection.
-     * @throws SQLException If a database access error occurs.
-     */
+    
     public static Connection openDatabaseConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mariadb://" + dbHost + ":" + dbPort + "/" + dbName, dbUsername, dbPassword);
     }
 
 
-    /**
-     * This method closes the connection to the database.
-     *
-     * @param connection The Connection object representing the open database connection.
-     * @throws SQLException If a database access error occurs.
-     */
+    
     public static void closeDatabaseConnection(Connection connection) throws SQLException {
         connection.close();
     }
 
 
-    /**
-     * This method is used to select data from a table in the database.
-     * It constructs a SQL SELECT query using the provided table name, field names, condition fields and condition values.
-     * It then executes this query and returns the result set.
-     *
-     * @param table           The name of the table to select from.
-     * @param fields          An array of field names to select.
-     * @param conditionFields An array of field names to use in the WHERE clause.
-     * @param conditionValues An array of values corresponding to the condition fields to use in the WHERE clause.
-     * @return A ResultSet object containing the result of the select operation, or null if a SQL exception occurs.
-     */
+    
     public static ResultSet select(String table, String[] fields, String[] conditionFields, String[] conditionValues) {
         // Print a message indicating the start of the selection process
         System.out.println("Selecting from table " + table);
@@ -149,16 +111,7 @@ public abstract class DatabaseManager {
     }
 
 
-    /**
-     * This method is used to insert data into a table in the database.
-     * It constructs a SQL INSERT query using the provided table name, field names, and values.
-     * It then executes this query and returns the ID of the inserted row.
-     *
-     * @param table  The name of the table to insert into.
-     * @param fields An array of field names to insert.
-     * @param values An array of values corresponding to the field names to insert.
-     * @return The ID of the inserted row.
-     */
+    
     public static int insert(String table, String[] fields, String[] values) {
         // Print a message indicating the start of the insertion process
 
@@ -211,18 +164,7 @@ public abstract class DatabaseManager {
     }
 
 
-    /**
-     * This method is used to update a record in a table in the database.
-     * It constructs a SQL UPDATE query using the provided table name, field name, value, condition field and condition value.
-     * It then executes this query and returns the number of rows affected.
-     *
-     * @param table          The name of the table to update.
-     * @param field          The field name to update.
-     * @param value          The new value for the field.
-     * @param conditionField The field name to use in the WHERE clause.
-     * @param conditionValue The value to use in the WHERE clause.
-     * @return The number of rows affected by the update.
-     */
+    
     public static int update(String table, String field, String value, String conditionField, String conditionValue) {
         // Print a message indicating the start of the update process
         System.out.println("Updating table " + table + " with " + field + " = " + value + " where " + conditionField + " = " + conditionValue);
@@ -266,16 +208,7 @@ public abstract class DatabaseManager {
     }
 
 
-    /**
-     * This method is used to delete a record from a table in the database.
-     * It constructs a SQL DELETE query using the provided table name, condition field and condition value.
-     * It then executes this query and returns the number of rows affected.
-     *
-     * @param table          The name of the table to delete from.
-     * @param conditionField The field name to use in the WHERE clause.
-     * @param conditionValue The value to use in the WHERE clause.
-     * @return The number of rows affected by the delete.
-     */
+    
     public static int delete(String table, String conditionField, String conditionValue) {
         // Print a message indicating the start of the deletion process
         System.out.println("Deleting from table " + table + " where " + conditionField + " = " + conditionValue);

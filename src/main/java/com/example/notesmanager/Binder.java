@@ -5,10 +5,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 
-/**
- * Represents a Binder in the application.
- * A Binder contains a list of Tabs.
- */
+
 public class Binder {
 
 
@@ -31,13 +28,7 @@ public class Binder {
     private int binderColorID;
 
 
-    /**
-     * Constructs a new Binder with the specified binder ID, binder name, and binder color ID.
-     *
-     * @param binderID      The ID of this binder.
-     * @param binderName    The name of this binder.
-     * @param binderColorID The color ID of this binder.
-     */
+    
     public Binder(
             Notebook notebook,
             int binderID,
@@ -52,41 +43,25 @@ public class Binder {
     }
 
 
-    /**
-     * Returns the ID of this binder.
-     *
-     * @return The ID of this binder.
-     */
+    
     public int getBinderID() {
         return this.binderID;
     }
 
 
-    /**
-     * Returns the name of this binder.
-     *
-     * @return The name of this binder.
-     */
+    
     public String getBinderName() {
         return this.binderName;
     }
 
 
-    /**
-     * Returns the color ID of this binder.
-     *
-     * @return The color ID of this binder.
-     */
+    
     public int getBinderColorID() {
         return this.binderColorID;
     }
 
 
-    /**
-     * Returns the list of Tabs in this Binder.
-     *
-     * @return The list of Tabs in this Binder.
-     */
+    
     public ArrayList<Tab> getTabs() {
         return tabs;
     }
@@ -97,14 +72,7 @@ public class Binder {
     }
 
 
-    /**
-     * Fetches all the tabs associated with this binder from the database.
-     * It queries the database for tabs that belong to the user who owns this binder.
-     * The results are parsed into Tab objects and stored in an ArrayList.
-     * If an error occurs during the database query or the parsing of the results, it prints the error and returns null.
-     *
-     * @return An ArrayList of Tab objects representing all the tabs associated with this binder, or null if an error occurs.
-     */
+    
     private ArrayList<Tab> fetchAllTabs() {
         System.out.println("\n***");
         System.out.println("fetchAllTabs() for userID " + this.userID + " / binder " + binderID);
@@ -149,12 +117,7 @@ public class Binder {
     }
 
 
-    /**
-     * Edits the name of this binder and updates it in the database.
-     *
-     * @param newName The new name of this binder.
-     * @return The result of the database update operation.
-     */
+    
     public int editName(String newName) {
         int result = DatabaseManager.update(
                 "binders",
@@ -171,12 +134,7 @@ public class Binder {
     }
 
 
-    /**
-     * Edits the color ID of this binder and updates it in the database.
-     *
-     * @param newColorID The new color ID of this binder.
-     * @return The result of the database update operation.
-     */
+    
     public int editColor(int newColorID) {
         int result = DatabaseManager.update(
                 "binders",
@@ -194,14 +152,7 @@ public class Binder {
     }
 
 
-    /**
-     * Creates a new Tab with the specified name and color ID.
-     * It inserts the new tab into the database, and then returns the new Tab object.
-     *
-     * @param tabName    The name for the new Tab.
-     * @param tabColorID The color ID for the new Tab.
-     * @return The new Tab object.
-     */
+    
     public Tab createTab(String tabName, int tabColorID) {
 
         // Vérif si l'ID de couleur n'est pas négatif avant de faire l'insertion
@@ -225,12 +176,7 @@ public class Binder {
     }
 
 
-    /**
-     * Deletes the tab with the specified ID from this binder.
-     *
-     * @param tabID The ID of the tab to delete.
-     * @return The result of the database delete operation.
-     */
+    
     public int deleteTab(int tabID) {
         System.out.println("\n***");
         System.out.println("deleteTab() : " + " tabID " + tabID);
@@ -255,12 +201,7 @@ public class Binder {
     }
 
 
-    /**
-     * Recherche un Tab (intervalaire) par son nom.
-     *
-     * @param tabName Le nom du Tab (intervalaire) à rechercher.
-     * @return Le Tab (intervalaire) correspondant au nom donné, ou null si non trouvé.
-     */
+    
     public Tab findTabByName(String tabName) {
         for (Tab tab : this.tabs) {
             if (tab.getTabName().equals(tabName)) {

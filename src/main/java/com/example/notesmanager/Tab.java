@@ -5,10 +5,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 
-/**
- * Represents a Tab in the application.
- * A Tab contains a list of Notes.
- */
+
 public class Tab {
 
 
@@ -41,51 +38,31 @@ public class Tab {
     }
 
 
-    /**
-     * Returns the list of Notes in this Tab.
-     *
-     * @return The list of Notes in this Tab.
-     */
+    
     public ArrayList<Note> getNotes() {
         return notes;
     }
 
 
-    /**
-     * Returns the unique identifier for this Tab.
-     *
-     * @return The unique identifier for this Tab.
-     */
+    
     public int getTabID() {
         return tabID;
     }
 
 
-    /**
-     * Returns the unique identifier for the Binder that this Tab belongs to.
-     *
-     * @return The unique identifier for the Binder that this Tab belongs to.
-     */
+    
     public int getBinderID() {
         return binderID;
     }
 
 
-    /**
-     * Returns the name of this Tab.
-     *
-     * @return The name of this Tab.
-     */
+    
     public String getTabName() {
         return tabName;
     }
 
 
-    /**
-     * Returns the unique identifier for the color of this Tab.
-     *
-     * @return The unique identifier for the color of this Tab.
-     */
+    
     public int getTabColorID() {
         return tabColorID;
     }
@@ -95,13 +72,7 @@ public class Tab {
         notes.add(note);
     }
 
-    /**
-     * Edits the name of this Tab.
-     * It updates the tab name in the database and returns the result of the update operation.
-     *
-     * @param newName The new name for this Tab.
-     * @return The result of the update operation. Typically, the number of rows affected.
-     */
+    
     public int editName(String newName) {
         int result = DatabaseManager.update(
                 "tabs",
@@ -119,13 +90,7 @@ public class Tab {
     }
 
 
-    /**
-     * Edits the color ID of this Tab.
-     * It updates the tab color ID in the database and returns the result of the update operation.
-     *
-     * @param newColorID The new color ID for this Tab.
-     * @return The result of the update operation. Typically, the number of rows affected.
-     */
+    
     public int editColor(int newColorID) {
         int result = DatabaseManager.update(
                 "tabs",
@@ -159,13 +124,7 @@ public class Tab {
     }
 
 
-    /**
-     * Deletes the note with the specified ID.
-     * It prints the ID of the note to the console, and then deletes the note from the database.
-     *
-     * @param noteID The unique identifier for the note to be deleted.
-     * @return The result of the delete operation. Typically, the number of rows affected.
-     */
+    
     public int deleteNote(int noteID) {
         System.out.println("\n***");
         System.out.println("deleteNote() : " + " noteID " + noteID);

@@ -15,10 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * The RegisterWindow class extends the Application class and represents the registration window of the application.
- * It contains fields for the stage, scene, and root of the application, as well as input fields for the user's name, email, and password.
- */
+
 public class RegisterWindow extends Application {
 
     // The stage of the application
@@ -47,26 +44,13 @@ public class RegisterWindow extends Application {
     private PasswordField inputRegisterConfirmPassword;
 
 
-    /**
-     * The main method of the application.
-     * It calls the launch method inherited from the Application class to start the JavaFX application.
-     *
-     * @param args the command-line arguments
-     */
+    
     public static void main(String[] args) {
         launch();
     }
 
 
-    /**
-     * The start method is the entry point for the JavaFX application.
-     * It is called after the init method has returned, and after the system is ready for the application to begin running.
-     * <p>
-     * It sets the primary stage for the application, loads the register window FXML file, sets the scene, and displays the stage.
-     *
-     * @param primaryStage the primary stage for this application, onto which the application scene can be set.
-     * @throws Exception if an error occurs during loading the FXML file or setting the scene.
-     */
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -92,22 +76,7 @@ public class RegisterWindow extends Application {
     }
 
 
-    /**
-     * This method is called when the create account button is clicked.
-     * It retrieves the user's name, email, and password from the input fields, checks if they are in the correct format,
-     * and if the entered passwords match.
-     * <p>
-     * If the format of all fields is correct and both of the entered passwords match, it creates a user account in the database and returns the corresponding User object.
-     * If the userID equals -1, it means the email already exists in the database and an alert is shown to the user.
-     * If the userID is 0, it means the database returned an IntegrityConstraintViolation and an alert is shown to the user.
-     * If the userID is greater than 0, it means the user has been successfully created and an alert is shown to the user.
-     * After the user clicks on the OK button of the alert, it navigates to the MainWindow.
-     * <p>
-     * If the format of any field is incorrect or the entered passwords do not match, it shows an alert informing the user to verify their inputs.
-     *
-     * @param e the action event
-     * @throws IOException if an I/O error occurs during navigation
-     */
+    
     public void createAccount(ActionEvent e) throws IOException {
 
         String userEmail = inputRegisterEmail.getText();
@@ -175,13 +144,7 @@ public class RegisterWindow extends Application {
     }
 
 
-    /**
-     * This method is called when the back to login button is clicked.
-     * It loads the login window FXML file, sets the scene, and displays the stage.
-     *
-     * @param e the action event
-     * @throws IOException if an I/O error occurs during loading the FXML file or setting the scene.
-     */
+    
     public void backToLogin(ActionEvent e) throws IOException {
         System.out.println("Back to login");
 

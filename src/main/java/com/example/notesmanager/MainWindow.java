@@ -21,64 +21,34 @@ import java.io.IOException;
 import java.util.*;
 
 
-/**
- * The MainWindow class extends the Application class from the JavaFX library.
- * <p>
- * This class represents the main window of the application. It contains private fields for the stage, scene, root, and various UI elements.
- * The stage represents the top-level container for all JavaFX objects; the scene and root are used to construct the scene graph.
- * The UI elements are annotated with @FXML, which allows them to be injected with values from the FXML markup.
- * The class also contains a static User object, a Notebook object, an ArrayList of Binders, a Note object, and a NoteArea object.
- *
- * @see Application
- * @see Stage
- * @see Scene
- * @see Parent
- * @see LabelManager
- * @see Button
- * @see MenuButton
- * @see HTMLEditor
- */
+
 public class MainWindow extends Application {
 
 
-    /**
-     * The root node of the scene graph. It is an intermediate container for complex scene graph.
-     */
+    
     private Parent root;
 
-    /**
-     * The label displaying the user's name. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     Label userNameLabel;
 
-    /**
-     * The label displaying the note's title. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     Label noteTitle;
 
-    /**
-     * The label displaying note's labels. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     Label noteLabels;
 
-    /**
-     * Pane that integrates the HTMLEditor, the note title, and the labels. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     private Pane noteSelectedPane;
 
-    /**
-     * Pane that integrates the message prompting to select a note. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     private Pane waitingNoteSelectedPane;
 
-    /**
-     * The logout and save buttons. They are annotated with @FXML so their values can be injected from the FXML file.
-     */
+    
     @FXML
     Button btnLogOut, btnSave;
 
@@ -88,51 +58,33 @@ public class MainWindow extends Application {
 
     ComboBox<String> categoryBox;
 
-    /**
-     * The button for creating a new label. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     MenuButton btnFilterLabel;
 
     @FXML
     MenuButton btnChooseLabel;
 
-    /**
-     * The HTML editor for the note area. It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     HTMLEditor noteArea;
 
-    /**
-     * The TreeView UI element for displaying the binder structure in the application.
-     * It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     private TreeView<String> binderTree;
 
-    /**
-     * Button for creating actions. This button is used to trigger the creation of new items in the application.
-     * It is annotated with @FXML so its value can be injected from the FXML file.
-     */
+    
     @FXML
     MenuButton btnCreateAction;
 
-    /**
-     * The current user of the application. This is a static field, meaning it is shared across all instances of the MainWindow class.
-     */
+    
     private static User user;
 
-    /**
-     * The notebook associated with the current user. This notebook contains all the binders and notes for the user.
-     */
+    
     Notebook notebook;
 
 
-    /**
-     * The initialize method is called after all the FXML fields have been injected.
-     * It sets the text of the userNameLabel to greet the user, initializes the notebook with the current user, and gets the binders from the notebook.
-     * It also initializes the note area with the current note and the HTMLEditor from the user interface, and sets the content of the note area to the content of the current note.
-     */
+    
     @FXML
     public void initialize() {
 
@@ -156,14 +108,7 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is called when the logout button is pressed.
-     * It shows a confirmation dialog to the user, asking if they want to save their work before logging out.
-     * If the user confirms, the method navigates back to the LoginWindow.
-     *
-     * @param event the action event
-     * @throws IOException if an I/O error occurs
-     */
+    
     public void logOut(ActionEvent event) throws IOException {
 
         // Create a new confirmation alert
@@ -189,13 +134,7 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is called when the save note button is pressed.
-     * It retrieves the HTML content from the note area and sets it as the content of the current note.
-     * It also prints a debug message to the console.
-     *
-     * @param e the action event
-     */
+    
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
         NoteArea.note.editContent(content);
@@ -456,12 +395,7 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is used to set the user for the MainWindow.
-     * It prints a debug message to the console, sets the static user field to the provided user, and then prints the user's toString representation to the console.
-     *
-     * @param pUser the user to set
-     */
+    
     public static void setUser(User pUser) {
         System.out.println("initUser");
         user = pUser;
@@ -469,11 +403,7 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is used to set the content of the note label dropdown menu.
-     * It fetches all labels from the database and adds them as menu items to the dropdown menu.
-     * Each menu item is set to trigger the setFilter method when selected.
-     */
+    
     public void setLabelFilterDropdownContent(MenuButton menuButton, EventHandler<ActionEvent> callback, boolean updateLabels) {
 
         if (updateLabels) {
@@ -506,30 +436,21 @@ public class MainWindow extends Application {
     }
 
 
-    /**
-     * This method is used to generate the tree view for the notebook.
-     * It creates an instance of the NotebookTreeView class, passing the binderTree and notebook as parameters.
-     * Then, it calls the createTreeView method on the NotebookTreeView instance to generate the tree view.
-     */
+    
     public void generateTreeView() {
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
     }
 
 
-    /**
-     * The application initialization method. This method is called after the init method has returned, and after the system is ready for the application to begin running.
-     *
-     * @param stage the primary stage for this application, onto which the application scene can be set. Applications may create other stages, if needed, but they will not be primary stages.
-     * @throws Exception if something goes wrong
-     */
+    
 
     @Override
     public void start(Stage stage) throws Exception {
 
     }
 
-    /************* Binders ******************/
+    
 
     @FXML
     private void addBinderMenu() {
@@ -652,7 +573,7 @@ public class MainWindow extends Application {
     }
 
 
-    /************* Tabs *******************/
+    
     @FXML
     private void addTabMenu() {
         System.out.println("Selected item: " + binderTree.getSelectionModel().getSelectedItem());
@@ -812,7 +733,7 @@ public class MainWindow extends Application {
     }
 
 
-    /************  Notes  *******************/
+    
 
 
     @FXML
@@ -900,7 +821,7 @@ public class MainWindow extends Application {
     }
 
 
-    /**************************************************/
+    
     @FXML
     private void deleteNoteMenu() {
         TreeItem<String> selectedItem = binderTree.getSelectionModel().getSelectedItem();

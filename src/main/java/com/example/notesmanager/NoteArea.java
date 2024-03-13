@@ -8,10 +8,7 @@ import javafx.scene.web.HTMLEditor;
 
 import java.util.ArrayList;
 
-/**
- * The NoteArea class represents the area where a note is displayed and edited.
- * It contains a Note object and an HTMLEditor object.
- */
+
 public class NoteArea {
 
     // The Note object associated with this NoteArea.
@@ -88,13 +85,7 @@ public class NoteArea {
         return note;
     }
 
-    /**
-     * This method is called when the main window is called the first time.
-     *
-     * @param noteArea                the HTMLEditor object
-     * @param noteSelectedPane        the Pane object that display content
-     * @param waitingNoteSelectedPane the Pane object that display waiting message
-     */
+    
     public static void setNoteArea(
             HTMLEditor noteArea,
             Pane noteSelectedPane,
@@ -116,18 +107,14 @@ public class NoteArea {
     }
 
 
-    /**
-     * This method is called when a note is clicked in order to display its content.
-     */
+    
     public static void setPaneNoteContentVisible() {
         noteSelectedPane.setVisible(true);
         waitingNoteSelectedPane.setVisible(false);
     }
 
 
-    /**
-     * This method is used to verify whether the content pane is currently visible.
-     */
+    
     public static boolean getNoteSelectedPaneStatus() {
         return noteSelectedPane.isVisible();
     }
