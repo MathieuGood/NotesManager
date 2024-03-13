@@ -1,6 +1,7 @@
 package com.example.notesmanager;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -87,6 +88,13 @@ public class MainWindow extends Application {
     
     @FXML
     public void initialize() {
+        //set size constraint
+        Platform.runLater(() -> {
+            Stage stage = (Stage) userNameLabel.getScene().getWindow();
+            stage.setResizable(true);
+            stage.setMinWidth(850.0);
+            stage.setMinHeight(500.0);
+        });
 
         // Set the text of the userNameLabel to greet the user
         userNameLabel.setText(user.getUserName());

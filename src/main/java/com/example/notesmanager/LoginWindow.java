@@ -86,13 +86,12 @@ public class LoginWindow extends Application {
             // Crée une nouvelle scène avec le FXML chargé
             Scene scene = new Scene(fxmlLoader.load());
 
-            // Définit les propriétés du stage principal
-            primaryStage.setResizable(true);
+            // Set the primary stage properties
+            primaryStage.setResizable(false);
             stage.setTitle("NotesManager");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            // Imprime la trace de la pile si une exception se produit
             e.printStackTrace();
         }
     }
@@ -125,9 +124,7 @@ public class LoginWindow extends Application {
 
             // Si l'utilisateur est un objet User (l'email et le mot de passe correspondent)
             if (user != null) {
-                // Utilisateur statique
                 MainWindow.setUser(user);
-
 
                 // Navigue vers MainWindow
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
