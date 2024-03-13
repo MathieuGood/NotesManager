@@ -124,10 +124,16 @@ public class MainWindow extends Application {
         // Show the alert and wait for the user's response
         if (alert.showAndWait().get() == ButtonType.OK) {
             try {
+                //Close the current stage
+                Stage currentStage = (Stage) userNameLabel.getScene().getWindow();
+                currentStage.close();
                 // If the user confirmed, load the LoginWindow
                 root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
+                stage.setMinWidth(284);
+                stage.setMinHeight(476);
+                stage.setResizable(false);
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException ex) {
