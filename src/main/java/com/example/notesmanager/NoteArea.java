@@ -46,6 +46,9 @@ public class NoteArea {
         NoteArea.setLabelsText();
         btnChooseLabel.setDisable(false);
 
+        // Clear the checkmarks from the btnChooseLabel MenuItems
+        btnChooseLabel.getItems().forEach(menuItem -> menuItem.setGraphic(null));
+
         // In the btnChooseLabel MenuItems, add checkmarks to the labels already attached to the note
         btnChooseLabel.getItems().forEach(menuItem -> {
             System.out.println("Print output of the ArrayList note.getLabels() :");
