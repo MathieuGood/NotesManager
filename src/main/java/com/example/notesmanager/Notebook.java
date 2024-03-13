@@ -4,36 +4,65 @@ import java.sql.*;
 import java.util.ArrayList;
 
 
-
+/**
+ * La classe Notebook représente un carnet de notes dans l'application.
+ * Un carnet de notes est associé à un utilisateur unique et contient plusieurs classeurs (Binder).
+ * Chaque classeur peut contenir plusieurs onglets (Tab) et chaque onglet peut contenir plusieurs notes (Note).
+ */
 public class Notebook {
 
 
-    // An ArrayList that holds all the Binder objects associated with this Notebook.
+    /**
+     * Une liste d'objets Binder représentant les classeurs dans le carnet de notes.
+     */
     private ArrayList<Binder> binders = new ArrayList<>();
 
-    // The unique identifier for the User that owns this Notebook.
+
+    /**
+     * L'ID de l'utilisateur associé à ce carnet de notes.
+     */
     private final int userID;
 
 
-    
+    /**
+     * Constructeur de la classe Notebook.
+     * Il initialise l'ID de l'utilisateur avec l'ID de l'utilisateur passé en paramètre et remplit le contenu du carnet de notes.
+     *
+     * @param user L'utilisateur associé à ce carnet de notes.
+     */
     public Notebook(User user) {
         this.userID = user.getUserID();
         setNotebookContent();
     }
 
 
-    
+    /**
+     * Récupère l'ID de l'utilisateur associé à ce carnet de notes.
+     *
+     * @return L'ID de l'utilisateur.
+     */
     public int getUserID() {
         return userID;
     }
 
 
-    
+    /**
+     * Récupère la liste des classeurs dans le carnet de notes.
+     *
+     * @return Une ArrayList contenant les objets Binder du carnet de notes.
+     */
     public ArrayList<Binder> getBinders() {
         return binders;
     }
 
 
+    /**
+     * Récupère une note spécifique en fonction de son ID.
+     * Parcourt tous les classeurs, onglets et notes jusqu'à trouver la note avec l'ID correspondant.
+     *
+     * @param noteID L'ID de la note à récupérer.
+     * @return L'objet Note correspondant à l'ID donné, ou null si aucune note avec cet ID n'est trouvée.
+     */
     public Note getNoteByID(int noteID) {
         for (Binder binder : binders) {
             for (Tab tab : binder.getTabs()) {
@@ -48,13 +77,23 @@ public class Notebook {
     }
 
 
-    
+    /**
+     * Ajoute un classeur à la liste des classeurs du carnet de notes.
+     *
+     * @param binder L'objet Binder à ajouter à la liste.
+     */
     public void addBinderToList(Binder binder) {
         binders.add(binder);
     }
 
 
-    
+    /**
+     * Cette méthode récupère tout le contenu du carnet de notes à partir de la base de données.
+     * Elle effectue une requête SQL SELECT pour récupérer les informations sur les classeurs, les onglets, les notes et les étiquettes associées à l'utilisateur.
+     * Les informations récupérées sont ensuite renvoyées sous forme de ResultSet pour être traitées ultérieurement.
+     *
+     * @return Un ResultSet contenant les informations sur les classeurs, les onglets, les notes et les étiquettes de l'utilisateur.
+     */
     public ResultSet fetchAllNotebookContent() {
 
         System.out.println("\n***");
@@ -89,28 +128,38 @@ public class Notebook {
     }
 
 
-    
+    /**
+     * Cette méthode initialise le contenu du carnet de notes.
+     * Elle appelle la méthode setNotebookContent avec un paramètre null.
+     */
     public void setNotebookContent() {
         setNotebookContent(null);
     }
 
 
-    
+    /**
+     * Cette méthode initialise le contenu du carnet de notes en fonction d'un filtre de nom d'étiquette.
+     * Elle récupère tout le contenu lié au carnet de notes à partir de la base de données et initialise les ID du classeur et de l'onglet actuels.
+     * Elle parcourt ensuite chaque ligne du ResultSet, récupère les données de la ligne actuelle et ajoute les objets Binder, Tab et Note appropriés à la liste des classeurs.
+     * Si un filtre de nom d'étiquette est fourni, elle ne saute pas la ligne actuelle si les étiquettes de la note ne correspondent pas au filtre.
+     *
+     * @param labelNameFilter Le nom de l'étiquette à utiliser comme filtre, ou null si aucun filtre ne doit être appliqué.
+     */
     public void setNotebookContent(String labelNameFilter) {
-        // Clear the binders list
+        // Vide la liste des classeurs
         binders = new ArrayList<>();
 
-        // Fetch all content related to the Notebook from the database
+        // Récupère tout le contenu lié au carnet de notes à partir de la base de données
         ResultSet notebookContent = fetchAllNotebookContent();
 
-        // Initialize current binder and tab IDs
+        // Initialise les ID du classeur et de l'onglet actuels
         int currentBinderID = 0;
         int currentTabID = 0;
 
         try {
-            // Iterate over each row in the ResultSet
+            // Parcourt chaque ligne du ResultSet
             while (notebookContent.next()) {
-                // Retrieve data from the current row of the ResultSet
+                // Récupère les données de la ligne actuelle du ResultSet
                 int binderID = notebookContent.getInt(1);
                 String binderName = notebookContent.getString(2);
                 int binderColorID = notebookContent.getInt(3);
@@ -122,48 +171,37 @@ public class Notebook {
                 String noteLabel1 = notebookContent.getString(9);
                 String noteLabel2 = notebookContent.getString(10);
 
-                // Print the retrieved data
-                //  System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID + " / " + tabID + " / " + tabName + " / " + tabColorID + " / " + noteID + " / " + noteName + " / " + noteColorID);
-
-                // If a labelNameFilter is provided, do not skip the current row if the note's labels do not match the filter
+                // Si un labelNameFilter est fourni, ne pas sauter la ligne actuelle si les étiquettes de la note ne correspondent pas au filtre
                 if (labelNameFilter != null) {
-                    // If either label1 or label2 does not match the filter, skip the current row
+                    // Si ni label1 ni label2 ne correspondent au filtre, sauter la ligne actuelle
                     if (!labelNameFilter.equals(noteLabel1) && !labelNameFilter.equals(noteLabel2)) {
                         continue;
                     }
                 }
 
-                System.out.println("Adding to notebook : " + noteName + " / " + noteLabel1 + " / " + noteLabel2);
-
-                // If the binder ID corresponds to a new binder, create a new Binder object and add it to the binders list
+                // Si l'ID du classeur correspond à un nouveau classeur, crée un nouvel objet Binder et l'ajoute à la liste des classeurs
                 if (binderID != currentBinderID) {
-                    System.out.println("Binder : " + binderName + " / ID #" + binderID);
                     addBinderToList(new Binder(this, binderID, binderName, binderColorID));
                     currentBinderID = binderID;
                 }
 
-                // If the tab ID corresponds to a new tab and is not null, create a new Tab object and add it to the tabs list of the last binder
+                // Si l'ID de l'onglet correspond à un nouvel onglet et n'est pas nul, crée un nouvel objet Tab et l'ajoute à la liste des onglets du dernier classeur
                 if (tabID != currentTabID && tabID != 0) {
-                    System.out.println("  > Tab : " + tabName);
                     binders.getLast().addTabToList(new Tab(binders.getLast(), tabID, tabName, tabColorID));
                     currentTabID = tabID;
                 }
 
-                // If the note ID is not null, create a new Note object and add it to the notes list of the last tab of the last binder
+                // Si l'ID de la note n'est pas nul, crée un nouvel objet Note et l'ajoute à la liste des notes du dernier onglet du dernier classeur
                 if (noteID != 0) {
-                    System.out.println("Checking if " + noteLabel1 + " or " + noteLabel2 + " is null");
-                    // Create a list of LabelNote objects to store the note's labels
+                    // Crée une liste d'objets LabelNote pour stocker les étiquettes de la note
                     ArrayList<NoteLabel> labels = new ArrayList<>();
                     if (noteLabel1 != null) {
                         labels.add(new NoteLabel(noteLabel1));
-                        System.out.println("Adding label " + noteLabel1 + " to note " + noteName);
                     }
                     if (noteLabel2 != null) {
                         labels.add(new NoteLabel(noteLabel2));
-                        System.out.println("Adding label " + noteLabel2 + " to note " + noteName);
                     }
 
-                    System.out.println("\t>> Note : " + noteName);
                     binders.getLast().getTabs().getLast().addNoteToList(new Note(
                             binders.getLast().getTabs().getLast(),
                             noteID,
@@ -173,54 +211,20 @@ public class Notebook {
                 }
             }
         } catch (Exception e) {
-            // Print any exceptions that occur
-            System.out.println("Error : " + e);
+            System.out.println("Erreur : " + e);
         }
     }
 
 
-    
-    private ArrayList<Binder> fetchAllBinders() {
-        System.out.println("\n***");
-        System.out.println("getAllBinders() for userID " + this.userID + " :");
-
-        ResultSet resultSet = DatabaseManager.select(
-                "binders",
-                new String[]{
-                        "binders.binder_id",
-                        "binders.binder_name",
-                        "binders.binder_color_id"
-                },
-                new String[]{"user_id"},
-                new String[]{String.valueOf(userID)}
-        );
-
-        // Create ArrayList to store all Binder objects
-        ArrayList<Binder> binders = new ArrayList<>();
-
-        // Parse query results to new Binder object and store it into ArrayList
-        try {
-            while (resultSet.next()) {
-                // Retrieve data from resultSet
-                int binderID = resultSet.getInt(1);
-                String binderName = resultSet.getString(2);
-                int binderColorID = resultSet.getInt(3);
-
-                // Print out data from resultSet
-                System.out.println("\t> " + binderID + " / " + binderName + " / " + binderColorID);
-
-                // Create new Binder object with parsed data and add it to ArrayList
-                binders.add(new Binder(this, binderID, binderName, binderColorID));
-            }
-        } catch (Exception e) {
-            System.out.println("Error : " + e);
-            return null;
-        }
-        return binders;
-    }
-
-
-    
+    /**
+     * Cette méthode crée un nouveau classeur et l'ajoute à la liste des classeurs du carnet de notes.
+     * Elle effectue une requête SQL INSERT pour ajouter le nouveau classeur à la base de données.
+     * Ensuite, elle crée un nouvel objet Binder avec les informations du nouveau classeur et l'ajoute à la liste des classeurs.
+     *
+     * @param binderName    Le nom du nouveau classeur.
+     * @param binderColorID L'ID de la couleur du nouveau classeur.
+     * @return L'objet Binder du nouveau classeur.
+     */
     public Binder createBinder(String binderName, int binderColorID) {
         System.out.println("\n***");
         System.out.println("createBinder() : " + binderName + " / userID " + userID + " / colorID " + binderColorID);
@@ -237,14 +241,21 @@ public class Notebook {
     }
 
 
-    
+    /**
+     * Cette méthode supprime un classeur de la liste des classeurs du carnet de notes.
+     * Elle effectue une requête SQL DELETE pour supprimer le classeur de la base de données.
+     * Si la requête est réussie, elle supprime l'objet Binder correspondant de la liste des classeurs.
+     *
+     * @param binderID L'ID du classeur à supprimer.
+     * @return Le nombre de lignes affectées par la requête SQL DELETE, ou 0 en cas d'échec.
+     */
     public int deleteBinder(int binderID) {
         System.out.println("\n***");
         System.out.println("deleteBinder() : " + " binderID " + binderID);
 
         int result = DatabaseManager.delete("binders", "binder_id", String.valueOf(binderID));
 
-        // If query is successful, remove the Binder object from the ArrayList
+        // Si la requête est réussie, supprime l'objet Binder de la liste des classeurs
         if (result > 0) {
 
             for (Binder binder : binders) {
@@ -257,7 +268,14 @@ public class Notebook {
         return result;
     }
 
-    
+
+    /**
+     * Cette méthode récupère un classeur spécifique en fonction de son nom.
+     * Elle parcourt tous les classeurs jusqu'à trouver le classeur avec le nom correspondant.
+     *
+     * @param binderName Le nom du classeur à récupérer.
+     * @return L'objet Binder correspondant au nom donné, ou null si aucun classeur avec ce nom n'est trouvé.
+     */
     public Binder getBinderByName(String binderName) {
         for (Binder binder : this.binders) {
             if (binder.getBinderName().equalsIgnoreCase(binderName)) {
@@ -267,7 +285,14 @@ public class Notebook {
         return null;
     }
 
-    
+
+    /**
+     * Cette méthode récupère un onglet spécifique en fonction de son nom.
+     * Elle parcourt tous les classeurs et onglets jusqu'à trouver l'onglet avec le nom correspondant.
+     *
+     * @param tabName Le nom de l'onglet à récupérer.
+     * @return L'objet Tab correspondant au nom donné, ou null si aucun onglet avec ce nom n'est trouvé.
+     */
     public Tab getTabByName(String tabName) {
         for (Binder binder : binders) {
             for (Tab tab : binder.getTabs()) {
@@ -280,6 +305,15 @@ public class Notebook {
     }
 
 
+    /**
+     * Cette méthode récupère une note spécifique en fonction de son nom, du nom de l'onglet et du nom du classeur.
+     * Elle parcourt tous les classeurs, onglets et notes jusqu'à trouver la note avec le nom correspondant dans l'onglet et le classeur spécifiés.
+     *
+     * @param noteName   Le nom de la note à récupérer.
+     * @param tabName    Le nom de l'onglet contenant la note.
+     * @param binderName Le nom du classeur contenant l'onglet.
+     * @return L'objet Note correspondant aux noms donnés, ou null si aucune note avec ce nom n'est trouvée dans l'onglet et le classeur spécifiés.
+     */
     public Note getNoteFromBinderTabNoteName(String noteName, String tabName, String binderName) {
 
         ArrayList<Binder> binders = this.getBinders();

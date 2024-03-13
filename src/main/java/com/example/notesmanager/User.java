@@ -2,64 +2,74 @@ package com.example.notesmanager;
 
 import java.sql.*;
 
-
-
+/**
+ * Cette classe représente un utilisateur dans le gestionnaire de notes.
+ * Un utilisateur est identifié par son identifiant unique, son nom et son email.
+ */
 public class User {
 
 
-    // The unique identifier for the User.
+    /**
+     * L'identifiant unique de l'utilisateur.
+     */
     private int userID;
 
-    // The name of the User.
+
+    /**
+     * Le nom de l'utilisateur.
+     */
     private String userName;
 
-    // The email of the User.
+
+    /**
+     * L'email de l'utilisateur.
+     */
     private String userEmail;
 
 
-    
+    /**
+     * Constructeur de la classe User.
+     * Il initialise un nouvel utilisateur avec les informations fournies.
+     *
+     * @param userID    L'identifiant unique de l'utilisateur.
+     * @param userName  Le nom de l'utilisateur.
+     * @param userEmail L'email de l'utilisateur.
+     */
     public User(int userID, String userName, String userEmail) {
         this.userID = userID;
         this.userName = userName;
         this.userEmail = userEmail;
     }
 
-    
+
+    /**
+     * Récupère l'identifiant unique de cet utilisateur.
+     *
+     * @return L'identifiant unique de cet utilisateur.
+     */
     public int getUserID() {
         return userID;
     }
 
 
-    
+    /**
+     * Récupère le nom de cet utilisateur.
+     *
+     * @return Le nom de cet utilisateur.
+     */
     public String getUserName() {
         return userName;
     }
 
 
-    
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-
-    
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-
-    
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-
-    
+    /**
+     * Crée un nouvel utilisateur avec le nom, l'email et le mot de passe spécifiés, et l'ajoute à la base de données.
+     *
+     * @param userName     Le nom du nouvel utilisateur.
+     * @param userEmail    L'email du nouvel utilisateur.
+     * @param userPassword Le mot de passe du nouvel utilisateur.
+     * @return L'identifiant unique du nouvel utilisateur.
+     */
     public static int createUser(String userName, String userEmail, String userPassword) {
         System.out.println("Creating new user " + userName + " / " + userEmail);
 
@@ -71,7 +81,13 @@ public class User {
     }
 
 
-    
+    /**
+     * Vérifie si le mot de passe fourni correspond à l'email de l'utilisateur dans la base de données.
+     *
+     * @param userEmail    L'email de l'utilisateur.
+     * @param userPassword Le mot de passe à vérifier.
+     * @return Un objet User si le mot de passe correspond, null sinon.
+     */
     public static User checkPasswordMatch(String userEmail, String userPassword) {
         System.out.println("Checking password match for " + userEmail);
 
@@ -86,7 +102,6 @@ public class User {
                 int userID = resultSet.getInt(1);
                 String userName = resultSet.getString(2);
 
-                // Print out data from resultSet
                 System.out.println("\t> userID " + userID + " / userName " + userName + " / userEmail " + userEmail);
 
                 return new User(userID, userName, userEmail);

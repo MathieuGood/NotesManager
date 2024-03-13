@@ -2,18 +2,28 @@ package com.example.notesmanager;
 
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.util.Objects;
-
-
+/**
+ * Classe Main qui lance l'application NotesManager.
+ */
 public class Main {
 
+
+    /**
+     * Démarre l'application en définissant le titre du stage principal.
+     *
+     * @param primaryStage Le stage principal pour cette application.
+     */
     public void start(Stage primaryStage) {
         primaryStage.setTitle("NotesManager");
     }
 
 
-    
+    /**
+     * La méthode principale pour cette application.
+     * Elle lance la fenêtre de connexion.
+     *
+     * @param args Les arguments de la ligne de commande.
+     */
     public static void main(String[] args) {
         LoginWindow.main(args);
     }

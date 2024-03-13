@@ -6,29 +6,54 @@ import java.sql.*;
 import java.util.*;
 
 
+/**
+ * La classe DatabaseManager est une classe abstraite qui gère la connexion à la base de données.
+ * Elle contient des méthodes pour ouvrir et fermer la connexion, ainsi que pour effectuer des opérations CRUD.
+ */
 public abstract class DatabaseManager {
 
 
-    
+    /**
+     * Les propriétés de la base de données, chargées à partir d'un fichier de propriétés.
+     */
     final static private Properties properties = loadProperties();
 
-    // The host of the database.
+
+    /**
+     * L'hôte de la base de données.
+     */
     static private String dbHost;
 
-    // The port number of the database.
+
+    /**
+     * Le numéro de port de la base de données.
+     */
     static private String dbPort;
 
-    // The username used to connect to the database.
+
+    /**
+     * Le nom d'utilisateur utilisé pour se connecter à la base de données.
+     */
     static private String dbUsername;
 
-    // The password used to connect to the database.
+
+    /**
+     * Le mot de passe utilisé pour se connecter à la base de données.
+     */
     static private String dbPassword;
 
-    // The name of the database.
+
+    /**
+     * Le nom de la base de données.
+     */
     static private String dbName;
 
 
-    
+    /**
+     * Charge les propriétés de la base de données à partir d'un fichier de propriétés.
+     *
+     * @return Les propriétés de la base de données.
+     */
     private static Properties loadProperties() {
         Properties properties = new Properties();
         try (FileInputStream fileInputStream = new FileInputStream("src/main/java/com/example/notesmanager/database.properties")) {
@@ -45,35 +70,51 @@ public abstract class DatabaseManager {
     }
 
 
-    
+    /**
+     * Ouvre une connexion à la base de données.
+     *
+     * @return La connexion à la base de données.
+     * @throws SQLException Si une erreur SQL se produit lors de l'ouverture de la connexion.
+     */
     public static Connection openDatabaseConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mariadb://" + dbHost + ":" + dbPort + "/" + dbName, dbUsername, dbPassword);
     }
 
-
-    
+    /**
+     * Ferme une connexion à la base de données.
+     *
+     * @param connection La connexion à fermer.
+     * @throws SQLException Si une erreur SQL se produit lors de la fermeture de la connexion.
+     */
     public static void closeDatabaseConnection(Connection connection) throws SQLException {
         connection.close();
     }
 
 
-    
+    /**
+     * Exécute une requête SELECT sur la base de données.
+     *
+     * @param table           Le nom de la table à partir de laquelle sélectionner.
+     * @param fields          Les champs à sélectionner.
+     * @param conditionFields Les champs de condition pour la clause WHERE.
+     * @param conditionValues Les valeurs de condition pour la clause WHERE.
+     * @return Un ResultSet contenant les résultats de la requête. Retourne null si une exception SQL se produit.
+     */
     public static ResultSet select(String table, String[] fields, String[] conditionFields, String[] conditionValues) {
-        // Print a message indicating the start of the selection process
-        System.out.println("Selecting from table " + table);
+        System.out.println("Sélection à partir de la table " + table);
 
         try {
-            // Open a connection to the database
+            // Ouvre une connexion à la base de données
             Connection connection = openDatabaseConnection();
 
-            // Create a comma-separated string of field names
+            // Crée une chaîne de caractères séparée par des virgules des noms de champs
             String fieldPlaceholders = String.join(", ", fields);
 
-            // Construct the SQL SELECT query
+            // Construit la requête SQL SELECT
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.append("SELECT ").append(fieldPlaceholders).append(" FROM ").append(table);
 
-            // Append WHERE clause if conditions are provided
+            // Ajoute la clause WHERE si des conditions sont fournies
             if (conditionFields != null && conditionFields.length > 0 && conditionValues != null && conditionValues.length > 0) {
                 queryBuilder.append(" WHERE ");
                 for (int i = 0; i < Math.min(conditionFields.length, conditionValues.length); i++) {
@@ -84,215 +125,236 @@ public abstract class DatabaseManager {
                 }
             }
 
-            // Prepare the SQL statement
+            // Prépare l'instruction SQL
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
-            System.out.println("Executing QUERY : " + statement.toString());
+            System.out.println("Exécution de la REQUÊTE : " + statement.toString());
 
-            // Set the values for the condition fields in the prepared statement
+            // Définit les valeurs pour les champs de condition dans l'instruction préparée
             if (conditionValues != null && conditionValues.length > 0) {
                 for (int i = 0; i < conditionValues.length; i++) {
                     statement.setString(i + 1, conditionValues[i]);
                 }
             }
 
-            // Execute the statement and get the result set
+            // Exécute l'instruction et obtient le ResultSet
             ResultSet resultSet = statement.executeQuery();
 
-            // Close the database connection
+            // Ferme la connexion à la base de données
             closeDatabaseConnection(connection);
 
             return resultSet;
 
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
-            System.out.println("SQL Error : " + e);
+            System.out.println("Erreur SQL : " + e);
             return null;
         }
     }
 
 
-    
+    /**
+     * Exécute une requête INSERT sur la base de données.
+     *
+     * @param table  Le nom de la table dans laquelle insérer.
+     * @param fields Les champs dans lesquels insérer les valeurs.
+     * @param values Les valeurs à insérer.
+     * @return L'ID de la ligne insérée. Retourne 0 si une violation de contrainte d'intégrité SQL se produit, -1 si une exception SQL se produit.
+     */
     public static int insert(String table, String[] fields, String[] values) {
-        // Print a message indicating the start of the insertion process
 
         try {
-            // Open a connection to the database
+            // Ouvre une connexion à la base de données
             Connection connection = openDatabaseConnection();
 
-            // Create placeholders for field names and values
+            // Crée des espaces réservés pour les noms de champs et les valeurs
             String fieldPlaceholders = String.join(", ", fields);
             String valuePlaceholders = String.join(", ", Collections.nCopies(fields.length, "?"));
 
-            // Construct the SQL INSERT query
+            // Construit la requête SQL INSERT
             String query = "INSERT INTO " + table + " (" + fieldPlaceholders + ") VALUES (" + valuePlaceholders + ")";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            System.out.println("Executing QUERY : " + statement.toString());
+            System.out.println("Exécution de la REQUÊTE : " + statement.toString());
 
-            // Set values for the prepared statement
+            // Définit les valeurs pour l'instruction préparée
             for (int i = 0; i < values.length; i++) {
                 statement.setString(i + 1, values[i]);
             }
 
-            // Execute the statement
+            // Exécute l'instruction
             int queryResult = statement.executeUpdate();
-            System.out.println("Executing QUERY : " + statement.toString());
+            System.out.println("Exécution de la REQUÊTE : " + statement.toString());
 
-            // Get last inserted ID
+            // Obtient le dernier ID inséré
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();
             int lastInsertedID = rs.getInt(1);
 
-            // Close the database connection
+            // Ferme la connexion à la base de données
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the insertion process
-            System.out.println("   > Insert done with result " + queryResult + ". ID of inserted row : " + lastInsertedID);
+            // Affiche un message indiquant la fin du processus d'insertion
+            System.out.println("   > Insertion terminée avec le résultat " + queryResult + ". ID de la ligne insérée : " + lastInsertedID);
 
-            // Return the ID of the inserted row
+            // Retourne l'ID de la ligne insérée
             return lastInsertedID;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // Print an error message if a SQL integrity constraint violation occurs
-            System.out.println("SQL Integrity Constraint Violation : " + e);
+            System.out.println("Violation de contrainte d'intégrité SQL : " + e);
             return 0;
 
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
-            System.out.println("SQL Error : " + e);
+            System.out.println("Erreur SQL : " + e);
             return -1;
         }
     }
 
 
-    
+    /**
+     * Exécute une requête UPDATE sur la base de données.
+     *
+     * @param table          Le nom de la table à mettre à jour.
+     * @param field          Le champ à mettre à jour.
+     * @param value          La nouvelle valeur pour le champ.
+     * @param conditionField Le champ de condition pour la clause WHERE.
+     * @param conditionValue La valeur de condition pour la clause WHERE.
+     * @return Le nombre de lignes affectées. Retourne 0 si une violation de contrainte d'intégrité SQL se produit, -1 si une exception SQL se produit.
+     */
     public static int update(String table, String field, String value, String conditionField, String conditionValue) {
-        // Print a message indicating the start of the update process
-        System.out.println("Updating table " + table + " with " + field + " = " + value + " where " + conditionField + " = " + conditionValue);
+
+        System.out.println("Mise à jour de la table " + table + " avec " + field + " = " + value + " où " + conditionField + " = " + conditionValue);
 
         try {
-            // Open a connection to the database
+            // Ouvre une connexion à la base de données
             Connection connection = openDatabaseConnection();
 
-            // Construct the SQL UPDATE query
+            // Construit la requête SQL UPDATE
             String query = "UPDATE " + table + " SET " + field + " = ?" + " WHERE " + conditionField + " = ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-            // Set values for the prepared statement
+            // Définit les valeurs pour l'instruction préparée
             statement.setString(1, value);
             statement.setString(2, conditionValue);
 
-            // Execute the statement and get the number of rows affected
+            // Exécute l'instruction et obtient le nombre de lignes affectées
             int queryResult = statement.executeUpdate();
-            System.out.println("Executing QUERY : " + statement.toString());
+            System.out.println("Exécution de la REQUÊTE : " + statement.toString());
 
-            // Close the database connection
+            // Ferme la connexion à la base de données
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the update process
-            System.out.println("   > Update done with result " + queryResult);
+            // Affiche un message indiquant la fin du processus de mise à jour
+            System.out.println("   > Mise à jour terminée avec le résultat " + queryResult);
 
-            // Return the number of rows affected
+            // Retourne le nombre de lignes affectées
             return queryResult;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // Print an error message if a SQL integrity constraint violation occurs
-            System.out.println("SQL Integrity Constraint Violation : " + e);
+            System.out.println("Violation de contrainte d'intégrité SQL : " + e);
             return 0;
 
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
-            System.out.println("SQL Error : " + e);
+            System.out.println("Erreur SQL : " + e);
             return -1;
         }
     }
 
 
-    
+    /**
+     * Exécute une requête DELETE sur la base de données.
+     *
+     * @param table          Le nom de la table à partir de laquelle supprimer.
+     * @param conditionField Le champ de condition pour la clause WHERE.
+     * @param conditionValue La valeur de condition pour la clause WHERE.
+     * @return Le nombre de lignes affectées. Retourne 0 si une violation de contrainte d'intégrité SQL se produit, -1 si une exception SQL se produit.
+     */
     public static int delete(String table, String conditionField, String conditionValue) {
-        // Print a message indicating the start of the deletion process
-        System.out.println("Deleting from table " + table + " where " + conditionField + " = " + conditionValue);
+
+        System.out.println("Suppression de la table " + table + " où " + conditionField + " = " + conditionValue);
 
         try {
-            // Open a connection to the database
+            // Ouvre une connexion à la base de données
             Connection connection = openDatabaseConnection();
 
-            // Construct the SQL DELETE query
+            // Construit la requête SQL DELETE
             String query = "DELETE FROM " + table + " WHERE " + conditionField + " = ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-            // Set values for the prepared statement
+            // Définit les valeurs pour l'instruction préparée
             statement.setString(1, conditionValue);
 
-            // Execute the statement and get the number of rows affected
+            // Exécute l'instruction et obtient le nombre de lignes affectées
             int queryResult = statement.executeUpdate();
-            System.out.println("Executing QUERY : " + statement.toString());
+            System.out.println("Exécution de la REQUÊTE : " + statement.toString());
 
-            // Close the database connection
+            // Ferme la connexion à la base de données
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the deletion process
-            System.out.println("   > Delete done with result " + queryResult);
+            // Affiche un message indiquant la fin du processus de suppression
+            System.out.println("   > Suppression terminée avec le résultat " + queryResult);
 
-            // Return the number of rows affected
+            // Retourne le nombre de lignes affectées
             return queryResult;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // Print an error message if a SQL integrity constraint violation occurs
-            System.out.println("SQL Integrity Constraint Violation : " + e);
+            System.out.println("Violation de contrainte d'intégrité SQL : " + e);
             return 0;
 
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
-            System.out.println("SQL Error : " + e);
+            System.out.println("Erreur SQL : " + e);
             return -1;
         }
     }
 
 
+    /**
+     * Exécute une procédure stockée sur la base de données.
+     *
+     * @param procedureName Le nom de la procédure stockée à exécuter.
+     * @param inParameters  Les paramètres d'entrée pour la procédure stockée.
+     * @param outParameter  Le paramètre de sortie de la procédure stockée.
+     * @return La valeur du paramètre de sortie de la procédure stockée. Retourne -1 si une exception SQL se produit.
+     */
     public static int call(String procedureName, String[] inParameters, String outParameter) {
-        // Print a message indicating the start of the procedure call
-        System.out.println("Calling " + procedureName + " with parameters " + Arrays.toString(inParameters));
+
+        System.out.println("Appel de " + procedureName + " avec les paramètres " + Arrays.toString(inParameters));
 
         try {
-            // Open a connection to the database
+            // Ouvre une connexion à la base de données
             Connection connection = openDatabaseConnection();
 
-            // Construct the SQL CALL query
+            // Construit la requête SQL CALL
             String query = "{CALL " + procedureName + "(" + String.join(", ", Collections.nCopies(inParameters.length + 1, "?")) + ")}";
-            System.out.println("Query string before prepared statement : " + query);
+            System.out.println("Chaîne de requête avant l'instruction préparée : " + query);
             CallableStatement statement = connection.prepareCall(query);
 
-            // Set values for the prepared statement
+            // Définit les valeurs pour l'instruction préparée
             for (int i = 0; i < inParameters.length; i++) {
                 statement.setString(i + 1, inParameters[i]);
             }
 
-            // Register the OUT parameter
+            // Enregistre le paramètre OUT
             statement.registerOutParameter(inParameters.length + 1, Types.INTEGER);
 
-            // Execute the statement
+            // Exécute l'instruction
             statement.execute();
 
-            // Retrieve the value of the OUT parameter
+            // Récupère la valeur du paramètre OUT
             int success = statement.getInt(inParameters.length + 1);
 
-            // Close the statement and the database connection
+            // Ferme l'instruction et la connexion à la base de données
             statement.close();
             closeDatabaseConnection(connection);
 
-            // Print a message indicating the end of the procedure call
-            System.out.println("Procedure called and returned " + success);
+            // Affiche un message indiquant la fin de l'appel de la procédure
+            System.out.println("Procédure appelée et retournée " + success);
 
-            // Return the result
             return success;
+
         } catch (SQLException e) {
-            // Print an error message if a SQL exception occurs
-            System.out.println("SQL Error : " + e);
+            System.out.println("Erreur SQL : " + e);
             return -1;
         }
     }
-
 
 }

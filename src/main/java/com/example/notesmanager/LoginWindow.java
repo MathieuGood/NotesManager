@@ -16,83 +16,120 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-
+/**
+ * Classe LoginWindow qui étend Application.
+ * Cette classe représente la fenêtre de connexion de l'application.
+ */
 public class LoginWindow extends Application {
 
-    // The primary stage for this application, onto which the application scene can be set.
+
+    /**
+     * Le stage principal pour cette application, sur lequel la scène de l'application peut être définie.
+     */
     private Stage stage;
 
-    // The scene for this application. The scene is the container for the visible content in the JavaFX scene graph.
+
+    /**
+     * La scène pour cette application. La scène est le conteneur pour le contenu visible dans le graphe de scène JavaFX.
+     */
     private Scene scene;
 
-    // The root node of the scene graph. It is an intermediate container for complex scene graph.
+
+    /**
+     * Le nœud racine du graphe de scène. C'est un conteneur intermédiaire pour le graphe de scène complexe.
+     */
     private Parent root;
 
-    // The TextField where the user enters their email for login. It is annotated with @FXML so its value can be injected from the FXML file.
+
+    /**
+     * Le TextField où l'utilisateur entre son email pour se connecter. Il est annoté avec @FXML pour que sa valeur puisse être injectée à partir du fichier FXML.
+     */
     @FXML
     private TextField inputLoginEmail;
 
-    // The PasswordField where the user enters their password for login. It is annotated with @FXML so its value can be injected from the FXML file.
+
+    /**
+     * Le PasswordField où l'utilisateur entre son mot de passe pour se connecter. Il est annoté avec @FXML pour que sa valeur puisse être injectée à partir du fichier FXML.
+     */
     @FXML
     private PasswordField inputLoginPassword;
 
 
-
-    
+    /**
+     * La méthode principale pour cette application.
+     * Elle imprime un message à la console et lance l'application.
+     *
+     * @param args Les arguments de la ligne de commande.
+     */
     public static void main(String[] args) {
         System.out.println("main login window function");
         launch();
     }
 
 
-    
+    /**
+     * Démarre l'application en définissant le stage principal et en chargeant le fichier FXML de la fenêtre de connexion.
+     *
+     * @param primaryStage Le stage principal pour cette application.
+     * @throws Exception Si une exception se produit lors du chargement du fichier FXML.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // Set the primary stage for this application
+        // Définit le stage principal pour cette application
         this.stage = primaryStage;
 
         try {
-            // Load the login window FXML file
+            // Charge le fichier FXML de la fenêtre de connexion
             FXMLLoader fxmlLoader = new FXMLLoader(LoginWindow.class.getResource("loginWindow.fxml"));
 
-            // Create a new scene with the loaded FXML
+            // Crée une nouvelle scène avec le FXML chargé
             Scene scene = new Scene(fxmlLoader.load());
 
-            // Set the primary stage properties
+            // Définit les propriétés du stage principal
             primaryStage.setResizable(true);
             stage.setTitle("NotesManager");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            // Print the stack trace if an exception occurs
+            // Imprime la trace de la pile si une exception se produit
             e.printStackTrace();
         }
     }
 
 
-    
+    /**
+     * Méthode pour gérer l'action de connexion lorsqu'un utilisateur tente de se connecter.
+     * Cette méthode récupère l'email et le mot de passe entrés par l'utilisateur, vérifie leur format,
+     * puis vérifie si l'email et le mot de passe correspondent à un utilisateur existant.
+     * Si c'est le cas, l'utilisateur est redirigé vers la fenêtre principale.
+     * Sinon, une alerte est affichée pour informer l'utilisateur que l'email et le mot de passe ne correspondent pas,
+     * ou que le format de l'email et/ou du mot de passe est incorrect.
+     *
+     * @param e L'événement d'action qui a déclenché cette méthode (c'est-à-dire l'utilisateur qui clique sur le bouton de connexion).
+     * @throws IOException Si une erreur se produit lors du chargement de la fenêtre principale.
+     */
     public void login(ActionEvent e) throws IOException {
         System.out.println("Login button pressed");
 
-        // Get userEmail and userPassword from fields
+        // Récupère l'email et le mot de passe de l'utilisateur à partir des champs
         String userEmail = inputLoginEmail.getText();
         String userPassword = inputLoginPassword.getText();
         System.out.println("User : " + userEmail + "  / Password : " + userPassword);
 
-        // Check if email and password are in the right format
+        // Vérifie si l'email et le mot de passe sont dans le bon format
         if (FormatChecker.checkEmailFormat(userEmail) && FormatChecker.checkPasswordFormat(userPassword)) {
 
-            // Instantiate user and assign it to User object if email and password match
+            // Instancie l'utilisateur et l'attribue à l'objet User si l'email et le mot de passe correspondent
             User user = User.checkPasswordMatch(userEmail, userPassword);
 
-            // If user is a User object (email and password match)
+            // Si l'utilisateur est un objet User (l'email et le mot de passe correspondent)
             if (user != null) {
-                // Static user
+                // Utilisateur statique
                 MainWindow.setUser(user);
 
 
-                // Navigate to MainWindow
+                // Navigue vers MainWindow
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
                 root = loader.load();
 
@@ -121,7 +158,13 @@ public class LoginWindow extends Application {
     }
 
 
-    
+    /**
+     * Méthode pour gérer l'action d'enregistrement lorsqu'un utilisateur tente de s'inscrire.
+     * Cette méthode charge le fichier FXML de la fenêtre d'enregistrement et affiche cette fenêtre.
+     *
+     * @param e L'événement d'action qui a déclenché cette méthode (c'est-à-dire l'utilisateur qui clique sur le bouton d'enregistrement).
+     * @throws IOException Si une erreur se produit lors du chargement de la fenêtre d'enregistrement.
+     */
     public void register(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
         root = loader.load();
@@ -131,4 +174,5 @@ public class LoginWindow extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 }

@@ -18,67 +18,102 @@ import java.io.IOException;
 
 public class RegisterWindow extends Application {
 
-    // The stage of the application
+
+    /**
+     * Le stage de l'application.
+     */
     private Stage stage;
 
-    // The scene of the application
+
+    /**
+     * La scène de l'application.
+     */
     private Scene scene;
 
-    // The root of the application
+
+    /**
+     * La racine de l'application.
+     */
     private Parent root;
 
-    // The input field for the user's name
+
+    /**
+     * Le champ de saisie pour le nom de l'utilisateur.
+     */
     @FXML
     private TextField inputRegisterName;
 
-    // The input field for the user's email
+
+    /**
+     * Le champ de saisie pour l'email de l'utilisateur.
+     */
     @FXML
     private TextField inputRegisterEmail;
 
-    // The input field for the user's password
+
+    /**
+     * Le champ de saisie pour le mot de passe de l'utilisateur.
+     */
     @FXML
     private PasswordField inputRegisterPassword;
 
-    // The input field for the user's password confirmation
+
+    /**
+     * Le champ de saisie pour la confirmation du mot de passe de l'utilisateur.
+     */
     @FXML
     private PasswordField inputRegisterConfirmPassword;
 
 
-    
+    /**
+     * La méthode principale de l'application.
+     * Elle lance l'application.
+     *
+     * @param args Les arguments de la ligne de commande.
+     */
     public static void main(String[] args) {
         launch();
     }
 
-
-    
+    /**
+     * Cette méthode est appelée lors du lancement de l'application.
+     * Elle charge le fichier FXML de la fenêtre d'inscription et l'affiche.
+     *
+     * @param primaryStage Le stage principal de l'application.
+     * @throws Exception Si une exception se produit lors du chargement du fichier FXML.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // Set the primary stage for this application
         this.stage = primaryStage;
 
         try {
-            // Load the register window FXML file
             FXMLLoader fxmlLoader = new FXMLLoader(LoginWindow.class.getResource("registerWindow.fxml"));
 
-            // Create a new scene with the loaded FXML
+            // Crée une nouvelle scène avec le FXML chargé
             Scene scene = new Scene(fxmlLoader.load());
 
-            // Set the primary stage properties
+            // Définit les propriétés du stage principal
             primaryStage.setResizable(false);
             stage.setTitle("NotesManager");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            // Print the stack trace if an exception occurs
             e.printStackTrace();
         }
     }
 
 
-    
+    /**
+     * Cette méthode est appelée lorsque l'utilisateur clique sur le bouton "Créer un compte".
+     * Elle récupère les informations entrées par l'utilisateur, vérifie leur format et tente de créer un compte utilisateur.
+     *
+     * @param e L'événement d'action qui a déclenché cette méthode.
+     * @throws IOException Si une erreur se produit lors du chargement du fichier FXML.
+     */
     public void createAccount(ActionEvent e) throws IOException {
 
+        // Récupère les informations entrées par l'utilisateur
         String userEmail = inputRegisterEmail.getText();
         String userName = inputRegisterName.getText();
         String userPassword = inputRegisterPassword.getText();
@@ -87,36 +122,36 @@ public class RegisterWindow extends Application {
         System.out.println("Create account button clicked");
         System.out.println("Registering user with the following information :" + userEmail + " " + userName + " " + userPassword + " " + userConfirmPassword);
 
-        // If format of all fields is correct and both of the entered passwords match
+        // Si le format de tous les champs est correct et que les deux mots de passe entrés correspondent
         if (FormatChecker.checkEmailFormat(userEmail)
                 && FormatChecker.checkNameFormat(userName)
                 && FormatChecker.checkPasswordFormat(userPassword)
                 && userPassword.equals(userConfirmPassword)) {
-            // Create user account in database and return the corresponding User object
+            // Crée un compte utilisateur dans la base de données et renvoie l'objet User correspondant
             int userID = User.createUser(userName, userEmail, userPassword);
 
-            // If userID equals -1, e-mail already exists in database
+            // Si userID est inférieur ou égal à 0, l'e-mail existe déjà dans la base de données
             if (userID <= 0) {
                 String alertContent;
-                // If userID is 0, database returned an IntegrityConstraintViolation
+                // Si userID est 0, la base de données a renvoyé une IntegrityConstraintViolation
                 if (userID == 0) {
-                    alertContent = "An account has already been registered to " + userEmail + ". Login with this address or specify a different e-mail to create new account.";
+                    alertContent = "Un compte a déjà été enregistré à " + userEmail + ". Connectez-vous avec cette adresse ou spécifiez un autre e-mail pour créer un nouveau compte.";
                 } else {
-                    alertContent = "Error occurred during account creation, please try again.";
+                    alertContent = "Une erreur s'est produite lors de la création du compte, veuillez réessayer.";
                 }
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Account creation");
-                alert.setHeaderText("Impossible to create account");
+                alert.setTitle("Création de compte");
+                alert.setHeaderText("Impossible de créer le compte");
                 alert.setContentText(alertContent);
                 alert.show();
             } else {
-                // If userID > 0, user has been successfully created
+                // Si userID > 0, l'utilisateur a été créé avec succès
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Account creation");
-                alert.setHeaderText("Account creation");
-                alert.setContentText("Account " + userEmail + " successfully created");
+                alert.setTitle("Création de compte");
+                alert.setHeaderText("Création de compte");
+                alert.setContentText("Compte " + userEmail + " créé avec succès");
 
-                // Wait for the user to click on the OK button to navigate to MainWindow
+                // Attend que l'utilisateur clique sur le bouton OK pour naviguer vers MainWindow
                 if (alert.showAndWait().get() == ButtonType.OK) {
                     MainWindow.setUser(new User(userID, userName, userEmail));
 
@@ -131,34 +166,40 @@ public class RegisterWindow extends Application {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Account creation");
-            alert.setHeaderText("Impossible to create account");
+            alert.setTitle("Création de compte");
+            alert.setHeaderText("Impossible de créer le compte");
             alert.setContentText("""
-                    Please verify that :
-                     - Your e-mail is correct
-                     - Your name contains at least one letter
-                     - Your password has at least 8 characters including 1 uppercase letter, 1 lowercase letter, 1 special character and 1 digit
+                    Veuillez vérifier que :
+                     - Votre e-mail est correct
+                     - Votre nom contient au moins une lettre
+                     - Votre mot de passe a au moins 8 caractères dont 1 majuscule, 1 minuscule, 1 caractère spécial et 1 chiffre
                     """);
             alert.show();
         }
     }
 
 
-    
+    /**
+     * Cette méthode est appelée lorsque l'utilisateur clique sur le bouton "Retour à la connexion".
+     * Elle charge le fichier FXML de la fenêtre de connexion et l'affiche.
+     *
+     * @param e L'événement d'action qui a déclenché cette méthode.
+     * @throws IOException Si une erreur se produit lors du chargement du fichier FXML.
+     */
     public void backToLogin(ActionEvent e) throws IOException {
         System.out.println("Back to login");
 
-        // Load the login window FXML file
+        // Charge le fichier FXML de la fenêtre de connexion
         FXMLLoader loader = new FXMLLoader(getClass().getResource("loginWindow.fxml"));
         root = loader.load();
 
-        // Get the stage from the source of the action event
+        // Récupère le stage à partir de la source de l'événement d'action
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
-        // Create a new scene with the loaded FXML
+        // Crée une nouvelle scène avec le FXML chargé
         scene = new Scene(root);
 
-        // Set the scene on the stage and display the stage
+        // Définit la scène sur le stage et affiche le stage
         stage.setScene(scene);
         stage.show();
     }

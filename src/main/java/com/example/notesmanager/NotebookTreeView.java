@@ -1,8 +1,6 @@
 package com.example.notesmanager;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
@@ -10,31 +8,50 @@ import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
-
+/**
+ * Cette classe représente la vue en arborescence d'un carnet de notes.
+ * Elle contient des méthodes pour créer la vue en arborescence et obtenir un cercle de couleur pour représenter les couleurs des classeurs, onglets et notes.
+ */
 public class NotebookTreeView {
 
 
-    
+    /**
+     * L'arbre de classeurs à afficher.
+     */
     private TreeView<String> binderTree;
 
-    
+
+    /**
+     * Le carnet de notes à afficher.
+     */
     private Notebook notebook;
 
-    
+
+    /**
+     * L'élément racine de l'arbre de classeurs.
+     */
     TreeItem<String> rootItem = new TreeItem<>("Main node");
 
 
-    
+    /**
+     * Constructeur de la classe NotebookTreeView.
+     *
+     * @param binderTree L'arbre de classeurs à afficher.
+     * @param notebook   Le carnet de notes à afficher.
+     */
     public NotebookTreeView(TreeView<String> binderTree, Notebook notebook) {
         this.binderTree = binderTree;
         this.notebook = notebook;
     }
 
 
-    
+    /**
+     * Cette méthode crée la vue en arborescence du carnet de notes.
+     * Elle parcourt tous les classeurs, onglets et notes du carnet de notes et les ajoute à l'arbre de classeurs.
+     */
     public void createTreeView() {
 
-        System.out.println(">>>>>>>> Creating tree view");
+        System.out.println("> Creating tree view");
 
         binderTree.setRoot(rootItem);
         binderTree.setShowRoot(false);
@@ -56,7 +73,7 @@ public class NotebookTreeView {
 
                     TreeItem<String> noteItem = new TreeItem<>(note.getNoteName());
 
-                    // Print note name on click on a note in the tree view
+                    // Affiche le contenu de la note dans la zone de texte lorsqu'on clique sur la note.
                     noteItem.addEventHandler(TreeItem.treeNotificationEvent(), event -> {
                         System.out.println("Clicked on note: " + note.getNoteName());
                     });
@@ -82,13 +99,6 @@ public class NotebookTreeView {
 
                         NoteArea.setContentInNoteArea(note);
 
-                        // TODO : Clear the checkmarks from the MenuItems in the "Choose labels" menu
-
-
-                        // TODO : Add checkmarks to the labels that are already in the note
-
-
-
                         if (!NoteArea.getNoteSelectedPaneStatus()) {
                             NoteArea.setPaneNoteContentVisible();
                         }
@@ -101,7 +111,12 @@ public class NotebookTreeView {
     }
 
 
-    
+    /**
+     * Cette méthode crée un cercle de couleur pour représenter la couleur d'un classeur, onglet ou note.
+     *
+     * @param colorHex La valeur hexadécimale de la couleur.
+     * @return Un cercle de la couleur spécifiée.
+     */
     private Node getColorCircle(String colorHex) {
         return new Circle(5, Color.web(colorHex));
     }
