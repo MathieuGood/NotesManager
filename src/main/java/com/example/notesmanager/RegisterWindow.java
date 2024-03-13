@@ -139,17 +139,11 @@ public class RegisterWindow extends Application {
                 } else {
                     alertContent = "Une erreur s'est produite lors de la création du compte, veuillez réessayer.";
                 }
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Création de compte");
-                alert.setHeaderText("Impossible de créer le compte");
-                alert.setContentText(alertContent);
-                alert.show();
+
+                CustomAlert.create(Alert.AlertType.INFORMATION, "Création de compte", "Impossible de créer le compte", alertContent, "show");
             } else {
                 // Si userID > 0, l'utilisateur a été créé avec succès
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Création de compte");
-                alert.setHeaderText("Création de compte");
-                alert.setContentText("Compte " + userEmail + " créé avec succès");
+               Alert alert =  CustomAlert.create(Alert.AlertType.INFORMATION, "Création de compte", "Création de compte", "Compte " + userEmail + " créé avec succès", null);
 
                 // Attend que l'utilisateur clique sur le bouton OK pour naviguer vers MainWindow
                 if (alert.showAndWait().get() == ButtonType.OK) {
@@ -165,16 +159,18 @@ public class RegisterWindow extends Application {
                 }
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Création de compte");
-            alert.setHeaderText("Impossible de créer le compte");
-            alert.setContentText("""
+
+            CustomAlert.create(
+                    Alert.AlertType.INFORMATION,
+                    "Création de compte",
+                    "Impossible de créer le compte",
+                    """
                     Veuillez vérifier que :
                      - Votre e-mail est correct
                      - Votre nom contient au moins une lettre
                      - Votre mot de passe a au moins 8 caractères dont 1 majuscule, 1 minuscule, 1 caractère spécial et 1 chiffre
-                    """);
-            alert.show();
+                    """,
+                    "show");
         }
     }
 
