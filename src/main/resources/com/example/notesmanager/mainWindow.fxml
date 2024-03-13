@@ -12,9 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<AnchorPane minHeight="500.0" minWidth="950.0" prefHeight="500.0" prefWidth="950.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notesmanager.MainWindow">
+<AnchorPane minHeight="500.0" minWidth="850.0" prefHeight="500.0" prefWidth="850.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notesmanager.MainWindow">
     <children>
-        <Label fx:id="userNameLabel" layoutX="366.0" layoutY="15.0" text="Bonjour :" />
+        <Label fx:id="userNameLabel" layoutX="15.0" layoutY="15.0" text="Bonjour :" />
         <SplitPane dividerPositions="0.2" layoutX="-1.0" layoutY="73.0" prefHeight="329.0" prefWidth="600.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">
             <items>
                 <AnchorPane minWidth="100.0" prefHeight="361.0" prefWidth="294.0">
@@ -44,7 +44,7 @@
             </items>
         </SplitPane>
 
-        <MenuButton fx:id="btnFilterLabel" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="10.0">
+        <MenuButton fx:id="btnFilterLabel" layoutX="141.0" layoutY="41.333333333333336" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="41.333333333333336">
             <items>
                 <MenuItem onAction="#setLabelFilter" text="All labels" />
             </items>
@@ -52,7 +52,7 @@
         <Button fx:id="btnSave" layoutX="434.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="10.0" />
         <Button fx:id="btnLogOut" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#logOut" text="Quitter" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
 
-        <MenuButton fx:id="btnCreateAction" layoutX="131.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.topAnchor="10.0">
+        <MenuButton fx:id="btnCreateAction" layoutX="268.0" layoutY="41.333333333333336" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.topAnchor="41.333333333333336">
             <items>
 
                 <MenuItem onAction="#addBinderMenu" text="Add Binder" />
@@ -73,7 +73,7 @@
 
             </items>
         </MenuButton>
-        <MenuButton fx:id="btnChooseLabel" layoutX="249.0" layoutY="10.0" mnemonicParsing="false" prefWidth="105.0" text="Choose label">
+        <MenuButton fx:id="btnChooseLabel" layoutX="495.0" layoutY="41.0" mnemonicParsing="false" prefWidth="105.0" text="Choose label" AnchorPane.rightAnchor="249.66666666666669">
             <items>
             </items>
         </MenuButton>
