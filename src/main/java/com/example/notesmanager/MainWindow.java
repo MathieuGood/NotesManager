@@ -166,11 +166,7 @@ public class MainWindow extends Application {
      */
     public void logOut(ActionEvent event) throws IOException {
 
-        // Create a new confirmation alert
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("LogOut");
-        alert.setHeaderText("You're about to logout");
-        alert.setContentText("Do you want to save before existing");
+        Alert alert = CustomAlert.create(Alert.AlertType.CONFIRMATION, "LogOut", "You're about to logout", "Do you want to save before existing", null);
 
         // Show the alert and wait for the user's response
         if (alert.showAndWait().get() == ButtonType.OK) {
@@ -378,8 +374,11 @@ public class MainWindow extends Application {
         String headerText = null;
         String contentText = null;
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Statut");
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Statut");
+
+        Alert alert = CustomAlert.create(Alert.AlertType.CONFIRMATION, "Statut", null, null, null);
+
 
         if (FormatChecker.checkLabelFormat(labelField)) {
             int result;
@@ -417,8 +416,8 @@ public class MainWindow extends Application {
                 }
 
                 // Set the alert's header and content text
-                alert.setHeaderText(headerText);
-                alert.setContentText(contentText);
+                CustomAlert.setHeader(headerText);
+                CustomAlert.setContent(contentText);
 
                 setLabelFilterDropdownContent(btnFilterLabel, this::setLabelFilter, true);
                 setLabelFilterDropdownContent(btnChooseLabel, this::setNoteLabel, false);
@@ -437,19 +436,19 @@ public class MainWindow extends Application {
 
 
             } else if (result == -1) {
-                alert.setHeaderText("Action impossible");
-                alert.setContentText("Le label " + labelField + " existe déjà dans la liste");
+                CustomAlert.setHeader("Action impossible");
+                CustomAlert.setContent("Le label " + labelField + " existe déjà dans la liste");
                 nameField.clear();
             } else {
-                alert.setHeaderText("Une erreur s'est produit");
-                alert.setContentText("Echec dans d'exécution pour le label " + labelField);
+                CustomAlert.setHeader("Une erreur s'est produit");
+                CustomAlert.setContent("Echec dans d'exécution pour le label " + labelField);
             }
 
             nameField.clear();
         } else {
             System.out.println("Incorrect format for label. Length need to be 4 and 10");
-            alert.setHeaderText("Impossible to execute the action");
-            alert.setContentText("Format of label is incorrect.");
+            CustomAlert.setHeader("Impossible to execute the action");
+            CustomAlert.setContent("Format of label is incorrect.");
         }
 
         alert.show();
@@ -610,7 +609,9 @@ public class MainWindow extends Application {
                     selectedItem.setGraphic(circle);
                 });
             } else {
-                showAlert("Classeur non trouvé.");
+
+                CustomAlert.create(Alert.AlertType.WARNING, "Action Requise", null, "Classeur non trouvé.", "showAndWait");
+//                showAlert("Classeur non trouvé.");
             }
         } else {
             showAlert("Veuillez sélectionner un classeur à éditer.");
