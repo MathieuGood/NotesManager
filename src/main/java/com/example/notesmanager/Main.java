@@ -9,16 +9,6 @@ public class Main {
 
 
     /**
-     * Démarre l'application en définissant le titre du stage principal.
-     *
-     * @param primaryStage Le stage principal pour cette application.
-     */
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("NotesManager");
-    }
-
-
-    /**
      * La méthode principale pour cette application.
      * Elle lance la fenêtre de connexion.
      *
