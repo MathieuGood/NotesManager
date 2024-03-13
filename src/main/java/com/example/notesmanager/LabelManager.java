@@ -14,6 +14,7 @@ public class LabelManager {
      */
     private static Map<Integer, String> labels = new java.util.HashMap<>();
 
+
     /**
      * Récupère toutes les étiquettes de la base de données.
      *
@@ -98,7 +99,7 @@ public class LabelManager {
     /**
      * Met à jour une étiquette existante.
      *
-     * @param labelName Le nom actuel de l'étiquette.
+     * @param labelName    Le nom actuel de l'étiquette.
      * @param newLabelName Le nouveau nom de l'étiquette.
      * @return Le nombre de lignes affectées par l'opération de mise à jour.
      */

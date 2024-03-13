@@ -1,10 +1,7 @@
 package com.example.notesmanager;
 
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
@@ -60,13 +57,13 @@ public class NotebookTreeView {
         for (Binder binder : binders) {
             String binderColorHex = binder.getColorHex();
             TreeItem<String> binderItem = new TreeItem<>(binder.getBinderName());
-            binderItem.setGraphic(getColorCircle(binderColorHex));
+            binderItem.setGraphic(NotebookColor.getColorCircle(binderColorHex));
 
             ArrayList<Tab> tabs = binder.getTabs();
             for (Tab tab : tabs) {
 
                 TreeItem<String> tabItem = new TreeItem<>(tab.getTabName());
-                tabItem.setGraphic(getColorCircle(tab.getColorHex()));
+                tabItem.setGraphic(NotebookColor.getColorCircle(tab.getColorHex()));
 
                 ArrayList<Note> notes = tab.getNotes();
                 for (Note note : notes) {
@@ -110,14 +107,4 @@ public class NotebookTreeView {
         });
     }
 
-
-    /**
-     * Cette méthode crée un cercle de couleur pour représenter la couleur d'un classeur, onglet ou note.
-     *
-     * @param colorHex La valeur hexadécimale de la couleur.
-     * @return Un cercle de la couleur spécifiée.
-     */
-    private Node getColorCircle(String colorHex) {
-        return new Circle(5, Color.web(colorHex));
-    }
 }

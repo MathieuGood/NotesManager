@@ -95,6 +95,7 @@ public class NoteArea {
 
         noteArea.setHtmlText(note.getNoteContent());
         noteTitle.setText(note.getNoteName());
+        noteTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
         NoteArea.setLabelsText();
         btnChooseLabel.setDisable(false);
 

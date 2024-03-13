@@ -1,5 +1,9 @@
 package com.example.notesmanager;
 
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,5 +122,11 @@ public class NotebookColor {
         fetchAllColors();
         return new ArrayList<>(colorNames.values());
     }
+
+    public static Node getColorCircle(String colorHex) {
+        return new Circle(5, Color.web(colorHex));
+    }
+
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.notesmanager;
 
+import javafx.scene.control.Alert;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -191,15 +193,18 @@ public class Note {
 
         // Vérification si la note a déjà deux étiquettes ou si l'étiquette choisie est déjà appliquée à la note
         if (labels.size() == 2) {
-            // Affichage d'un message indiquant que la note a déjà deux étiquettes
-            System.out.println("Impossible d'appliquer l'étiquette " + labelName + " La note a déjà deux étiquettes");
-            // Affichage de toutes les étiquettes de la note
-            System.out.println("Étiquettes dans la note " + this.noteID + " : ");
+
             for (NoteLabel label : labels) {
                 System.out.println(label.getLabelName());
             }
 
-            // TODO : Ajouter une alerte
+            CustomAlert.create(
+                    Alert.AlertType.INFORMATION,
+                    "Erreur",
+                    "Erreur",
+                    "Impossible d'appliquer l'étiquette " + labelName + " La note a déjà deux étiquettes",
+                    "show"
+            );
 
             return 0;
 
@@ -212,7 +217,13 @@ public class Note {
                 System.out.println(label.getLabelName());
             }
 
-            // TODO : Ajouter une alerte
+            CustomAlert.create(
+                    Alert.AlertType.INFORMATION,
+                    "Erreur",
+                    "Erreur",
+                    "Impossible d'appliquer l'étiquette " + labelName + " La note porte déjà cette étiquette",
+                    "show"
+            );
 
             return 0;
 

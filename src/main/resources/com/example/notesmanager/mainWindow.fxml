@@ -44,9 +44,9 @@
             </items>
         </SplitPane>
 
-        <MenuButton fx:id="btnFilterLabel" layoutX="134.0" layoutY="41.333333333333336" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Label filter" AnchorPane.topAnchor="41.333333333333336">
+        <MenuButton fx:id="btnFilterLabel" layoutX="134.0" layoutY="41.333333333333336" mnemonicParsing="false" onAction="#setLabelFilter" prefHeight="25.0" prefWidth="117.0" text="Filtre étiquette" AnchorPane.topAnchor="41.333333333333336">
             <items>
-                <MenuItem onAction="#setLabelFilter" text="All labels" />
+                <MenuItem onAction="#setLabelFilter" text="Tous" />
             </items>
         </MenuButton>
         <Button fx:id="btnSave" layoutX="687.0" layoutY="41.0" mnemonicParsing="false" onAction="#saveNote" text="Sauvegarder" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="40.0" />
@@ -55,21 +55,21 @@
         <MenuButton fx:id="btnCreateAction" layoutX="7.0" layoutY="41.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Actions" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="41.0">
             <items>
 
-                <MenuItem onAction="#addBinderMenu" text="Add Binder" />
-                <MenuItem onAction="#editBinderMenu" text="Edit Binder" />
-                <MenuItem onAction="#deleteBinderMenu" text="Delete Binder" />
+                <MenuItem onAction="#addBinderMenu" text="Ajouter Classeur" />
+                <MenuItem onAction="#editBinderMenu" text="Modifier nom Classeur" />
+                <MenuItem onAction="#deleteBinderMenu" text="Supprimer Classeur" />
 
                 <SeparatorMenuItem />
 
-                <MenuItem onAction="#addTabMenu" text="Add Tab" />
-                <MenuItem onAction="#editTabMenu" text="Edit Tab" />
-                <MenuItem onAction="#deleteTabMenu" text="Delete Tab" />
+                <MenuItem onAction="#addTabMenu" text="Ajouter Intercalaire" />
+                <MenuItem onAction="#editTabMenu" text="Modifier nom Intercalaire" />
+                <MenuItem onAction="#deleteTabMenu" text="Supprimer Intercalaire" />
 
                 <SeparatorMenuItem />
 
-                <MenuItem onAction="#addNoteMenu" text="Add Note" />
-                <MenuItem onAction="#editNoteMenu" text="Edit Note" />
-                <MenuItem onAction="#deleteNoteMenu" text="Delete Note" />
+                <MenuItem onAction="#addNoteMenu" text="Ajouter Note" />
+                <MenuItem onAction="#editNoteMenu" text="Modifier titre Note" />
+                <MenuItem onAction="#deleteNoteMenu" text="Supprimer Note" />
 
             </items>
         </MenuButton>
@@ -77,7 +77,7 @@
             <items>
             </items>
         </MenuButton>
-        <Button fx:id="btnHandleLabels" layoutX="261.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleLabels" prefHeight="25.0" prefWidth="117.0" text="Gestion des labels" />
+        <Button fx:id="btnHandleLabels" layoutX="261.0" layoutY="41.0" mnemonicParsing="false" onAction="#labelManagementDialog" prefHeight="25.0" prefWidth="117.0" text="Gestion étiquettes" />
 
 
     </children>
