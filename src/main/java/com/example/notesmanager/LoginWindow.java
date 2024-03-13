@@ -136,21 +136,11 @@ public class LoginWindow extends Application {
                 stage.show();
             } else {
                 System.out.println("E-mail and password DO NOT match!");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Impossible to login");
-                alert.setHeaderText("Impossible to login");
-                alert.setContentText("E-mail and password do not match");
-                alert.show();
-
+                CustomAlert.create(Alert.AlertType.INFORMATION, "Impossible to login", "Impossible to login", "E-mail and password do not match", "show");
             }
         } else {
             System.out.println("Incorrect format for either e-mail or password.");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Impossible to login");
-            alert.setHeaderText("Impossible to login");
-            alert.setContentText("Format of e-mail and/or password is incorrect.");
-            alert.show();
-
+            CustomAlert.create(Alert.AlertType.INFORMATION, "Impossible to login", "Impossible to login", "Format of e-mail and/or password is incorrect.", "show");
         }
     }
 

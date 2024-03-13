@@ -6,9 +6,7 @@ public class CustomAlert {
 
     public static Alert alert;
     public static String title;
-
     public static String header;
-
     public static String content;
 
     public static void setTitle(String title) {
@@ -33,9 +31,9 @@ public class CustomAlert {
         CustomAlert.header = header;
         CustomAlert.content = content;
 
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        CustomAlert.alert.setTitle(title);
+        CustomAlert.alert.setHeaderText(header);
+        CustomAlert.alert.setContentText(content);
 
         if (typeDisplay != null) {
             if (typeDisplay.equals("showAndWait")) alert.showAndWait();
@@ -44,6 +42,4 @@ public class CustomAlert {
 
         return alert;
     }
-
-
 }

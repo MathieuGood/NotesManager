@@ -85,7 +85,12 @@ public class MainWindow extends Application {
     Notebook notebook;
 
 
-    
+    @Override
+    public void start(Stage stage) throws Exception {
+
+    }
+
+
     @FXML
     public void initialize() {
         //set size constraint
@@ -148,6 +153,8 @@ public class MainWindow extends Application {
     public void saveNote(ActionEvent e) {
         String content = noteArea.getHtmlText();
         NoteArea.note.editContent(content);
+
+        CustomAlert.create(Alert.AlertType.INFORMATION, "Confirmation", null, "Note bien sauvegardé", "show");
         System.out.println("btn save note");
     }
 
@@ -327,11 +334,7 @@ public class MainWindow extends Application {
         String headerText = null;
         String contentText = null;
 
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Statut");
-
         Alert alert = CustomAlert.create(Alert.AlertType.CONFIRMATION, "Statut", null, null, null);
-
 
         if (FormatChecker.checkLabelFormat(labelField)) {
             int result;
@@ -449,21 +452,11 @@ public class MainWindow extends Application {
     }
 
 
-    
     public void generateTreeView() {
         NotebookTreeView notebookTreeView = new NotebookTreeView(binderTree, notebook);
         notebookTreeView.createTreeView();
     }
 
-
-    
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
-    }
-
-    
 
     @FXML
     private void addBinderMenu() {
@@ -490,15 +483,21 @@ public class MainWindow extends Application {
 
                 Binder newBinder = notebook.createBinder(binderName, binderColorId);
 
-                //  code hexadécimal de la couleur du nouveau classeur
-                String colorHex = NotebookColor.getHexColorByID(binderColorId);
-                Node circle = getColorCircle(colorHex);
+                if(newBinder != null) {
+                    CustomAlert.create(Alert.AlertType.INFORMATION,"Information", null, "Création réussi", "show");
 
-                TreeItem<String> newBinderItem = new TreeItem<>(binderName);
-                newBinderItem.setGraphic(circle);
+                    //  code hexadécimal de la couleur du nouveau classeur
+                    String colorHex = NotebookColor.getHexColorByID(binderColorId);
+                    Node circle = getColorCircle(colorHex);
 
-                // Ajout du nouveau classeur à la racine de l'arbre
-                binderTree.getRoot().getChildren().add(newBinderItem);
+                    TreeItem<String> newBinderItem = new TreeItem<>(binderName);
+                    newBinderItem.setGraphic(circle);
+
+                    // Ajout du nouveau classeur à la racine de l'arbre
+                    binderTree.getRoot().getChildren().add(newBinderItem);
+                } else {
+                    CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Oups ! Une erreur s'est produite lors de la création du classeur", "show");
+                }
             }
         }
     }
@@ -543,13 +542,14 @@ public class MainWindow extends Application {
                     Node circle = getColorCircle(colorHex);
                     selectedItem.setGraphic(circle);
                 });
-            } else {
 
-                CustomAlert.create(Alert.AlertType.WARNING, "Action Requise", null, "Classeur non trouvé.", "showAndWait");
-//                showAlert("Classeur non trouvé.");
+                CustomAlert.create(Alert.AlertType.INFORMATION,"Erreur", null, "Classeur édité.", "showAndWait");
+
+            } else {
+                CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Classeur non trouvé.", "showAndWait");
             }
         } else {
-            showAlert("Veuillez sélectionner un classeur à éditer.");
+            CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Veuillez sélectionner un classeur à éditer.", "showAndWait");
         }
     }
 
@@ -562,13 +562,9 @@ public class MainWindow extends Application {
             String binderName = selectedItem.getValue();
             Binder selectedBinder = notebook.getBinderByName(binderName);
 
+            Alert alert = CustomAlert.create(Alert.AlertType.WARNING, "Confirmation de suppression", null, "Supprimer le classeur \" + binderName + \" ?", "Êtes-vous sûr ? Cette action est irréversible.");
 
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Confirmation de suppression");
-            confirmAlert.setHeaderText("Supprimer le classeur \"" + binderName + "\" ?");
-            confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible et supprimera tous les intercalaires et notes associés.");
-
-            Optional<ButtonType> result = confirmAlert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
 
                 // Suppression du classeur
@@ -579,11 +575,11 @@ public class MainWindow extends Application {
 
                     binderTree.getRoot().getChildren().remove(selectedItem);
                 } else {
-                    showAlert("Erreur lors de la suppression du classeur.");
+                    CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Erreur lors de la suppression du classeur.", "showAndWait");
                 }
             }
         } else {
-            showAlert("Veuillez sélectionner un classeur à supprimer.");
+            CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Veuillez sélectionner un classeur à supprimer.", "showAndWait");
         }
     }
 
@@ -627,26 +623,32 @@ public class MainWindow extends Application {
                         if (tabColorID >= 0) {
                             Tab newtab = binder.createTab(tabName, tabColorID);
 
-                            //  code hexadécimal de la couleur du nouveau classeur
-                            String colorHex = NotebookColor.getHexColorByID(tabColorID);
-                            Node circle = getColorCircle(colorHex);
+                            if (newtab != null) {
+                                CustomAlert.create(Alert.AlertType.INFORMATION,"Information", null, "Intercalaire bien créée", "show");
 
-                            TreeItem<String> newTabItem = new TreeItem<>(tabName);
-                            newTabItem.setGraphic(circle);
+                                //  code hexadécimal de la couleur du nouveau classeur
+                                String colorHex = NotebookColor.getHexColorByID(tabColorID);
+                                Node circle = getColorCircle(colorHex);
 
-                            selectedBinder.getChildren().add(newTabItem);
+                                TreeItem<String> newTabItem = new TreeItem<>(tabName);
+                                newTabItem.setGraphic(circle);
+
+                                selectedBinder.getChildren().add(newTabItem);
+                            } else {
+                                CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Oups ! Une erreur s'est produite lors de la création de l'intercalaire", "show");
+                            }
+
+
                         } else {
-                            showAlert("La couleur sélectionnée est invalide.");
+                            CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "La couleur sélectionnée est invalide.", "show");
                         }
                     }
                 }
             } else {
-                System.out.println("Erreur : Binder correspondant au nom sélectionné introuvable.");
-                showAlert("Veuillez sélectionner un classeur pour ajouter un intercalaire.");
+                CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Veuillez sélectionner un classeur pour ajouter un intercalaire.", "show");
             }
         } else {
-            System.out.println("Erreur : Aucun classeur sélectionné.");
-            showAlert("Aucun classeur sélectionné.");
+            CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Aucun classeur sélectionné.", "show");
         }
     }
 
@@ -670,7 +672,6 @@ public class MainWindow extends Application {
 
                     Optional<String> nameResult = nameDialog.showAndWait();
                     nameResult.ifPresent(newName -> {
-
                         selectedTab.editName(newName);
                         selectedItem.setValue(newName);
                     });
@@ -694,13 +695,11 @@ public class MainWindow extends Application {
                         }
                     });
                 } else {
-                    showAlert("Intercalaire non trouvé.");
+                    CustomAlert.create(Alert.AlertType.WARNING,"Information", null, "Intercalaire non trouvé.", "showAndWait");
                 }
-            } else {
-                showAlert("Veuillez sélectionner un intercalaire à éditer.");
             }
         } else {
-            showAlert("Aucun élément sélectionné.");
+            CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Veuillez sélectionner un intercalaire à éditer.", "showAndWait");
         }
     }
 
@@ -716,13 +715,9 @@ public class MainWindow extends Application {
             Tab selectedTab = notebook.getTabByName(selectedTabName);
 
             if ((selectedTab != null)) {
+                Alert alert = CustomAlert.create(Alert.AlertType.CONFIRMATION, "Confirmation de suppression", "Supprimer l'intercalaire " + selectedTabName + " ?", "Aucun élément sélectionné.", null);
 
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmation de suppression");
-                confirmAlert.setHeaderText("Supprimer l'intercalaire \"" + selectedTabName + "\" ?");
-                confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
-
-                Optional<ButtonType> result = confirmAlert.showAndWait();
+                Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     Binder binder = notebook.getBinderByName(selectedItem.getParent().getValue());
                     if (binder != null) {
@@ -731,24 +726,19 @@ public class MainWindow extends Application {
                         if (deleteResult > 0) {
                             selectedItem.getParent().getChildren().remove(selectedItem);
                         } else {
-                            showAlert("Erreur lors de la suppression de l'intercalaire.");
+                            CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Erreur lors de la suppression de l'intercalaire.", "showAndWait");
                         }
-
                     }
                 } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
-                    System.out.println("Vous avez annulé la suppressionde l'intercalaire.");
+                    CustomAlert.create(Alert.AlertType.INFORMATION,"Information", null, "Vous avez annulé la suppressionde l'intercalaire.", "showAndWait");
                 }
 
             } else {
-                showAlert("Veuillez sélectionner un intercalaire à supprimer.");
+                CustomAlert.create(Alert.AlertType.INFORMATION, "Erreur", null, "Veuillez sélectionner un intercalaire à supprimer.", "showAndWait");
             }
-
         }
-
     }
 
-
-    
 
 
     @FXML
@@ -757,7 +747,6 @@ public class MainWindow extends Application {
         System.out.println("Selected item: " + binderTree.getSelectionModel().getSelectedItem());
 
         TreeItem<String> selectedNameTab = binderTree.getSelectionModel().getSelectedItem();
-
 
         if (selectedNameTab != null && selectedNameTab.getParent() != null && selectedNameTab.getParent().getParent() == binderTree.getRoot()) {
 
@@ -774,19 +763,27 @@ public class MainWindow extends Application {
 
                     Note newNote = selectedTab.createNote(name);
 
-                    // Mettez à jour l'interface utilisateur
-                    TreeItem<String> newNoteItem = new TreeItem<>(name);
-                    selectedNameTab.getChildren().add(newNoteItem);
+                    if (newNote != null) {
+                        CustomAlert.create(Alert.AlertType.INFORMATION, "Information", null, "Note bien créé", "show");
 
-                    NoteArea.setContentInNoteArea(newNote);
-                    noteArea.setHtmlText(newNote.getNoteContent());
+                        // Mettez à jour l'interface utilisateur
+                        TreeItem<String> newNoteItem = new TreeItem<>(name);
+                        selectedNameTab.getChildren().add(newNoteItem);
+
+                        NoteArea.setContentInNoteArea(newNote);
+                        noteArea.setHtmlText(newNote.getNoteContent());
+                    } else {
+                        CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Oups ! Une erreur s'est produite lors de la création de la note", "show");
+                    }
                 });
             } else {
-                showAlert("Intercalaire non trouvé.");
+                CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Intercalaire non trouvé.", "show");
             }
         } else {
-            showAlert("Veuillez sélectionner un intercalaire pour ajouter une note.");
+            CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Veuillez sélectionner un intercalaire pour ajouter une note.", "show");
         }
+
+
     }
 
     @FXML
@@ -818,21 +815,22 @@ public class MainWindow extends Application {
                         if (updateResult > 0) {
                             selectedItem.setValue(newName);
                             NoteArea.noteTitle.setText(newName);
+
+                            CustomAlert.create(Alert.AlertType.INFORMATION,"Information", null, "Note bien modifiée", "show");
                         } else {
-                            showAlert("Erreur lors de la mise à jour du nom de la note.");
+                            CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Oups ! Une erreur s'est produite lors de la modification de la note", "show");
                         }
 
                     });
                 } else {
-                    showAlert("Note non trouvé.");
+                    CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Note non trouvé", "show");
                 }
             } else {
-                showAlert("Intercalaire non trouvé.");
+                CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Intercalaire non trouvé.", "show");
             }
         } else {
-            showAlert("Veuillez sélectionner une note à éditer.");
+            CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Veuillez sélectionner une note à éditer.", "show");
         }
-
     }
 
 
@@ -852,10 +850,7 @@ public class MainWindow extends Application {
 
                 if (selectedNote != null) {
 
-                    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirmAlert.setTitle("Confirmation de suppression");
-                    confirmAlert.setHeaderText("Supprimer la note \"" + selectedNote.getNoteName() + "\" ?");
-                    confirmAlert.setContentText("Êtes-vous sûr ? Cette action est irréversible.");
+                    Alert confirmAlert = CustomAlert.create(Alert.AlertType.CONFIRMATION, "Confirmation de suppression", "Supprimer la note " + selectedNote.getNoteName() + " ?", "Êtes-vous sûr ? Cette action est irréversible.", null);
 
                     Optional<ButtonType> result = confirmAlert.showAndWait();
                     if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -869,28 +864,23 @@ public class MainWindow extends Application {
                             noteSelectedPane.setVisible(false);
                             waitingNoteSelectedPane.setVisible(true);
                             NoteArea.btnChooseLabel.setDisable(true);
+
+                            CustomAlert.create(Alert.AlertType.INFORMATION, "Information", null, "Note bien supprimé.", "show");
+
                         } else {
-                            showAlert("Erreur lors de la suppression de la note.");
+                            CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Erreur lors de la suppression de la note.", "show");
                         }
                     } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
-                        System.out.println("Vous avez annulé la suppression de la note.");
+                        CustomAlert.create(Alert.AlertType.INFORMATION, "Information", null, "Vous avez annulé la suppression de la note.", "show");
                     }
                 } else {
-                    showAlert("Veuillez sélectionner une note à supprimer.");
+                    CustomAlert.create(Alert.AlertType.WARNING,"Erreur", null, "Veuillez sélectionner une note à supprimer.", "show");
                 }
+            } else {
+                CustomAlert.create(Alert.AlertType.WARNING, "Erreur", null, "Veuillez sélectionner une note à supprimer.", "show");
             }
         }
     }
-
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Action Requise");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 
     private Node getColorCircle(String colorHex) {
         return new Circle(5, Color.web(colorHex));
