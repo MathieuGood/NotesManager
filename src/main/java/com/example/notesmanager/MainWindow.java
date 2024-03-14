@@ -553,14 +553,18 @@ public class MainWindow extends Application {
                 CustomAlert.setHeader("Erreur");
                 CustomAlert.setContent("L'étiquette " + labelField + " existe déjà dans la liste");
                 nameField.clear();
+                categoryBox.getSelectionModel().clearSelection();
+
             } else {
                 CustomAlert.setHeader("Erreur");
                 CustomAlert.setContent("L'étiquette " + labelField + " n'a pas pu être ajoutée.");
+                categoryBox.getSelectionModel().clearSelection();
             }
             nameField.clear();
 
         } else {
             System.out.println("Erreur");
+            categoryBox.getSelectionModel().clearSelection();
             CustomAlert.setHeader("Format incorrect");
             CustomAlert.setContent("La longeur du nom de l'étiquette doit être comprise entre 2 et 16 caractères.");
         }
