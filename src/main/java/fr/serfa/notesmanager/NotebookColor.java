@@ -1,4 +1,4 @@
-package com.example.notesmanager;
+package fr.serfa.notesmanager;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;

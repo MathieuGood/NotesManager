@@ -1,4 +1,4 @@
-package com.example.notesmanager;
+package fr.serfa.notesmanager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

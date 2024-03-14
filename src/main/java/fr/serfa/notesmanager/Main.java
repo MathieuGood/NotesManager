@@ -1,6 +1,4 @@
-package com.example.notesmanager;
-
-import javafx.stage.Stage;
+package fr.serfa.notesmanager;
 
 /**
  * Classe Main qui lance l'application NotesManager.

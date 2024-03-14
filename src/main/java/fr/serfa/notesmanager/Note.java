@@ -1,4 +1,4 @@
-package com.example.notesmanager;
+package fr.serfa.notesmanager;
 
 import javafx.scene.control.Alert;
 

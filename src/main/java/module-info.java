@@ -12,6 +12,6 @@ module com.example.notesmanager {
     requires java.sql;
     requires java.desktop;
 
-    opens com.example.notesmanager to javafx.fxml;
-    exports com.example.notesmanager;
+    opens fr.serfa.notesmanager to javafx.fxml;
+    exports fr.serfa.notesmanager;
 }

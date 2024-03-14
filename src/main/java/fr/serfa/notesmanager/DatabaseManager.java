@@ -1,4 +1,4 @@
-package com.example.notesmanager;
+package fr.serfa.notesmanager;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public abstract class DatabaseManager {
      */
     private static Properties loadProperties() {
         Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/java/com/example/notesmanager/database.properties")) {
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/java/fr/serfa/notesmanager/database.properties")) {
             properties.load(fileInputStream);
             dbHost = properties.getProperty("dbHost");
             dbPort = properties.getProperty("dbPort");

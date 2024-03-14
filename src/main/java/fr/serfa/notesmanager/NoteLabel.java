@@ -1,4 +1,4 @@
-package com.example.notesmanager;
+package fr.serfa.notesmanager;
 
 /**
  * Cette classe représente une étiquette de note dans le gestionnaire de notes.
