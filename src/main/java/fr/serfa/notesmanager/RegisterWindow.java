@@ -16,6 +16,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
+/**
+ * La classe RegisterWindow est une extension de la classe Application de JavaFX.
+ * Elle représente la fenêtre d'inscription de l'application.
+ * Cette classe contient des champs pour les éléments de l'interface utilisateur tels que les champs de texte et les boutons,
+ * ainsi que des méthodes pour gérer les événements d'action tels que les clics sur les boutons.
+ * Elle contient également une méthode main pour lancer l'application et une méthode start pour initialiser la fenêtre d'inscription.
+ */
 public class RegisterWindow extends Application {
 
 
