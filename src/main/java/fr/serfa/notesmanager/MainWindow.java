@@ -790,7 +790,7 @@ public class MainWindow extends Application {
             Alert alert = CustomAlert.create(
                     Alert.AlertType.WARNING,
                     "Confirmation de suppression",
-                    null, "Supprimer le classeur \" + binderName + \" ?",
+                    null, "Supprimer le classeur " + binderName + " ?",
                     "Êtes-vous sûr ? Cette action est irréversible"
             );
 
