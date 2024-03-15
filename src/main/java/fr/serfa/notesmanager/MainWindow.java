@@ -234,10 +234,8 @@ public class MainWindow extends Application {
     /**
      * Cette méthode est appelée lors de l'enregistrement d'une note.
      * Elle récupère le contenu de la note dans l'éditeur HTML, met à jour le contenu de la note et affiche une alerte de confirmation.
-     *
-     * @param e L'événement qui a déclenché cette méthode (clic sur le bouton d'enregistrement).
      */
-    public void saveNote(ActionEvent e) {
+    public void saveNote() {
         // Récupération du contenu de la note dans l'éditeur HTML
         String content = noteArea.getHtmlText();
 
@@ -342,6 +340,8 @@ public class MainWindow extends Application {
 
         // Vérifie si la source de l'événement est un MenuItem
         if (e.getSource() instanceof MenuItem selectedLabel && note != null) {
+            saveNote();
+
             // Récupère le nom du label
             String labelName = selectedLabel.getText();
             System.out.println("Selected label" + labelName);
