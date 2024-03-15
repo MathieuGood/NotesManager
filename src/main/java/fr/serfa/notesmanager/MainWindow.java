@@ -719,35 +719,52 @@ public class MainWindow extends Application {
 
                 Optional<String> nameResult = nameDialog.showAndWait();
                 nameResult.ifPresent(newName -> {
-                    selectedBinder.editName(newName);
-                    selectedItem.setValue(newName);
+                    int result = selectedBinder.editName(newName);
+
+                    if (result > 0) {
+                        selectedItem.setValue(newName);
+
+                        List<String> colorNames = NotebookColor.getAllColorNames();
+                        String currentColorName = NotebookColor.getColorNameByID(selectedBinder.getBinderColorID());
+                        ChoiceDialog<String> dialogColor = new ChoiceDialog<>(currentColorName, colorNames);
+                        dialogColor.setTitle("Choix de la couleur");
+                        dialogColor.setHeaderText("Choix de la couleur");
+                        dialogColor.setContentText("Couleur :");
+
+                        Optional<String> colorResult = dialogColor.showAndWait();
+                        colorResult.ifPresent(newColorName -> {
+                            int newColorID = NotebookColor.getColorIDByName(newColorName);
+
+                            int resultColor = selectedBinder.editColor(newColorID);
+                            String colorHex = NotebookColor.getHexColorByID(newColorID);
+                            Node circle = NotebookColor.getColorCircle(colorHex);
+
+                            if (resultColor > 0) {
+                                selectedItem.setGraphic(circle);
+
+                                CustomAlert.create(
+                                        Alert.AlertType.INFORMATION,
+                                        "Information",
+                                        null,
+                                        "Mise à jour bien effectuée",
+                                        "show"
+                                );
+                            }
+                        });
+                    } else {
+                        CustomAlert.create(
+                                Alert.AlertType.WARNING,
+                                "Erreur",
+                                null,
+                                "Erreur dans la mise à jour",
+                                "show"
+                        );
+                    }
                 });
 
 
-                List<String> colorNames = NotebookColor.getAllColorNames();
-                String currentColorName = NotebookColor.getColorNameByID(selectedBinder.getBinderColorID());
-                ChoiceDialog<String> dialogColor = new ChoiceDialog<>(currentColorName, colorNames);
-                dialogColor.setTitle("Choix de la couleur");
-                dialogColor.setHeaderText("Choix de la couleur");
-                dialogColor.setContentText("Couleur :");
 
-                Optional<String> colorResult = dialogColor.showAndWait();
-                colorResult.ifPresent(newColorName -> {
-                    int newColorID = NotebookColor.getColorIDByName(newColorName);
-                    selectedBinder.editColor(newColorID);
 
-                    String colorHex = NotebookColor.getHexColorByID(newColorID);
-                    Node circle = NotebookColor.getColorCircle(colorHex);
-                    selectedItem.setGraphic(circle);
-                });
-
-                CustomAlert.create(
-                        Alert.AlertType.INFORMATION,
-                        "Erreur",
-                        null,
-                        "Nom du classeur modifié",
-                        "showAndWait")
-                ;
 
             } else {
                 CustomAlert.create(
@@ -788,9 +805,9 @@ public class MainWindow extends Application {
             Binder selectedBinder = notebook.getBinderByName(binderName);
 
             Alert alert = CustomAlert.create(
-                    Alert.AlertType.WARNING,
+                    Alert.AlertType.CONFIRMATION,
                     "Confirmation de suppression",
-                    null, "Supprimer le classeur \" + binderName + \" ?",
+                    null, "Supprimer le classeur " + binderName + " ?",
                     "Êtes-vous sûr ? Cette action est irréversible"
             );
 
