@@ -55,42 +55,36 @@ public class NotebookTreeView {
 
         ArrayList<Binder> binders = notebook.getBinders();
 
-        System.out.println("Binders: " + binders.size());
-        if (binders.size() == 0) {
-            System.out.println("No binders");
-            rootItem.getChildren().add(new TreeItem<>("Pas de notes"));
+        // Clear the tree view from the previous content
+        rootItem.getChildren().clear();
 
-        } else {
+        for (Binder binder : binders) {
+            String binderColorHex = binder.getColorHex();
+            TreeItem<String> binderItem = new TreeItem<>(binder.getBinderName());
+            binderItem.setGraphic(NotebookColor.getColorCircle(binderColorHex));
 
-            for (Binder binder : binders) {
-                String binderColorHex = binder.getColorHex();
-                TreeItem<String> binderItem = new TreeItem<>(binder.getBinderName());
-                binderItem.setGraphic(NotebookColor.getColorCircle(binderColorHex));
+            ArrayList<Tab> tabs = binder.getTabs();
+            for (Tab tab : tabs) {
 
-                ArrayList<Tab> tabs = binder.getTabs();
-                for (Tab tab : tabs) {
+                TreeItem<String> tabItem = new TreeItem<>(tab.getTabName());
+                tabItem.setGraphic(NotebookColor.getColorCircle(tab.getColorHex()));
 
-                    TreeItem<String> tabItem = new TreeItem<>(tab.getTabName());
-                    tabItem.setGraphic(NotebookColor.getColorCircle(tab.getColorHex()));
+                ArrayList<Note> notes = tab.getNotes();
 
-                    ArrayList<Note> notes = tab.getNotes();
+                for (Note note : notes) {
 
-                    for (Note note : notes) {
+                    TreeItem<String> noteItem = new TreeItem<>(note.getNoteName());
 
-                        TreeItem<String> noteItem = new TreeItem<>(note.getNoteName());
+                    // Affiche le contenu de la note dans la zone de texte lorsqu'on clique sur la note.
+                    noteItem.addEventHandler(TreeItem.treeNotificationEvent(), event -> {
+                        System.out.println("Clicked on note: " + note.getNoteName());
+                    });
 
-                        // Affiche le contenu de la note dans la zone de texte lorsqu'on clique sur la note.
-                        noteItem.addEventHandler(TreeItem.treeNotificationEvent(), event -> {
-                            System.out.println("Clicked on note: " + note.getNoteName());
-                        });
-
-                        tabItem.getChildren().add(noteItem);
-                    }
-                    binderItem.getChildren().add(tabItem);
+                    tabItem.getChildren().add(noteItem);
                 }
-                rootItem.getChildren().add(binderItem);
+                binderItem.getChildren().add(tabItem);
             }
-
+            rootItem.getChildren().add(binderItem);
         }
 
 
