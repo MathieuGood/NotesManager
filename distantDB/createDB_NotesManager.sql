@@ -42,11 +42,8 @@ INSERT INTO users(user_name,
                   user_email,
                   user_password)
 VALUES ('Mathieu', 'bon.mathieu@gmail.com', 'Mathieu*1'),
-       ('Soundouce', 'soundouce.chibani@gmail.com', 'Soundouce*1'),
-       ('Youssef', 'you.moudni@gmail.com', 'Youssef*1'),
-       ('Belgrand', 'grmabele@gmail.com', 'Belgrand*1'),
-       ('Testeur', 'test@test.com', 'Testeur*1'),
-       ('a', 'a@a.com', 'Aaaaaa*1');
+       ('Testeur', 'test@test.com', 'Testeur*1')
+;
 
 
 CREATE TABLE colors
@@ -60,16 +57,16 @@ CREATE TABLE colors
 
 INSERT INTO colors(color_name,
                    color_hex)
-VALUES ('red', '#FF0000'),
-       ('blue', '#0000FF'),
-       ('green', '#008000'),
-       ('yellow', '#FFFF00'),
-       ('orange', '#FFA500'),
-       ('purple', '#800080'),
-       ('pink', '#FFC0CB'),
-       ('brown', '#A52A2A'),
-       ('black', '#000000'),
-       ('white', '#FFFFFF');
+VALUES ('Rouge', '#FF0000'),
+       ('Bleu', '#0000FF'),
+       ('Vert', '#008000'),
+       ('Jaune', '#FFFF00'),
+       ('Orange', '#FFA500'),
+       ('Violet', '#800080'),
+       ('Rose', '#FFC0CB'),
+       ('Marron', '#A52A2A'),
+       ('Noir', '#000000'),
+       ('Blanc', '#FFFFFF');
 
 
 CREATE TABLE binders
@@ -88,7 +85,8 @@ CREATE TABLE binders
 INSERT INTO binders(binder_name,
                     user_id,
                     binder_color_id)
-VALUES ('Cours SERFA', 1, 2)
+VALUES ('SERFA', 1, 2),
+       ('Livres', 1, 5)
 ;
 
 
@@ -111,7 +109,10 @@ INSERT INTO tabs(tab_name,
 VALUES ('Java', 1, 2),
        ('React Native', 1, 3),
        ('SQL', 1, 4),
-       ('Python', 1, 9)
+       ('Python', 1, 9),
+       ('Histoire de France', 2, 1),
+       ('Fantastique', 2, 2),
+       ('Biographies', 2, 8)
 ;
 
 
@@ -119,7 +120,7 @@ CREATE TABLE notes
 (
     note_id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
     note_name      VARCHAR(50),
-    note_content   LONGTEXT DEFAULT "",
+    note_content   LONGTEXT     DEFAULT "",
     tab_id         INT UNSIGNED NOT NULL,
     note_label1_id INT UNSIGNED DEFAULT NULL,
     note_label2_id INT UNSIGNED DEFAULT NULL,
@@ -129,37 +130,104 @@ CREATE TABLE notes
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO notes(note_name, note_content, tab_id)
+INSERT INTO notes (note_name, note_content, tab_id)
 VALUES
-    -- Notes for Java tab
-    ('Java Basics', 'Learn about variables, data types, and operators in Java.', 1),
-    ('Java OOP Concepts', 'Understand concepts like classes, objects, inheritance, and polymorphism.', 1),
-    ('Java Collections', 'Explore Java collections framework including ArrayList, HashMap, and LinkedList.', 1),
-    ('Exception Handling', 'Study how to handle exceptions in Java using try-catch blocks.', 1),
-    ('File Handling', 'Learn to read from and write to files in Java using FileReader and FileWriter.', 1),
-    ('Multithreading', 'Understand the basics of multithreading and synchronization in Java.', 1),
+    -- Notes pour l'onglet Java
+    ('Bases de Java', 'Apprenez les variables, les types de données et les opérateurs en Java.', 1),
+    ('Concepts de POO en Java',
+     'Comprenez des concepts comme les classes, les objets, l''héritage et le polymorphisme en Java.', 1),
+    ('Collections en Java', 'Explorez le framework des collections Java, y compris ArrayList, HashMap et LinkedList.',
+     1),
+    ('Gestion des exceptions', 'Étudiez comment gérer les exceptions en Java en utilisant des blocs try-catch.', 1),
+    ('Gestion des fichiers',
+     'Apprenez à lire depuis et à écrire dans des fichiers en Java en utilisant FileReader et FileWriter.', 1),
+    ('Multithreading', 'Comprenez les bases du multithreading et de la synchronisation en Java.', 1),
 
-    -- Notes for React Native tab
-    ('React Native Setup', 'Follow the React Native documentation to set up your development environment.', 2),
-    ('React Native Components', 'Understand basic components like View, Text, and Image in React Native.', 2),
-    ('React Navigation', 'Learn how to implement navigation in React Native using React Navigation library.', 2),
-    ('State Management', 'Explore state management options in React Native including useState and useContext.', 2),
-    ('Redux Integration', 'Integrate Redux into your React Native app for centralized state management.', 2),
-    ('Styling in React Native', 'Learn different methods to style components in React Native using StyleSheet.', 2),
+    -- Notes pour l'onglet React Native
+    ('Configuration de React Native',
+     'Suivez la documentation de React Native pour configurer votre environnement de développement.', 2),
+    ('Composants de React Native', 'Comprenez les composants de base tels que View, Text et Image en React Native.', 2),
+    ('Navigation avec React',
+     'Apprenez à implémenter la navigation en React Native en utilisant la bibliothèque React Navigation.', 2),
+    ('Gestion d''état', 'Explorez les options de gestion d''état en React Native, y compris useState et useContext.',
+     2),
+    ('Intégration de Redux', 'Intégrez Redux dans votre application React Native pour une gestion d''état centralisée.',
+     2),
+    ('Stylisation en React Native',
+     'Apprenez différentes méthodes pour styliser des composants en React Native en utilisant StyleSheet.', 2),
 
-    -- Notes for SQL tab
-    ('SQL Queries', 'Practice writing SQL SELECT queries to retrieve data from a database.', 3),
-    ('SQL Joins', 'Understand different types of SQL joins like INNER JOIN, LEFT JOIN, and RIGHT JOIN.', 3),
-    ('SQL DDL Commands', 'Learn about Data Definition Language commands like CREATE, ALTER, and DROP.', 3),
-    ('SQL DML Commands', 'Explore Data Manipulation Language commands like INSERT, UPDATE, and DELETE.', 3),
-    ('Database Normalization', 'Understand the normalization process to organize data in a relational database.', 3),
-    ('Transactions in SQL', 'Study transactions and their importance in maintaining data integrity in SQL.', 3)
+    -- Notes pour l'onglet SQL
+    ('Requêtes SQL', 'Pratiquez l''écriture de requêtes SQL SELECT pour récupérer des données d''une base de données.',
+     3),
+    ('Joins SQL', 'Comprenez les différents types de joints SQL tels que INNER JOIN, LEFT JOIN et RIGHT JOIN.', 3),
+    ('Commandes DDL SQL',
+     'Apprenez les commandes du langage de définition de données (DDL) telles que CREATE, ALTER et DROP.', 3),
+    ('Commandes DML SQL',
+     'Explorez les commandes du langage de manipulation de données (DML) telles que INSERT, UPDATE et DELETE.', 3),
+    ('Normalisation de base de données',
+     'Comprenez le processus de normalisation pour organiser les données dans une base de données relationnelle.', 3),
+    ('Transactions en SQL',
+     'Étudiez les transactions et leur importance dans le maintien de l''intégrité des données en SQL.', 3),
+
+    -- Notes pour l'onglet Python
+    ('Bases de Python',
+     'Apprenez les bases de Python, y compris les variables, les types de données et les opérateurs.',
+     4),
+    ('Structures de contrôle',
+     'Explorez les structures de contrôle en Python, telles que les boucles for, les boucles while et les instructions if.',
+     4),
+    ('Fonctions en Python',
+     'Comprenez comment définir et appeler des fonctions en Python, ainsi que les arguments et les valeurs de retour.',
+     4),
+    ('Modules et packages',
+     'Découvrez comment organiser votre code en utilisant des modules et des packages en Python.', 4),
+    ('Gestion des erreurs',
+     'Apprenez à gérer les erreurs et les exceptions en Python en utilisant des blocs try-except.', 4),
+    ('Manipulation de fichiers',
+     'Explorez les opérations de lecture et d''écriture de fichiers en Python en utilisant les fonctions open et close.',
+     4),
+
+    -- Notes pour l'onglet Histoire de France
+    ('Révolution française',
+     'Découvrez les événements clés de la Révolution française, y compris la prise de la Bastille et la Terreur.', 5),
+    ('Napoléon Bonaparte',
+     'Apprenez-en plus sur la vie et les réalisations de Napoléon Bonaparte, empereur des Français.', 5),
+    ('Guerre mondiale',
+     'Explorez les causes et les conséquences de la Première et de la Seconde Guerre mondiale.', 5),
+    ('Renaissance française',
+     'Découvrez la période de la Renaissance en France et son impact sur l''art, la science et la culture.', 5),
+
+    -- Notes pour l'onglet Fantastique
+    ('Créatures mythiques',
+     'Explorez les différentes créatures mythiques de la littérature fantastique, y compris les dragons et les licornes.',
+     6),
+    ('Monde imaginaire',
+     'Découvrez des mondes imaginaires créés par des auteurs de fantasy tels que J.R.R. Tolkien et George R.R. Martin.',
+     6),
+    ('Magie et sorcellerie',
+     'Étudiez les concepts de magie et de sorcellerie dans la littérature fantastique et les mythes anciens.', 6),
+    ('Héros et héroïnes',
+     'Découvrez des héros et héroïnes emblématiques de la littérature fantastique, tels que Harry Potter et Frodo Baggins.',
+     6),
+
+    -- Notes pour l'onglet Biographies
+    ('Albert Einstein', 'Découvrez la vie et les réalisations du célèbre physicien Albert Einstein.', 7),
+    ('Marie Curie', 'Apprenez-en plus sur la vie et les contributions de la scientifique Marie Curie.', 7),
+    ('Leonardo da Vinci', 'Explorez les œuvres et les inventions du polymathe italien Leonardo da Vinci.', 7)
 ;
 
+
 UPDATE notes
-SET note_label1_id = 2,
-    note_label2_id = 4
-WHERE note_id = 1;
+SET note_label1_id = 1
+    WHERE note_id = 1;
+
+UPDATE notes
+SET note_label1_id = 5
+WHERE note_id IN (4, 5, 10, 13);
+
+UPDATE notes
+SET note_label1_id = 2
+WHERE note_id IN (2, 6, 8, 11, 14);
 
 
 CREATE TABLE labels
@@ -173,13 +241,13 @@ CREATE TABLE labels
 INSERT INTO labels(label_name)
 VALUES ('Important'),
        ('Urgent'),
-       ('Work'),
-       ('Personal'),
-       ('School'),
-       ('Home'),
-       ('Fun'),
-       ('Family'),
-       ('Friends')
+       ('Travail'),
+       ('Personnel'),
+       ('À réviser'),
+       ('Maison'),
+       ('Loisirs'),
+       ('Famille'),
+       ('Amis')
 ;
 
 
@@ -189,8 +257,7 @@ ALTER TABLE binders
 ALTER TABLE tabs
     ADD CONSTRAINT UC_binder_tab_name UNIQUE (binder_id, tab_name);
 ALTER TABLE notes
-    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name)
-    ,
+    ADD CONSTRAINT UC_tab_note_name UNIQUE (tab_id, note_name),
     ADD CONSTRAINT FK_note_label1 FOREIGN KEY (note_label1_id) REFERENCES labels (label_id)
         ON DELETE SET NULL,
     ADD CONSTRAINT FK_note_label2 FOREIGN KEY (note_label2_id) REFERENCES labels (label_id)
