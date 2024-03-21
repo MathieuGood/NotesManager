@@ -243,13 +243,13 @@ public class MainWindow extends Application {
         NoteArea.note.editContent(content);
 
         // Affichage d'une alerte de confirmation
-        CustomAlert.create(
-                Alert.AlertType.INFORMATION,
-                "Confirmation",
-                null,
-                "Note bien sauvegardée",
-                "show"
-        );
+        //        CustomAlert.create(
+        //                Alert.AlertType.INFORMATION,
+        //                "Confirmation",
+        //                null,
+        //                "Note bien sauvegardée",
+        //                "show"
+        //        );
     }
 
 
