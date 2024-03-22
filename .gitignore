@@ -42,3 +42,6 @@ build/
 
 ### Database credentials
 src/main/java/fr/serfa/notesmanager/database.properties
+
+### Jar files
+*.jar
